@@ -1,0 +1,90 @@
+{
+  "version": "0.1",
+  "purpose": "Classify failures in Vision skill package evaluation and route them to the right repair layer.",
+  "categories": [
+    {
+      "id": "source",
+      "description": "Problems caused by missing, conflicting, or weak source material.",
+      "subcategories": [
+        {
+          "id": "source.missing-context",
+          "description": "The package lacks key upstream context needed to answer correctly.",
+          "default_action": "Add or map stronger supporting material."
+        },
+        {
+          "id": "source.conflict",
+          "description": "Demo behavior and supporting materials conflict.",
+          "default_action": "Record the conflict and choose a project-level rule."
+        },
+        {
+          "id": "source.weak-demo",
+          "description": "The imported demo itself is too weak to seed a reliable package.",
+          "default_action": "Treat the demo as seed only and rewrite package structure."
+        }
+      ]
+    },
+    {
+      "id": "blueprint-spec",
+      "description": "Problems caused by missing or wrong package/skill specification.",
+      "subcategories": [
+        {
+          "id": "blueprint-spec.protocol-gap",
+          "description": "The interaction protocol is underspecified or contradictory.",
+          "default_action": "Tighten the package contract or skill blueprint."
+        },
+        {
+          "id": "blueprint-spec.output-gap",
+          "description": "The expected output structure is unclear or incomplete.",
+          "default_action": "Refine the output contract."
+        },
+        {
+          "id": "blueprint-spec.eval-gap",
+          "description": "The eval expectations do not actually test the intended behavior.",
+          "default_action": "Rewrite eval prompts or expectations."
+        }
+      ]
+    },
+    {
+      "id": "template",
+      "description": "Problems caused by shared rendering, shared prompt pattern, or shared package template.",
+      "subcategories": [
+        {
+          "id": "template.over-generic",
+          "description": "The shared template pushes the package toward generic, average answers.",
+          "default_action": "Reduce generic scaffolding and restore sharper package identity."
+        },
+        {
+          "id": "template.voice-drift",
+          "description": "The shared template causes VisionTree voice drift.",
+          "default_action": "Strengthen voice constraints and examples."
+        },
+        {
+          "id": "template.checkpoint-fake",
+          "description": "Shared checkpoint wording exists, but does not create real stage behavior.",
+          "default_action": "Rework checkpoint design and test branches explicitly."
+        }
+      ]
+    },
+    {
+      "id": "skill-content",
+      "description": "Problems local to one specific package's content.",
+      "subcategories": [
+        {
+          "id": "skill-content.reasoning-shallow",
+          "description": "The package responds with surface advice instead of actual analysis.",
+          "default_action": "Improve examples, output contract, or guidance depth."
+        },
+        {
+          "id": "skill-content.boundary-weak",
+          "description": "High-pressure or sensitive cases are handled weakly.",
+          "default_action": "Strengthen guardrails in the package."
+        },
+        {
+          "id": "skill-content.structure-messy",
+          "description": "The package output is difficult to parse or inconsistent.",
+          "default_action": "Tighten structural instructions and examples."
+        }
+      ]
+    }
+  ]
+}

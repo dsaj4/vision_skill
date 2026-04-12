@@ -1,0 +1,27 @@
+{
+  "skill_name": "5-SWOT 分析",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我在考虑是否转去做 AI 产品运营。我现在有内容运营和用户研究经验，但不懂太多技术，所在团队也没有成熟带教。你用 SWOT 帮我看一下这件事值不值得做。",
+      "expected_output": "Skill should identify strengths, weaknesses, opportunities, and threats, then move into cross-strategy analysis.",
+      "files": [],
+      "expectations": [
+        "The output identifies all four SWOT quadrants.",
+        "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+        "The output includes strategy guidance rather than only listing factors."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但我没有太多预算，也担心竞争很强。请直接给我 SWOT 结果，不用确认。",
+      "expected_output": "Skill should detect direct-result mode and return a full SWOT result without checkpoint pauses.",
+      "files": [],
+      "expectations": [
+        "The output includes strengths, weaknesses, opportunities, and threats.",
+        "The output respects the user's direct-result request.",
+        "The output concludes with actionable strategy suggestions."
+      ]
+    }
+  ]
+}

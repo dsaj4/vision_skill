@@ -1,0 +1,426 @@
+{
+  "metadata": {
+    "iteration_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-1",
+    "generated_at": "2026-04-08T09:48:23Z",
+    "runs_per_configuration": 1,
+    "eval_ids": [
+      1,
+      2
+    ]
+  },
+  "per_eval": [
+    {
+      "eval_id": 1,
+      "eval_name": "ai-swot",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 0.6667,
+            "stddev": 0.0,
+            "min": 0.6667,
+            "max": 0.6667
+          },
+          "time_seconds": {
+            "mean": 41.505,
+            "stddev": 0.0,
+            "min": 41.505,
+            "max": 41.505
+          },
+          "tokens": {
+            "mean": 3847.0,
+            "stddev": 0.0,
+            "min": 3847.0,
+            "max": 3847.0
+          },
+          "expectation_variance": {
+            "swot-quadrants": {
+              "text": "The output identifies all four SWOT quadrants.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "interaction-mode": {
+              "text": "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "strategy-guidance": {
+              "text": "The output includes strategy guidance rather than only listing factors.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q1111|p1|d0|lmedium"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 63.224,
+            "stddev": 0.0,
+            "min": 63.224,
+            "max": 63.224
+          },
+          "tokens": {
+            "mean": 2947.0,
+            "stddev": 0.0,
+            "min": 2947.0,
+            "max": 2947.0
+          },
+          "expectation_variance": {
+            "swot-quadrants": {
+              "text": "The output identifies all four SWOT quadrants.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "interaction-mode": {
+              "text": "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "strategy-guidance": {
+              "text": "The output includes strategy guidance rather than only listing factors.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h10|q1111|p0|d1|llong"
+            ]
+          }
+        }
+      },
+      "flags": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "3-swot",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 59.565,
+            "stddev": 0.0,
+            "min": 59.565,
+            "max": 59.565
+          },
+          "tokens": {
+            "mean": 4032.0,
+            "stddev": 0.0,
+            "min": 4032.0,
+            "max": 4032.0
+          },
+          "expectation_variance": {
+            "swot-quadrants": {
+              "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "direct-result-mode": {
+              "text": "The output respects the user's direct-result request.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "strategy-guidance": {
+              "text": "The output concludes with actionable strategy suggestions.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q1111|p0|d1|llong"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.6667,
+            "stddev": 0.0,
+            "min": 0.6667,
+            "max": 0.6667
+          },
+          "time_seconds": {
+            "mean": 30.326,
+            "stddev": 0.0,
+            "min": 30.326,
+            "max": 30.326
+          },
+          "tokens": {
+            "mean": 1568.0,
+            "stddev": 0.0,
+            "min": 1568.0,
+            "max": 1568.0
+          },
+          "expectation_variance": {
+            "swot-quadrants": {
+              "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "direct-result-mode": {
+              "text": "The output respects the user's direct-result request.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "strategy-guidance": {
+              "text": "The output concludes with actionable strategy suggestions.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h1|q1111|p0|d1|lmedium"
+            ]
+          }
+        }
+      },
+      "flags": []
+    }
+  ],
+  "overall": {
+    "configurations": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 0.8334,
+          "stddev": 0.2357,
+          "min": 0.6667,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 50.535,
+          "stddev": 12.7703,
+          "min": 41.505,
+          "max": 59.565
+        },
+        "tokens": {
+          "mean": 3939.5,
+          "stddev": 130.8148,
+          "min": 3847.0,
+          "max": 4032.0
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.8334,
+          "stddev": 0.2357,
+          "min": 0.6667,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 46.775,
+          "stddev": 23.2624,
+          "min": 30.326,
+          "max": 63.224
+        },
+        "tokens": {
+          "mean": 2257.5,
+          "stddev": 975.1003,
+          "min": 1568.0,
+          "max": 2947.0
+        }
+      }
+    },
+    "flags": [
+      "weak_stability_value"
+    ]
+  },
+  "variance_by_expectation": {
+    "expectations": [
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "with_skill",
+        "expectation_id": "swot-quadrants",
+        "text": "The output identifies all four SWOT quadrants.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "with_skill",
+        "expectation_id": "interaction-mode",
+        "text": "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "with_skill",
+        "expectation_id": "strategy-guidance",
+        "text": "The output includes strategy guidance rather than only listing factors.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "without_skill",
+        "expectation_id": "swot-quadrants",
+        "text": "The output identifies all four SWOT quadrants.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "without_skill",
+        "expectation_id": "interaction-mode",
+        "text": "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "configuration": "without_skill",
+        "expectation_id": "strategy-guidance",
+        "text": "The output includes strategy guidance rather than only listing factors.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "with_skill",
+        "expectation_id": "swot-quadrants",
+        "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "with_skill",
+        "expectation_id": "direct-result-mode",
+        "text": "The output respects the user's direct-result request.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "with_skill",
+        "expectation_id": "strategy-guidance",
+        "text": "The output concludes with actionable strategy suggestions.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "without_skill",
+        "expectation_id": "swot-quadrants",
+        "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "without_skill",
+        "expectation_id": "direct-result-mode",
+        "text": "The output respects the user's direct-result request.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "configuration": "without_skill",
+        "expectation_id": "strategy-guidance",
+        "text": "The output concludes with actionable strategy suggestions.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      }
+    ]
+  }
+}

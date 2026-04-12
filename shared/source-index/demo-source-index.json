@@ -1,0 +1,21 @@
+{
+  "mode": "demo-only-candidates",
+  "sources": [
+    {
+      "source_id": "demo-root-mental-models",
+      "title": "思维模型 demo 根目录",
+      "path": "E:\\Project\\vision-lab\\vision-skill\\思维模型\\思维模型",
+      "source_type": "demo-collection",
+      "trust_level": "working-demo",
+      "intended_usage": "candidate-package seeding"
+    },
+    {
+      "source_id": "demo-swot-analysis-skill",
+      "title": "5-SWOT 分析 demo",
+      "path": "E:\\Project\\vision-lab\\vision-skill\\思维模型\\思维模型\\1-个人成长与自我认知\\5-SWOT 分析\\SKILL.md",
+      "source_type": "demo-skill",
+      "trust_level": "working-demo",
+      "intended_usage": "seed for swot-analysis package"
+    }
+  ]
+}

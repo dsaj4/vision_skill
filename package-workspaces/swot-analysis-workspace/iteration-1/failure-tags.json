@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-08T09:48:49Z"
+  },
+  "counts": {
+    "blueprint-spec.protocol-gap": 2
+  },
+  "per_eval": [
+    {
+      "eval_id": 1,
+      "failure_tags": [
+        "blueprint-spec.protocol-gap"
+      ],
+      "repair_layer": "blueprint-spec"
+    },
+    {
+      "eval_id": 2,
+      "failure_tags": [
+        "blueprint-spec.protocol-gap"
+      ],
+      "repair_layer": "blueprint-spec"
+    }
+  ]
+}
