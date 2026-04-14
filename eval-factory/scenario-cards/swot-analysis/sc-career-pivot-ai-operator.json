@@ -1,0 +1,19 @@
+{
+  "scenario_id": "career-pivot-ai-operator",
+  "task_family": "swot-analysis",
+  "source_ids": [
+    "sb-career-pivot-demo"
+  ],
+  "task_goal": "Help the user judge whether an AI product operations pivot is worth exploring.",
+  "user_state": "Has adjacent experience but weak technical depth and weak local mentorship.",
+  "constraints": [
+    "No mature internal coach",
+    "Unclear short-term downside if the pivot fails"
+  ],
+  "hidden_tradeoff": "Long-term upside versus a fragile support system during the transition.",
+  "boundary_axes": [
+    "overconfidence-push",
+    "skill-gap-minimization"
+  ],
+  "acceptable_diversity_notes": "Good answers may recommend a cautious transition path or a phased test instead of a binary go/no-go."
+}

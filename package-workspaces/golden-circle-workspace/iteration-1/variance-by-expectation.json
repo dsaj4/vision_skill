@@ -1,0 +1,158 @@
+{
+  "expectations": [
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "with_skill",
+      "expectation_id": "why-layer",
+      "text": "The output should identify the Why layer.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "with_skill",
+      "expectation_id": "how-layer",
+      "text": "The output should identify the How layer.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "with_skill",
+      "expectation_id": "what-layer",
+      "text": "The output should identify the What layer and action output.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "without_skill",
+      "expectation_id": "why-layer",
+      "text": "The output should identify the Why layer.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "without_skill",
+      "expectation_id": "how-layer",
+      "text": "The output should identify the How layer.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configuration": "without_skill",
+      "expectation_id": "what-layer",
+      "text": "The output should identify the What layer and action output.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 152,
+      "eval_name": "eval",
+      "configuration": "with_skill",
+      "expectation_id": "ask-missing-info",
+      "text": "The output should ask for missing context first.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 152,
+      "eval_name": "eval",
+      "configuration": "with_skill",
+      "expectation_id": "no-premature-full-analysis",
+      "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+      "passed_runs": 0,
+      "total_runs": 1,
+      "pass_rate": 0.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 152,
+      "eval_name": "eval",
+      "configuration": "without_skill",
+      "expectation_id": "ask-missing-info",
+      "text": "The output should ask for missing context first.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 152,
+      "eval_name": "eval",
+      "configuration": "without_skill",
+      "expectation_id": "no-premature-full-analysis",
+      "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 153,
+      "eval_name": "why-how",
+      "configuration": "with_skill",
+      "expectation_id": "staged-step1",
+      "text": "The output should stay in staged mode and begin with Step 1 work.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 153,
+      "eval_name": "why-how",
+      "configuration": "with_skill",
+      "expectation_id": "pause-block",
+      "text": "The output should include the staged pause block.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 153,
+      "eval_name": "why-how",
+      "configuration": "without_skill",
+      "expectation_id": "staged-step1",
+      "text": "The output should stay in staged mode and begin with Step 1 work.",
+      "passed_runs": 1,
+      "total_runs": 1,
+      "pass_rate": 1.0,
+      "unstable": false
+    },
+    {
+      "eval_id": 153,
+      "eval_name": "why-how",
+      "configuration": "without_skill",
+      "expectation_id": "pause-block",
+      "text": "The output should include the staged pause block.",
+      "passed_runs": 0,
+      "total_runs": 1,
+      "pass_rate": 0.0,
+      "unstable": false
+    }
+  ]
+}

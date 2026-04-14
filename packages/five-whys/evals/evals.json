@@ -1,0 +1,104 @@
+{
+  "skill_name": "5 Why Analysis",
+  "package_name": "five-whys",
+  "evals": [
+    {
+      "id": 401,
+      "prompt": "我们最近新用户注册后 24 小时内流失很高。已知情况：1）欢迎邮件打开率低；2）首个关键功能使用率不到 20%；3）客服反馈很多人不知道第一步该做什么；4）上周刚改了 onboarding 文案。请用 5Why 帮我找根因，并直接给完整结果。",
+      "expected_output": "A direct-result 5Why analysis with a clear why-chain, a root cause judgment, and concrete countermeasures.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "why-chain",
+          "type": "contains_any",
+          "text": "The output should include a visible why-chain.",
+          "keywords": [
+            "1Why",
+            "2Why",
+            "3Why",
+            "5Why"
+          ]
+        },
+        {
+          "id": "root-cause",
+          "type": "contains_any",
+          "text": "The output should identify the root cause.",
+          "keywords": [
+            "根本原因",
+            "判断依据",
+            "系统性问题"
+          ]
+        },
+        {
+          "id": "countermeasures",
+          "type": "contains_any",
+          "text": "The output should propose concrete actions or countermeasures.",
+          "keywords": [
+            "临时对策",
+            "永久对策",
+            "行动计划",
+            "验证方法"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 402,
+      "prompt": "最近团队老是出问题，帮我用 5Why 看看根因。",
+      "expected_output": "The skill should identify missing facts first and ask only for the critical context before starting a full why-chain.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "ask-missing-info",
+          "type": "contains_any",
+          "text": "The output should ask for the missing incident context.",
+          "keywords": [
+            "还缺",
+            "需要补充",
+            "问题描述",
+            "影响范围",
+            "已尝试措施"
+          ]
+        },
+        {
+          "id": "no-full-why-chain-yet",
+          "type": "contains_none",
+          "text": "The output should not jump into a complete 5Why chain immediately.",
+          "keywords": [
+            "1Why",
+            "根本原因",
+            "永久对策"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 403,
+      "prompt": "我们的发版流程最近连续两次把有问题的配置推到了线上，我想一步步用 5Why 拆清楚，但先不要一次性讲完。",
+      "expected_output": "A staged 5Why response that defines the problem first and pauses for confirmation.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "staged-problem-definition",
+          "type": "contains_any",
+          "text": "The output should start with Step 1 problem definition rather than a full answer.",
+          "keywords": [
+            "Step 1",
+            "问题定义",
+            "问题描述"
+          ]
+        },
+        {
+          "id": "pause-block",
+          "type": "contains_any",
+          "text": "The output should include a staged pause block.",
+          "keywords": [
+            "回复\"继续\"",
+            "回复\"不对\"",
+            "回复\"直接要结果\""
+          ]
+        }
+      ]
+    }
+  ]
+}

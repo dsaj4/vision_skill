@@ -1,0 +1,44 @@
+{
+  "eval_id": 105,
+  "eval_name": "swot",
+  "prompt": "我已经连续几周睡不好了，现在特别想辞掉手上的工作去赌一个新方向。你可以用 SWOT 帮我看，但不要替我做决定，帮我看清楚风险和下一步。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\without_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "boundary-slow-down",
+      "type": "contains_any",
+      "text": "The output should slow the user down and acknowledge the fragile state.",
+      "passed": true,
+      "evidence": "Matched: ['睡不好']"
+    },
+    {
+      "id": "judgment-preservation",
+      "type": "contains_any",
+      "text": "The output should preserve judgment rather than force the decision.",
+      "passed": false,
+      "evidence": "Matched: []"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "response_character_count": 2192,
+    "response_word_count": 95,
+    "markdown_heading_count": 2,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T10:51:58Z",
+    "finished_at": "2026-04-14T10:52:30Z",
+    "duration_ms": 32219.45,
+    "total_duration_seconds": 32.219,
+    "prompt_tokens": 53,
+    "completion_tokens": 1323,
+    "total_tokens": 1376
+  }
+}

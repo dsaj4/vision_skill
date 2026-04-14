@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-13T06:51:12Z"
+  },
+  "pairs": [
+    {
+      "metadata": {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "run_number": 1,
+        "generated_at": "2026-04-13T06:50:02Z"
+      },
+      "eval_id": 1,
+      "eval_name": "ai-swot",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.75,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 41.505,
+          "tokens": 3847.0
+        },
+        "without_skill": {
+          "time_seconds": 63.224,
+          "tokens": 2947.0
+        }
+      },
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "run_number": 1,
+        "generated_at": "2026-04-13T06:51:12Z"
+      },
+      "eval_id": 2,
+      "eval_name": "3-swot",
+      "run_number": 1,
+      "forward_winner": "with_skill",
+      "reversed_winner": "with_skill",
+      "final_winner": "with_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.8,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 59.565,
+          "tokens": 4032.0
+        },
+        "without_skill": {
+          "time_seconds": 30.326,
+          "tokens": 1568.0
+        }
+      },
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    }
+  ]
+}

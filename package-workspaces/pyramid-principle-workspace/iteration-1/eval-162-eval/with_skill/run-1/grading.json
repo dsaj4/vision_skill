@@ -1,0 +1,44 @@
+{
+  "eval_id": 162,
+  "eval_name": "eval",
+  "prompt": "帮我用金字塔原理整理一下这个事情。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\with_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "ask-missing-info",
+      "type": "contains_any",
+      "text": "The output should ask for missing topic, claim, audience, or support context first.",
+      "passed": true,
+      "evidence": "Matched: ['主题', '目标受众']"
+    },
+    {
+      "id": "no-premature-structure",
+      "type": "contains_none",
+      "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+      "passed": false,
+      "evidence": "Forbidden matches: ['核心结论']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "response_character_count": 285,
+    "response_word_count": 14,
+    "markdown_heading_count": 0,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T14:12:08Z",
+    "finished_at": "2026-04-14T14:12:40Z",
+    "duration_ms": 31442.33,
+    "total_duration_seconds": 31.442,
+    "prompt_tokens": 1602,
+    "completion_tokens": 1683,
+    "total_tokens": 3285
+  }
+}

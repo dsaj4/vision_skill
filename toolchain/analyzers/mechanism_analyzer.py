@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from toolchain.benchmarks.level3_summary import ensure_level3_summary
 from toolchain.executors.dashscope_executor import (
     _post_chat_completion,
     _resolve_api_key,
@@ -34,12 +35,11 @@ def _truncate(text: str, limit: int = 1600) -> str:
     return text[: limit - 15] + "\n...[truncated]"
 
 
-def _extract_markdown_section(content: str, heading_pattern: str) -> str:
-    pattern = re.compile(rf"^{heading_pattern}.*?(?=^##\s|^###\s|\Z)", re.MULTILINE | re.DOTALL)
+def _extract_markdown_section(content: str, titles: list[str]) -> str:
+    joined = "|".join(re.escape(title) for title in titles)
+    pattern = re.compile(rf"^(?:{joined}).*?(?=^##\s|^###\s|\Z)", re.MULTILINE | re.DOTALL)
     match = pattern.search(content)
-    if not match:
-        return ""
-    return match.group(0).strip()
+    return match.group(0).strip() if match else ""
 
 
 def _extract_step(content: str, step_number: int) -> str:
@@ -71,24 +71,25 @@ def _collect_allowed_failure_tags(taxonomy: dict[str, Any]) -> set[str]:
 
 def _extract_skill_mechanisms(skill_text: str) -> dict[str, Any]:
     return {
-        "interaction_mode": _extract_markdown_section(skill_text, r"##\s+交互模式"),
+        "interaction_mode": _extract_markdown_section(skill_text, ["## 交互模式", "## Interaction Mode"]),
         "step_0": _extract_step(skill_text, 0),
         "step_1": _extract_step(skill_text, 1),
         "step_2": _extract_step(skill_text, 2),
         "step_3": _extract_step(skill_text, 3),
-        "rules": _extract_markdown_section(skill_text, r"##\s+规则"),
-        "output_format": _extract_markdown_section(skill_text, r"##\s+输出格式"),
+        "rules": _extract_markdown_section(skill_text, ["## 规则", "## Rules"]),
+        "output_format": _extract_markdown_section(skill_text, ["## 输出格式", "## Output Format"]),
     }
 
 
 def _run_signal_from_response(response_text: str) -> dict[str, Any]:
     lowered = response_text.lower()
     has_structured_output = len(re.findall(r"^#{1,6}\s+", response_text, re.MULTILINE)) > 0
-    has_pause_markers = any(marker.lower() in lowered for marker in ['回复"继续"', '回复"不对"', '回复"直接要结果"', "输出后暂停", "暂停确认"])
+    pause_markers = ['回复"继续"', '回复"不对"', '回复"直接要结果"', "输出后暂停", "暂停确认"]
+    has_pause_markers = any(marker.lower() in lowered for marker in pause_markers)
     has_quadrants = all(keyword in lowered for keyword in ("strength", "weak", "opportun", "threat")) or all(
         keyword in response_text for keyword in ("优势", "劣势", "机会", "威胁")
     )
-    guardrail_signal = any(keyword in response_text for keyword in ("高压", "减压", "稳定基础", "濒临崩溃", "脆弱"))
+    guardrail_signal = any(keyword in response_text for keyword in ("高压", "减压", "脆弱", "先稳住", "先不要"))
     return {
         "has_structured_output": has_structured_output,
         "has_pause_markers": has_pause_markers,
@@ -98,7 +99,7 @@ def _run_signal_from_response(response_text: str) -> dict[str, Any]:
     }
 
 
-def _load_run_record(run_dir: Path) -> dict[str, Any]:
+def _load_run_record(run_dir: Path, pairwise_outcome: dict[str, Any] | None = None) -> dict[str, Any]:
     grading = _load_json(run_dir / "grading.json")
     transcript = _load_json(run_dir / "transcript.json")
     request = _load_json(run_dir / "request.json")
@@ -112,6 +113,7 @@ def _load_run_record(run_dir: Path) -> dict[str, Any]:
         "timing": timing,
         "expectations": grading.get("expectations", []),
         "mechanism_signals": _run_signal_from_response(response_text),
+        "pairwise_outcome": pairwise_outcome or {},
         "request_excerpt": _truncate(json.dumps(request, ensure_ascii=False, indent=2), 1200),
         "assistant_excerpt": _truncate(transcript.get("assistant_response", response_text), 1200),
         "evidence_paths": {
@@ -129,17 +131,24 @@ def build_analysis_packet(
     package_dir: Path,
     taxonomy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    iteration_dir = Path(iteration_dir)
-    package_dir = Path(package_dir)
-    benchmark = _load_json(iteration_dir / "benchmark.json")
-    stability = _load_json(iteration_dir / "stability.json")
+    iteration_path = Path(iteration_dir)
+    package_path = Path(package_dir)
+    benchmark = _load_json(iteration_path / "benchmark.json")
+    stability = _load_json(iteration_path / "stability.json")
+    level3_summary = ensure_level3_summary(iteration_path)
     taxonomy_data = _load_taxonomy(taxonomy)
-    skill_text = (package_dir / "SKILL.md").read_text(encoding="utf-8")
+    skill_text = (package_path / "SKILL.md").read_text(encoding="utf-8")
+    pairwise_index = {
+        (int(item["eval_id"]), int(item["run_number"])): item
+        for item in level3_summary.get("per_eval", [])
+        if item.get("eval_id") is not None and item.get("run_number") is not None
+    }
 
     evals: list[dict[str, Any]] = []
-    for eval_dir in sorted(iteration_dir.glob("eval-*")):
+    for eval_dir in sorted(iteration_path.glob("eval-*")):
         eval_metadata = _load_json(eval_dir / "eval_metadata.json")
         stability_match = next((item for item in stability.get("per_eval", []) if item["eval_id"] == eval_metadata["eval_id"]), {})
+        eval_pairwise = [item for item in level3_summary.get("per_eval", []) if item.get("eval_id") == eval_metadata["eval_id"]]
         eval_record = {
             "eval_id": eval_metadata["eval_id"],
             "eval_name": eval_metadata.get("eval_name", eval_dir.name),
@@ -147,6 +156,7 @@ def build_analysis_packet(
             "expected_output": eval_metadata.get("expected_output", ""),
             "with_skill_runs": [],
             "without_skill_runs": [],
+            "pairwise_results": eval_pairwise,
             "stability_flags": stability_match.get("flags", []),
         }
         for configuration in ("with_skill", "without_skill"):
@@ -156,18 +166,20 @@ def build_analysis_packet(
             for run_dir in sorted(config_dir.glob("run-*")):
                 if not (run_dir / "grading.json").exists():
                     continue
-                eval_record[f"{configuration}_runs"].append(_load_run_record(run_dir))
+                pairwise_outcome = pairwise_index.get((int(eval_metadata["eval_id"]), int(run_dir.name.split("-")[1])))
+                eval_record[f"{configuration}_runs"].append(_load_run_record(run_dir, pairwise_outcome=pairwise_outcome))
         evals.append(eval_record)
 
     return {
         "metadata": {
-            "package_name": package_dir.name,
-            "skill_name": benchmark.get("metadata", {}).get("skill_name", package_dir.name),
-            "iteration_dir": str(iteration_dir),
+            "package_name": package_path.name,
+            "skill_name": level3_summary.get("metadata", {}).get("skill_name", package_path.name),
+            "iteration_dir": str(iteration_path),
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         },
         "skill_mechanisms": _extract_skill_mechanisms(skill_text),
-        "benchmark_summary": benchmark.get("run_summary", {}),
+        "level3_summary": level3_summary,
+        "gate_summary": level3_summary.get("gate_summary", benchmark.get("run_summary", {})),
         "stability_summary": stability.get("overall", {}),
         "evals": evals,
         "failure_taxonomy": taxonomy_data,
@@ -314,10 +326,10 @@ def analyze_iteration(
     endpoint: str | None = None,
     timeout_seconds: int | None = None,
 ) -> dict[str, Any]:
-    iteration_dir = Path(iteration_dir)
-    package_dir = Path(package_dir)
+    iteration_path = Path(iteration_dir)
+    package_path = Path(package_dir)
     taxonomy_data = _load_taxonomy(taxonomy)
-    packet = build_analysis_packet(iteration_dir, package_dir, taxonomy=taxonomy_data)
+    packet = build_analysis_packet(iteration_path, package_path, taxonomy=taxonomy_data)
 
     model = analyzer_model or os.getenv("VISION_ANALYZER_MODEL") or _resolve_model(None)
     payload = {
@@ -361,9 +373,9 @@ def analyze_iteration(
         ],
     }
 
-    _write_json(iteration_dir / "analysis.json", analysis)
-    (iteration_dir / "analysis.md").write_text(_analysis_markdown(analysis), encoding="utf-8")
-    _write_json(iteration_dir / "failure-tags.json", failure_tags)
+    _write_json(iteration_path / "analysis.json", analysis)
+    (iteration_path / "analysis.md").write_text(_analysis_markdown(analysis), encoding="utf-8")
+    _write_json(iteration_path / "failure-tags.json", failure_tags)
 
     return {
         "packet": packet,

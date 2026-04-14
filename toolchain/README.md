@@ -1,64 +1,155 @@
 # Toolchain
 
-这里是 `vision-skill` 的工程工具链。当前主链已经覆盖：
+This directory contains the current engineering toolchain for `vision-skill`.
+
+## Current Modules
 
 - `validators/`
   - Level 1-2
-  - 校验 package 结构和协议约束
+  - package structure and protocol checks
 - `executors/`
-  - Level 3
-  - 执行 `with_skill / without_skill` 真实 run
+  - run `with_skill / without_skill` executions
 - `graders/`
-  - Level 3
-  - 对单个 run 生成 `grading.json`
+  - Level 3A gate checks and legacy grading
+- `judges/`
+  - Level 3B pairwise differential judging
 - `benchmarks/`
-  - Level 3-4
-  - 聚合 `benchmark` 与 `stability` 产物
+  - legacy benchmark aggregation, differential benchmark, and stability
 - `analyzers/`
-  - Level 5
-  - 读取已有 artifacts，生成 `analysis.json`
+  - Level 5 mechanism analysis
 - `reviews/`
-  - Level 6
-  - 生成人审包、评分模板和放行建议
+  - Level 6 review packet and release recommendation
+- `eval_factory/`
+  - validate and export certified eval bundles
+  - sync certified bundles into package evals for mainline consumption
+- `agent_hosts/`
+  - real host validation
+  - current backend: `Codex`
+  - validates skill trigger and multi-turn protocol outside the API lane
 
-当前还没有完整落地的模块：
+Still placeholder modules:
 
 - `builders/`
 - `packagers/`
 
-## 推荐阅读顺序
+## Reading Order
 
 1. `validators/`
 2. `executors/`
 3. `graders/`
-4. `benchmarks/`
-5. `analyzers/`
-6. `reviews/`
+4. `judges/`
+5. `benchmarks/`
+6. `analyzers/`
+7. `reviews/`
+8. `eval_factory/`
+9. `agent_hosts/`
 
-## 常用命令
+## Common Commands
 
-先跑 Level 3：
+Run the default end-to-end eval pipeline:
 
 ```bash
-python -m toolchain.benchmarks.run_benchmark
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 2 --runs-per-configuration 3 --judge-model "qwen-plus" --analyzer-model "qwen-plus"
 ```
 
-再从 benchmark 进入 Level 4-6：
+Run the lightweight smoke path:
+
+```bash
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 3 --smoke
+```
+
+Smoke mode behavior:
+
+- defaults to `1` run per configuration
+- defaults to at most `2` evals when no `--eval-ids` or `--max-evals` is supplied
+- enables `skip_completed` automatically so interrupted smoke jobs can resume without re-running finished calls
+
+Run the host lane for host-enabled eval cases:
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+Run the supporting Level 3A gate benchmark:
+
+```bash
+python -m toolchain.benchmarks.run_benchmark --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --skill-name "SWOT Analysis" --skill-path "E:\Project\vision-lab\vision-skill\packages\swot-analysis"
+```
+
+Run the new differential benchmark path:
+
+```bash
+python -m toolchain.benchmarks.run_differential_benchmark --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --skill-name "SWOT Analysis" --skill-path "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --judge-model "qwen3.5-plus"
+```
+
+Run Level 4-6 against the normalized `level3-summary.json` handoff:
 
 ```bash
 python -m toolchain.run_level456 --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis"
 ```
 
-这条命令会依次生成：
+Validate the current eval-factory sample bundle:
 
-- `stability.json`
-- `stability.md`
-- `variance-by-expectation.json`
-- `analysis.json`
-- `analysis.md`
-- `failure-tags.json`
-- `human-review-packet.md`
-- `release-recommendation.json`
+```bash
+pytest toolchain/eval_factory/tests/test_catalog.py
+```
 
-如果 iteration 下还没有 `human-review-score.json`，它会自动写入模板。
-如果已经有人填写过人审结果，默认不会覆盖；只有显式传入 `--refresh-review-template` 才会重写。
+## Current Differential Outputs
+
+The new Level 3B path writes these artifacts in the iteration directory:
+
+- `pairwise-judgment.json`
+- `pairwise-judgment-reversed.json`
+- `pairwise-consensus.json`
+- `differential-benchmark.json`
+- `differential-benchmark.md`
+
+These remain on disk alongside the older `benchmark.json` gate artifact, but the mainline now treats `differential-benchmark.json` as the Level 3 primary output.
+
+## Current Mainline Contract
+
+The default eval path is now:
+
+```text
+certified bundle
+  -> package eval sync
+  -> prepare iteration
+  -> execute
+  -> benchmark.json (gate/supporting)
+  -> differential-benchmark.json (primary)
+  -> level3-summary.json
+  -> stability
+  -> analysis
+  -> human review packet
+  -> release recommendation
+```
+
+Level 4-6 should read `level3-summary.json` first, not `benchmark.json` directly.
+
+The host lane runs in parallel:
+
+```text
+package evals with host_eval.enabled
+  -> Codex host proxy
+  -> host transcript
+  -> normalized events
+  -> signal report
+  -> protocol report
+  -> trigger report
+  -> host grading
+  -> host-benchmark.json
+```
+
+The host lane is rule-first:
+
+- simple cleaning before any downstream use
+- no raw host transcript in future model prompts
+- compact packets only, with fixed budget caps
+
+## Current Eval Factory Output
+
+The first live certified bundle currently sits outside package directories:
+
+- `eval-factory/certified-evals/swot-analysis/swot-analysis-certified-batch-v0.1.json`
+
+This keeps eval production separate from package consumption while still supporting package-level auto-sync through `metadata/package.json -> eval_source`.

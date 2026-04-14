@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from toolchain.analyzers.mechanism_analyzer import Sender, analyze_iteration
+from toolchain.benchmarks.level3_summary import ensure_level3_summary
 from toolchain.benchmarks.stability import generate_stability_report, write_stability_artifacts
 from toolchain.reviews.cognitive_review import (
     build_human_review_packet,
@@ -27,6 +28,7 @@ def run_level456(
 ) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
     package_path = Path(package_dir)
+    level3_summary = ensure_level3_summary(iteration_path)
 
     stability = generate_stability_report(iteration_path)
     write_stability_artifacts(iteration_path, stability)
@@ -54,6 +56,8 @@ def run_level456(
     return {
         "iteration_dir": str(iteration_path),
         "package_dir": str(package_path),
+        "level3_primary_mode": level3_summary.get("primary_mode", "unknown"),
+        "level3_summary_path": str(iteration_path / "level3-summary.json"),
         "analysis_model": analysis["metadata"]["analyzer_model"],
         "stability_flags": stability["overall"]["flags"],
         "representative_runs": packet["representative_runs"],
@@ -61,6 +65,7 @@ def run_level456(
         "recommendation": recommendation["recommendation"],
         "blockers": recommendation["blockers"],
         "artifacts": {
+            "level3_summary_json": str(iteration_path / "level3-summary.json"),
             "stability_json": str(iteration_path / "stability.json"),
             "analysis_json": str(iteration_path / "analysis.json"),
             "human_review_packet": str(iteration_path / "human-review-packet.md"),

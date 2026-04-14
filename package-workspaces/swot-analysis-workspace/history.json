@@ -17,6 +17,13 @@
       "stage": "prepared",
       "grading_result": "not-run",
       "is_current_best": false
+    },
+    {
+      "version": "iteration-2",
+      "parent": "candidate-seed",
+      "stage": "prepared",
+      "grading_result": "not-run",
+      "is_current_best": false
     }
   ]
 }

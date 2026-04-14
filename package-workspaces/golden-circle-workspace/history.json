@@ -1,0 +1,15 @@
+{
+  "started_at": "",
+  "package_name": "golden-circle",
+  "skill_name": "15-黄金圈思维",
+  "current_best": "candidate-seed",
+  "iterations": [
+    {
+      "version": "iteration-1",
+      "parent": "candidate-seed",
+      "stage": "prepared",
+      "grading_result": "not-run",
+      "is_current_best": false
+    }
+  ]
+}

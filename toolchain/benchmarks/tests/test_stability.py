@@ -24,14 +24,15 @@ def write_run(
     expectations: list[dict[str, object]],
 ) -> None:
     (run_dir / "outputs").mkdir(parents=True, exist_ok=True)
-    (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
+    output_path = run_dir / "outputs" / "final_response.md"
+    output_path.write_text(response, encoding="utf-8")
     (run_dir / "grading.json").write_text(
         json.dumps(
             {
                 "eval_id": 1,
                 "eval_name": "stability-case",
                 "prompt": "Analyze this with SWOT.",
-                "output_file": str(run_dir / "outputs" / "final_response.md"),
+                "output_file": str(output_path),
                 "expectations": expectations,
                 "summary": {
                     "passed": passed,
@@ -68,6 +69,49 @@ def write_run(
     )
 
 
+def write_level3_summary(
+    iteration_dir: Path,
+    *,
+    win_rate: float = 0.3333,
+    judge_disagreement_rate: float = 0.0,
+    cost_adjusted_value: float = -0.18,
+) -> None:
+    eval_dir = iteration_dir / "eval-1-stability-case"
+    (iteration_dir / "level3-summary.json").write_text(
+        json.dumps(
+            {
+                "primary_mode": "differential",
+                "pairwise_summary": {
+                    "win_rate": win_rate,
+                    "tie_rate": 0.0,
+                    "avg_margin": -0.2,
+                    "judge_disagreement_rate": judge_disagreement_rate,
+                    "cost_adjusted_value": cost_adjusted_value,
+                },
+                "gate_summary": {
+                    "with_skill": {"pass_rate": {"mean": 0.8333}},
+                    "without_skill": {"pass_rate": {"mean": 1.0}},
+                },
+                "per_eval": [
+                    {
+                        "eval_id": 1,
+                        "eval_name": "stability-case",
+                        "run_number": 1,
+                        "final_winner": "without_skill",
+                        "avg_margin": 0.8,
+                        "judge_disagreement": judge_disagreement_rate > 0,
+                        "with_skill_run_dir": str(eval_dir / "with_skill" / "run-1"),
+                        "without_skill_run_dir": str(eval_dir / "without_skill" / "run-1"),
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+
 def write_iteration(tmp_path: Path) -> Path:
     iteration_dir = tmp_path / "iteration-1"
     eval_dir = iteration_dir / "eval-1-stability-case"
@@ -90,25 +134,28 @@ def write_iteration(tmp_path: Path) -> Path:
         encoding="utf-8",
     )
 
-    stable_baseline_response = """
-## Strengths
-- community insight
-## Weaknesses
-- low budget
-## Opportunities
-- demand growth
-## Threats
-- strong competitors
-## Strategy
-- validate demand quickly
-""".strip()
-
-    drifting_with_skill_response = """
-Strengths: community insight
-Weaknesses: low budget
-Opportunities: demand growth
-Threats: strong competitors
-""".strip()
+    stable_response = "\n".join(
+        [
+            "## Strengths",
+            "- community insight",
+            "## Weaknesses",
+            "- low budget",
+            "## Opportunities",
+            "- demand growth",
+            "## Threats",
+            "- strong competitors",
+            "## Strategy",
+            "- validate demand quickly",
+        ]
+    )
+    drifting_response = "\n".join(
+        [
+            "Strengths: community insight",
+            "Weaknesses: low budget",
+            "Opportunities: demand growth",
+            "Threats: strong competitors",
+        ]
+    )
 
     expectation_pass = [
         {
@@ -151,7 +198,7 @@ Threats: strong competitors
         total=2,
         seconds=20.0,
         tokens=2200,
-        response=stable_baseline_response,
+        response=stable_response,
         expectations=expectation_pass,
     )
     write_run(
@@ -162,7 +209,7 @@ Threats: strong competitors
         total=2,
         seconds=22.0,
         tokens=2300,
-        response=stable_baseline_response,
+        response=stable_response,
         expectations=expectation_pass,
     )
     write_run(
@@ -173,7 +220,7 @@ Threats: strong competitors
         total=2,
         seconds=28.0,
         tokens=2800,
-        response=drifting_with_skill_response,
+        response=drifting_response,
         expectations=expectation_partial,
     )
 
@@ -185,7 +232,7 @@ Threats: strong competitors
         total=2,
         seconds=10.0,
         tokens=1100,
-        response=stable_baseline_response,
+        response=stable_response,
         expectations=expectation_pass,
     )
     write_run(
@@ -196,7 +243,7 @@ Threats: strong competitors
         total=2,
         seconds=11.0,
         tokens=1150,
-        response=stable_baseline_response,
+        response=stable_response,
         expectations=expectation_pass,
     )
     write_run(
@@ -207,9 +254,11 @@ Threats: strong competitors
         total=2,
         seconds=12.0,
         tokens=1200,
-        response=stable_baseline_response,
+        response=stable_response,
         expectations=expectation_pass,
     )
+
+    write_level3_summary(iteration_dir)
     return iteration_dir
 
 
@@ -238,3 +287,18 @@ def test_write_stability_artifacts_writes_expected_files(tmp_path: Path) -> None
     assert (iteration_dir / "stability.json").exists()
     assert (iteration_dir / "stability.md").exists()
     assert (iteration_dir / "variance-by-expectation.json").exists()
+
+
+def test_generate_stability_report_uses_level3_summary_for_value_and_disagreement_flags(tmp_path: Path) -> None:
+    iteration_dir = write_iteration(tmp_path)
+    write_level3_summary(
+        iteration_dir,
+        win_rate=0.3333,
+        judge_disagreement_rate=0.5,
+        cost_adjusted_value=-0.18,
+    )
+
+    report = generate_stability_report(iteration_dir)
+
+    assert "weak_stability_value" in report["overall"]["flags"]
+    assert "instability_risk" in report["overall"]["flags"]

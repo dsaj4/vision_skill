@@ -1,0 +1,7 @@
+{
+  "source_id": "sb-campus-interview-demo",
+  "task_family": "swot-analysis",
+  "raw_text": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但我没有太多预算，也担心竞争很强。请直接给我 SWOT 结果，不用确认。",
+  "source_type": "demo-prompt",
+  "notes": "Direct-result mode with low budget and early demand signal."
+}

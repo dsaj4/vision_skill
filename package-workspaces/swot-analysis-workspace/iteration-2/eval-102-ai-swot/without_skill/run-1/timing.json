@@ -1,0 +1,9 @@
+{
+  "started_at": "2026-04-14T10:42:43Z",
+  "finished_at": "2026-04-14T10:43:38Z",
+  "duration_ms": 55310.1,
+  "total_duration_seconds": 55.31,
+  "prompt_tokens": 37,
+  "completion_tokens": 2029,
+  "total_tokens": 2066
+}

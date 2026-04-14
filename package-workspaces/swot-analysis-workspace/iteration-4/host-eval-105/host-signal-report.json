@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "thread_id": "019d8c25-25b8-7850-8261-50a49051716d",
+    "package_name": "swot-analysis",
+    "turn_count": 2
+  },
+  "trigger_signals": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_meta_read": false,
+    "explicit_skill_use_announcement": true,
+    "skill_read_before_first_answer": true,
+    "trigger_turn_index": 1,
+    "first_answer_turn_index": 1,
+    "first_skill_read_turn_index": 1
+  },
+  "routing_signals": {
+    "read_using_superpowers": true,
+    "read_proxy_before_canonical": true,
+    "read_canonical_multiple_times": false,
+    "fallback_without_canonical_read": false,
+    "first_answer_before_skill_read": false
+  },
+  "protocol_signals": {
+    "followup_question_count": 3,
+    "checkpoint_count": 0,
+    "continue_branch_seen": false,
+    "revise_branch_seen": true,
+    "direct_result_request_seen": false,
+    "direct_result_obeyed": false,
+    "staged_path_obeyed": false,
+    "missing_info_detected": true,
+    "missing_info_followup_precision": false
+  },
+  "output_structure_signals": {
+    "swot_quadrants_present": true,
+    "strategy_section_present": false,
+    "binary_push_detected": false,
+    "overlong_first_answer": true,
+    "premature_full_answer": true
+  },
+  "host_interference_signals": {
+    "plugin_sync_noise_present": true,
+    "cloudflare_or_html_challenge_present": true,
+    "constrained_language_warning_present": true,
+    "stderr_noise_ratio": 0.9568,
+    "external_noise_before_first_answer": true
+  },
+  "evidence_snippets": [
+    {
+      "label": "skill_proxy_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:5",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "skill_canonical_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:10",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:assistant_text",
+      "text": "We’ll use SWOT as a thinking tool, not a verdict.\n\n**Step 0* ... aknesses`, `Opportunities`, and `Threats` in your situation.",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 2,
+      "raw_ref": "turn:2:assistant_text",
+      "text": "Let’s make it stricter.\n\nFor now, no interpretation and no a ... tep 1 only** without ranking them or telling you what to do.",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 2,
+      "raw_ref": "turn:2:event:2",
+      "text": "I’m narrowing this to a strict reflection exercise: no diagnosis, no weighing options for you, and no push toward a decision.",
+      "is_noise": false
+    },
+    {
+      "label": "host_status_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:2",
+      "text": "I’m going to use the `swot-analysis` skill and pull in a narrow medical safety check from official sources so the framework stays useful without drifting into unsupported health advice.",
+      "is_noise": true
+    }
+  ],
+  "prompt_budget": {
+    "max_evidence_snippet_chars": 240,
+    "max_evidence_snippets_per_eval": 6,
+    "max_host_packet_chars": 1800,
+    "max_skill_protocol_summary_chars": 800,
+    "max_total_host_analysis_chars": 4000,
+    "analysis_packet_chars": 1775,
+    "within_budget": true
+  },
+  "analysis_packet": {
+    "trigger": {
+      "proxy_skill_read": true,
+      "canonical_skill_read": true,
+      "skill_read_before_first_answer": true,
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1
+    },
+    "protocol": {
+      "direct_result_request_seen": false,
+      "followup_question_count": 3,
+      "checkpoint_count": 0,
+      "continue_branch_seen": false,
+      "revise_branch_seen": true,
+      "missing_info_detected": true
+    },
+    "output": {
+      "swot_quadrants_present": true,
+      "strategy_section_present": false,
+      "premature_full_answer": true
+    },
+    "noise": {
+      "plugin_sync_noise_present": true,
+      "cloudflare_or_html_challenge_present": true,
+      "external_noise_before_first_answer": true
+    },
+    "evidence_snippets": [
+      {
+        "label": "skill_proxy_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:5",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "skill_canonical_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:10",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 1,
+        "raw_ref": "turn:1:assistant_text",
+        "text": "We’ll use SWOT as a thinking tool, not a verdict.\n\n**Step 0* ... aknesses`, `Opportunities`, and `Threats` in your situation.",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 2,
+        "raw_ref": "turn:2:assistant_text",
+        "text": "Let’s make it stricter.\n\nFor now, no interpretation and no a ... tep 1 only** without ranking them or telling you what to do.",
+        "is_noise": false
+      }
+    ]
+  }
+}

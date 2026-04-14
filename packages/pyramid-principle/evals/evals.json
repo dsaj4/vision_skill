@@ -1,0 +1,104 @@
+{
+  "skill_name": "Pyramid Principle",
+  "package_name": "pyramid-principle",
+  "evals": [
+    {
+      "id": 161,
+      "prompt": "我要给公司管理层汇报：为什么今年不应该继续扩招销售，而应该先重构销售流程和客户分层。已知：1）目前线索不少但成交率低；2）新人 ramp-up 慢；3）销售经理大量时间花在救火；4）CEO 只给我 10 分钟汇报时间。请用金字塔原理帮我直接整理成可表达的结构，不用确认。",
+      "expected_output": "A direct-result pyramid structure with a clear core conclusion, grouped arguments, and expression guidance.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "core-conclusion",
+          "type": "contains_any",
+          "text": "The output should state the core conclusion first.",
+          "keywords": [
+            "核心结论",
+            "一句话概括",
+            "结论先行"
+          ]
+        },
+        {
+          "id": "argument-groups",
+          "type": "contains_any",
+          "text": "The output should organize key supporting arguments.",
+          "keywords": [
+            "论据组",
+            "关键论据",
+            "塔身"
+          ]
+        },
+        {
+          "id": "expression-guidance",
+          "type": "contains_any",
+          "text": "The output should include communication or expression guidance.",
+          "keywords": [
+            "表达建议",
+            "开场方式",
+            "逻辑检验"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 162,
+      "prompt": "帮我用金字塔原理整理一下这个事情。",
+      "expected_output": "The skill should ask for the most important missing context before building a pyramid structure.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "ask-missing-info",
+          "type": "contains_any",
+          "text": "The output should ask for missing topic, claim, audience, or support context first.",
+          "keywords": [
+            "还缺",
+            "需要补充",
+            "主题",
+            "核心观点",
+            "目标受众",
+            "支撑材料"
+          ]
+        },
+        {
+          "id": "no-premature-structure",
+          "type": "contains_none",
+          "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+          "keywords": [
+            "塔尖",
+            "核心结论",
+            "论据组",
+            "塔身"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "prompt": "我要把“为什么团队协作效率越来越低”讲给部门负责人听，但还没整理清楚。请用金字塔原理一步步帮我搭结构。",
+      "expected_output": "A staged pyramid-principle response that starts with Step 1 and pauses for confirmation.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "staged-step1",
+          "type": "contains_any",
+          "text": "The output should stay in staged mode and begin with Step 1 work.",
+          "keywords": [
+            "Step 1",
+            "核心结论",
+            "塔尖"
+          ]
+        },
+        {
+          "id": "pause-block",
+          "type": "contains_any",
+          "text": "The output should include the staged pause block.",
+          "keywords": [
+            "回复\"继续\"",
+            "回复\"不对\"",
+            "回复\"直接要结果\""
+          ]
+        }
+      ]
+    }
+  ]
+}

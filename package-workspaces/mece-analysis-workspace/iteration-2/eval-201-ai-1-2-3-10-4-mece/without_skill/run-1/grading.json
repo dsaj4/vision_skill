@@ -1,0 +1,51 @@
+{
+  "eval_id": 201,
+  "eval_name": "ai-1-2-3-10-4-mece",
+  "prompt": "我在做一个面向自由职业者的 AI 记账助手，最近增长停滞。已知情况：1）新用户注册不少，但次日留存低；2）主要流量来自小红书和微信群；3）我每周只有 10 小时能投入；4）目标是找出下一阶段最值得优先解决的问题。请用 MECE 帮我拆解，并直接给完整结果，不用确认。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\without_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "mece-dimension",
+      "type": "contains_any",
+      "text": "The output should state the decomposition dimension or method.",
+      "passed": false,
+      "evidence": "Matched: []"
+    },
+    {
+      "id": "mece-check",
+      "type": "contains_any",
+      "text": "The output should include a MECE-style completeness or independence check.",
+      "passed": false,
+      "evidence": "Matched: []"
+    },
+    {
+      "id": "mece-priority",
+      "type": "contains_any",
+      "text": "The output should conclude with action priorities or next-step guidance.",
+      "passed": true,
+      "evidence": "Matched: ['优先级']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 2,
+    "total": 3,
+    "pass_rate": 0.3333
+  },
+  "execution_metrics": {
+    "response_character_count": 2441,
+    "response_word_count": 297,
+    "markdown_heading_count": 8,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T14:11:41Z",
+    "finished_at": "2026-04-14T14:13:08Z",
+    "duration_ms": 86548.28,
+    "total_duration_seconds": 86.548,
+    "prompt_tokens": 86,
+    "completion_tokens": 4118,
+    "total_tokens": 4204
+  }
+}

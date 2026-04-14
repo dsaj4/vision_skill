@@ -140,3 +140,27 @@ def test_execute_iteration_runs_both_configurations(tmp_path: Path) -> None:
     assert result["total_runs"] == 2
     assert (iteration_dir / "eval-1-swot" / "with_skill" / "run-1" / "raw_response.json").exists()
     assert (iteration_dir / "eval-1-swot" / "without_skill" / "run-1" / "outputs" / "final_response.md").exists()
+
+
+def test_execute_iteration_skips_completed_runs_when_requested(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir = write_iteration(tmp_path / "workspace")
+    completed_run_dir = iteration_dir / "eval-1-swot" / "with_skill" / "run-1"
+    (completed_run_dir / "raw_response.json").write_text(json.dumps({"choices": [{"message": {"content": "done"}}]}), encoding="utf-8")
+    (completed_run_dir / "transcript.json").write_text(json.dumps({"assistant_response": "done"}), encoding="utf-8")
+    (completed_run_dir / "timing.json").write_text(json.dumps({"total_tokens": 10, "total_duration_seconds": 1.0}), encoding="utf-8")
+    (completed_run_dir / "outputs" / "final_response.md").write_text("done", encoding="utf-8")
+
+    result = execute_iteration(
+        iteration_dir,
+        package_dir,
+        sender=fake_sender,
+        api_key="test-key",
+        model="qwen-test",
+        skip_completed=True,
+    )
+
+    assert result["total_runs"] == 2
+    assert len(result["completed_runs"]) == 1
+    assert len(result["skipped_runs"]) == 1
+    assert result["skipped_runs"][0]["run_dir"] == str(completed_run_dir)

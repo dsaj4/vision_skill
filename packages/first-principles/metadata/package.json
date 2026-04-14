@@ -1,0 +1,12 @@
+{
+  "package_name": "first-principles",
+  "skill_name": "18-第一性原理",
+  "category": "thinking-problem-solving",
+  "status": "candidate",
+  "version": "0.1.0",
+  "owner": "vision-skill",
+  "core_track": "mainline-a-package-factory",
+  "release_stage": "candidate",
+  "source_mode": "demo-only",
+  "candidate_origin": "demo-migration"
+}

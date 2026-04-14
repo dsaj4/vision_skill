@@ -97,6 +97,36 @@ def write_iteration(base: Path) -> Path:
         "notes": [],
     }
     (iteration_dir / "benchmark.json").write_text(json.dumps(benchmark, ensure_ascii=False, indent=2), encoding="utf-8")
+    (iteration_dir / "level3-summary.json").write_text(
+        json.dumps(
+            {
+                "primary_mode": "differential",
+                "pairwise_summary": {
+                    "win_rate": 1.0,
+                    "tie_rate": 0.0,
+                    "avg_margin": 0.7,
+                    "judge_disagreement_rate": 0.0,
+                    "cost_adjusted_value": 0.3,
+                },
+                "gate_summary": benchmark["run_summary"],
+                "per_eval": [
+                    {
+                        "eval_id": 1,
+                        "eval_name": "swot-case",
+                        "run_number": 1,
+                        "final_winner": "with_skill",
+                        "avg_margin": 0.7,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(iteration_dir / "eval-1-swot-case" / "with_skill" / "run-1"),
+                        "without_skill_run_dir": str(iteration_dir / "eval-1-swot-case" / "without_skill" / "run-1"),
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
     stability = {
         "metadata": {"runs_per_configuration": 3},
@@ -288,3 +318,13 @@ def test_analyze_iteration_recovers_failure_tags_from_repair_recommendations(tmp
     assert result["analysis"]["per_eval"][0]["failure_tags"] == ["blueprint-spec.eval-gap"]
     assert result["analysis"]["per_eval"][0]["repair_layer"] == "blueprint-spec"
     assert result["analysis"]["failure_tag_counts"]["blueprint-spec.eval-gap"] == 1
+
+
+def test_build_analysis_packet_includes_level3_pairwise_signals(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir, taxonomy = write_iteration(tmp_path / "workspace")
+
+    packet = build_analysis_packet(iteration_dir, package_dir, taxonomy)
+
+    assert packet["level3_summary"]["primary_mode"] == "differential"
+    assert packet["evals"][0]["with_skill_runs"][0]["pairwise_outcome"]["final_winner"] == "with_skill"

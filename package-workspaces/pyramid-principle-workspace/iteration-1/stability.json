@@ -1,0 +1,592 @@
+{
+  "metadata": {
+    "iteration_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1",
+    "generated_at": "2026-04-14T14:16:39Z",
+    "runs_per_configuration": 1,
+    "eval_ids": [
+      161,
+      162,
+      163
+    ],
+    "level3_primary_mode": "differential"
+  },
+  "level3_summary": {
+    "primary_mode": "differential",
+    "pairwise_summary": {
+      "win_rate": 0.0,
+      "tie_rate": 0.0,
+      "avg_margin": -0.5583,
+      "judge_disagreement_rate": 0.0,
+      "cost_adjusted_value": -0.6286
+    }
+  },
+  "per_eval": [
+    {
+      "eval_id": 161,
+      "eval_name": "1-2-ramp-up-3-4-ceo-10",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 39.668,
+            "stddev": 0.0,
+            "min": 39.668,
+            "max": 39.668
+          },
+          "tokens": {
+            "mean": 3724.0,
+            "stddev": 0.0,
+            "min": 3724.0,
+            "max": 3724.0
+          },
+          "expectation_variance": {
+            "core-conclusion": {
+              "text": "The output should state the core conclusion first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "argument-groups": {
+              "text": "The output should organize key supporting arguments.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "expression-guidance": {
+              "text": "The output should include communication or expression guidance.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lmedium"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.3333,
+            "stddev": 0.0,
+            "min": 0.3333,
+            "max": 0.3333
+          },
+          "time_seconds": {
+            "mean": 51.697,
+            "stddev": 0.0,
+            "min": 51.697,
+            "max": 51.697
+          },
+          "tokens": {
+            "mean": 2666.0,
+            "stddev": 0.0,
+            "min": 2666.0,
+            "max": 2666.0
+          },
+          "expectation_variance": {
+            "core-conclusion": {
+              "text": "The output should state the core conclusion first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "argument-groups": {
+              "text": "The output should organize key supporting arguments.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            },
+            "expression-guidance": {
+              "text": "The output should include communication or expression guidance.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h12|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 161,
+          "eval_name": "1-2-ramp-up-3-4-ceo-10",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.425,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    },
+    {
+      "eval_id": 162,
+      "eval_name": "eval",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 31.442,
+            "stddev": 0.0,
+            "min": 31.442,
+            "max": 31.442
+          },
+          "tokens": {
+            "mean": 3285.0,
+            "stddev": 0.0,
+            "min": 3285.0,
+            "max": 3285.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for missing topic, claim, audience, or support context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-structure": {
+              "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Forbidden matches: ['核心结论']"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lshort"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 30.858,
+            "stddev": 0.0,
+            "min": 30.858,
+            "max": 30.858
+          },
+          "tokens": {
+            "mean": 1652.0,
+            "stddev": 0.0,
+            "min": 1652.0,
+            "max": 1652.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for missing topic, claim, audience, or support context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-structure": {
+              "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Forbidden matches: ['核心结论']"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h3|q0000|p0|d0|lmedium"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 162,
+          "eval_name": "eval",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.5,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    },
+    {
+      "eval_id": 163,
+      "eval_name": "eval",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 40.381,
+            "stddev": 0.0,
+            "min": 40.381,
+            "max": 40.381
+          },
+          "tokens": {
+            "mean": 3788.0,
+            "stddev": 0.0,
+            "min": 3788.0,
+            "max": 3788.0
+          },
+          "expectation_variance": {
+            "staged-step1": {
+              "text": "The output should stay in staged mode and begin with Step 1 work.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "pause-block": {
+              "text": "The output should include the staged pause block.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lshort"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 55.349,
+            "stddev": 0.0,
+            "min": 55.349,
+            "max": 55.349
+          },
+          "tokens": {
+            "mean": 3034.0,
+            "stddev": 0.0,
+            "min": 3034.0,
+            "max": 3034.0
+          },
+          "expectation_variance": {
+            "staged-step1": {
+              "text": "The output should stay in staged mode and begin with Step 1 work.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "pause-block": {
+              "text": "The output should include the staged pause block.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h11|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 163,
+          "eval_name": "eval",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.75,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    }
+  ],
+  "overall": {
+    "configurations": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 0.6667,
+          "stddev": 0.2887,
+          "min": 0.5,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 37.1637,
+          "stddev": 4.9679,
+          "min": 31.442,
+          "max": 40.381
+        },
+        "tokens": {
+          "mean": 3599.0,
+          "stddev": 273.8083,
+          "min": 3285.0,
+          "max": 3788.0
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.4444,
+          "stddev": 0.0962,
+          "min": 0.3333,
+          "max": 0.5
+        },
+        "time_seconds": {
+          "mean": 45.968,
+          "stddev": 13.2124,
+          "min": 30.858,
+          "max": 55.349
+        },
+        "tokens": {
+          "mean": 2450.6667,
+          "stddev": 715.7215,
+          "min": 1652.0,
+          "max": 3034.0
+        }
+      }
+    },
+    "flags": [
+      "instability_risk",
+      "weak_stability_value"
+    ]
+  },
+  "variance_by_expectation": {
+    "expectations": [
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "with_skill",
+        "expectation_id": "core-conclusion",
+        "text": "The output should state the core conclusion first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "with_skill",
+        "expectation_id": "argument-groups",
+        "text": "The output should organize key supporting arguments.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "with_skill",
+        "expectation_id": "expression-guidance",
+        "text": "The output should include communication or expression guidance.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "without_skill",
+        "expectation_id": "core-conclusion",
+        "text": "The output should state the core conclusion first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "without_skill",
+        "expectation_id": "argument-groups",
+        "text": "The output should organize key supporting arguments.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "configuration": "without_skill",
+        "expectation_id": "expression-guidance",
+        "text": "The output should include communication or expression guidance.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for missing topic, claim, audience, or support context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "no-premature-structure",
+        "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for missing topic, claim, audience, or support context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "no-premature-structure",
+        "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "staged-step1",
+        "text": "The output should stay in staged mode and begin with Step 1 work.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "pause-block",
+        "text": "The output should include the staged pause block.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "staged-step1",
+        "text": "The output should stay in staged mode and begin with Step 1 work.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "pause-block",
+        "text": "The output should include the staged pause block.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      }
+    ]
+  }
+}

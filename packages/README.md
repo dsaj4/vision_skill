@@ -11,3 +11,6 @@
 当前已落地的候选包：
 
 - `swot-analysis`
+- `mece-analysis`
+- `first-principles`
+- `five-whys`

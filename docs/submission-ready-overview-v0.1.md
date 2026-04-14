@@ -12,6 +12,7 @@ It is meant to show:
 
 - the project structure
 - the package contract
+- the eval-factory contract
 - the evaluation chain
 - the current example package
 - the evidence model for iteration and review
@@ -46,6 +47,7 @@ Reviewers should treat the following as the current canonical paths:
 - code guide: `docs/code-guides/2026-04-08-vision-skill-code-understanding-guide-v0.1.md`
 - sample package: `packages/swot-analysis/`
 - sample workspace: `package-workspaces/swot-analysis-workspace/`
+- certified eval upstream: `eval-factory/certified-evals/swot-analysis/`
 
 ## Current Implemented Scope
 
@@ -56,28 +58,35 @@ Implemented modules:
 - Level 2
   - protocol validation
 - Level 3
-  - run grading and benchmark aggregation
+  - Level 3A gate checks and legacy benchmark aggregation
+  - Level 3B differential benchmark with pairwise judging
 - Level 4
   - stability analysis
 - Level 5
   - mechanism analysis with model-assisted reasoning
 - Level 6
   - human review packet generation and release recommendation
+- Host Agent Eval Lane
+  - `Codex` host adapter
+  - real-host trigger validation
+  - multi-turn protocol validation
 
 Current sample assets:
 
 - `swot-analysis` candidate package
-- one workspace with benchmark, stability, analysis, and review artifacts
+- first certified eval bundle for `swot-analysis`
+- one workspace with benchmark, differential benchmark, `level3-summary`, stability, analysis, and review artifacts
+- host-enabled eval cases for `swot-analysis`
 
 ## Known Limits
 
 These are current project limits and should be read as honest scope boundaries:
 
 - only one candidate package is currently included
-- executor and scaffold are still library-first modules rather than fully polished CLI tools
 - builder and packager modules are still placeholders
 - the current sample package does not yet consistently outperform baseline
 - release recommendation is intentionally conservative and keeps human review as the final gate
+- host lane is currently parallel evidence and has not yet been merged into the main release recommendation artifact
 
 ## How To Demo The Repository
 
@@ -85,16 +94,21 @@ Minimal demo path:
 
 1. Read `README.md`
 2. Inspect `packages/swot-analysis/`
-3. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/benchmark.md`
-4. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/stability.md`
-5. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/analysis.md`
-6. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/human-review-packet.md`
+3. Inspect `eval-factory/certified-evals/swot-analysis/swot-analysis-certified-batch-v0.1.json`
+4. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/benchmark.md`
+5. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/differential-benchmark.md`
+6. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/stability.md`
+7. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/analysis.md`
+8. Inspect `package-workspaces/swot-analysis-workspace/iteration-1/human-review-packet.md`
 
 Command demo path:
 
 1. Run `pytest`
-2. Re-run benchmark for the sample workspace
-3. Re-run `python -m toolchain.run_level456`
+2. Run `python -m toolchain.run_eval_pipeline --smoke`
+3. Run `python -m toolchain.agent_hosts.run_host_eval --max-evals 2`
+4. Confirm the generated iteration contains `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, `stability.json`, `analysis.json`, and `release-recommendation.json`
+5. Confirm host artifacts contain `host-transcript.json`, `host-trigger-report.json`, and `host-benchmark.json`
+6. Run `pytest toolchain/eval_factory/tests/test_catalog.py`
 
 ## Recommended Submission Narrative
 
@@ -107,7 +121,6 @@ The cleanest way to present this repository is:
 
 ## Next Step After Submission
 
-- add CLI coverage for scaffold and executor
 - add two more candidate packages
 - improve the current sample package until benchmark delta is meaningfully positive
 - connect the future builder/packager layers to the current evaluation chain

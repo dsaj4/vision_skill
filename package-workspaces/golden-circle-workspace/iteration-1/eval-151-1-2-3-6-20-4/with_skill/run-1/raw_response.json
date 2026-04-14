@@ -1,0 +1,31 @@
+{
+  "choices": [
+    {
+      "message": {
+        "content": "🎯 黄金圈分析\n分析主题：被裁员产品经理职业转型社群付费产品化\n\n🔍 Why 层（为什么）\n核心目的：帮助被裁员产品经理重建职业方向与信心，而非仅提供信息安慰。\n价值意义：解决“焦虑但不愿为信息买单”的痛点，通过个性化诊断提供确定性，降低转型试错成本。\n愿景画面：成为一个高信任度的职业重生基地，用户在此不仅找到工作，更找到新的职业身份认同。\n信念驱动：职业转型的本质是“人的重建”，一对一的深度连接比标准化课程更能解决个体困境。\n\n📋 How 层（怎么做）\n核心策略：以“一对一诊断”为核心引流与交付产品，社群作为陪伴与资源载体，而非卖课平台。\n方法原则：\n- 服务前置：先诊断后付费，或低价诊断转高价陪跑，建立信任。\n- 结果导向：不以“课程内容量”为卖点，而以“转型路径清晰度”为卖点。\n- 稀缺营造：强调创始人亲自诊断的时间稀缺性，提升付费意愿。\n资源需求：创始人时间（核心交付）、行业人脉（内推/导师）、社群运营工具。\n约束条件：一对一耗时严重，需在 6 周内平衡交付质量与获客数量；用户付费能力受裁员影响可能下降。\n\n✅ What 层（做什么）\n具体行动：\n- 产品设计：定义“诊断 + 规划 + 社群”的最小可行产品（MVP），定价策略测试（如早鸟价）。\n- 获客渠道：在脉脉、知乎、产品经理社群等裁员集中地发布“免费诊断名额”引流。\n- 交付流程：标准化诊断模板，确保 20 个用户的服务质量可控。\n- 案例沉淀：每完成一个用户，立即整理脱敏案例作为后续销售素材。\n产出成果：20 个付费用户合同、5 个以上成功转型/清晰路径案例、一套标准化诊断 SOP。\n衡量标准：6 周内收款人数≥20，用户满意度评分≥4.5/5，转介绍率≥20%。\n时间规划：\n- 第 1 周：产品定义与定价，准备诊断模板。\n- 第 2-3 周：内容引流，开放免费/低价诊断名额，转化付费。\n- 第 4-5 周：集中交付诊断服务，建立社群。\n- 第 6 周：收集反馈，复盘优化，准备二期。\n\n⚖️ 一致性检验\nWhy-How 一致性：一致。强调“重建方向”的愿景与“一对一诊断”的策略高度匹配，避免了纯信息售卖。\nHow-What 一致性：部分一致。一对一诊断虽符合策略，但 6 周 20 人对创始人时间压力巨大，存在交付风险。\n调整建议：\n- 增加“小组诊断”环节，将部分通用问题群内解决，保留核心规划为一对一。\n- 设置阶梯价格，高价包含一对一，低价仅含社群 + 通用规划课，筛选高意向用户。\n\n🚀 行动建议\n优先行动：\n- 立即设计一份“职业诊断预检表”，作为引流钩子。\n- 找出过去 3 个成功帮助过的案例，整理成故事文案，作为信任背书。\n- 在朋友圈/私域发布“招募 20 位转型体验官”海报，测试转化率。\n\n💡 关键提醒\n- 先问为什么，再问怎么做和做什么\n- Why 不清晰时，不要急于行动\n- 定期回顾 Why，防止偏离初心\n- 沟通时从 Why 开始更有说服力",
+        "reasoning_content": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   **Skill Package:** 15-黄金圈思维 (Golden Circle Thinking).\n    *   **User Input:** \"我想把一个面向被裁员产品经理的职业转型社群做成付费产品。已知：1）很多人焦虑，但不愿意为纯信息买单；2）我最擅长的是一对一诊断和路径规划；3）目标是在 6 周内验证首批 20 个付费用户；4）我希望这个品牌不只是卖课，而是帮助用户重建职业方向。请用黄金圈思维帮我分析，直接给完整结果。\"\n    *   **Constraint:** The user explicitly said \"直接给完整结果\" (give complete results directly). This triggers the \"Direct Output Mode\" (直接输出模式) defined in the SKILL_MD.\n    *   **Task:** Execute the Golden Circle Analysis (Why -> How -> What) based on the provided information, following the output format specified in the SKILL_MD, without intermediate pauses.\n\n2.  **Verify Skill Instructions:**\n    *   **Core Task:** Help user analyze from Why to How to What.\n    *   **Interaction Mode:** Since the user said \"直接给完整结果\", I must skip Step 0-3 pauses and output the full analysis (Step 1-4 combined) in the specified format.\n    *   **Output Format:** Must follow the markdown structure provided in the \"输出格式\" section (🎯 黄金圈分析，🔍 Why 层，📋 How 层，✅ What 层，⚖️ 一致性检验，🚀 行动建议，💡 关键提醒).\n    *   **Content Requirements:**\n        *   Why: Core purpose, value, vision, belief.\n        *   How: Strategy, principles, resources, constraints.\n        *   What: Actions, outputs, metrics, timeline.\n        *   Consistency Check: Why-How, How-What.\n        *   Actionable advice.\n\n3.  **Drafting the Content (Internal Monologue/Analysis):**\n\n    *   **Context:** Product Manager (PM) career transition community for laid-off PMs. Paid product.\n    *   **Known Facts:**\n        1.  Anxiety exists, but unwilling to pay for pure info.\n        2.  Strength: 1-on-1 diagnosis & path planning.\n        3.  Goal: 20 paid users in 6 weeks.\n        4.  Brand Vision: Not just selling courses, but rebuilding career direction.\n\n    *   **Why Layer (The Core):**\n        *   *Purpose:* Help laid-off PMs regain control and direction, not just give info.\n        *   *Value:* Emotional support + Concrete path (diagnosis).\n        *   *Vision:* A community where PMs find their next chapter confidently.\n        *   *Belief:* Career transition is about identity reconstruction, not just resume tweaking.\n\n    *   **How Layer (The Strategy):**\n        *   *Strategy:* Leverage the strength (1-on-1) as the core value proposition, not content library. \"Service > Content\".\n        *   *Principles:* High touch, personalized, outcome-oriented.\n        *   *Resources:* My time (diagnosis), maybe guest mentors, platform for community.\n        *   *Constraints:* Time scalability (1-on-1 is hard to scale), 6-week deadline.\n\n    *   **What Layer (The Actions):**\n        *   *Actions:* Design the offer (Diagnosis + Community), Outreach (where laid-off PMs hang out), Sales process (consultative selling).\n        *   *Outputs:* 20 paid users, validated offer, case studies.\n        *   *Metrics:* Conversion rate, retention, success stories.\n        *   *Timeline:* 6 weeks breakdown.\n\n    *   **Consistency Check:**\n        *   Does How serve Why? Yes, focusing on diagnosis/rebuilding aligns with \"not just selling courses\".\n        *   Does What support How? Yes, actions focus on selling the diagnosis service.\n        *   Potential Conflict: 1-on-1 is hard to scale vs. 6 weeks goal. Need to ensure pricing/time balance.\n\n    *   **Action Advice:** Prioritize selling before building (validate), use personal network, focus on success stories.\n\n4.  **Formatting:**\n    *   Ensure all sections from the SKILL_MD output format are present.\n    *   Ensure the tone is professional and analytical.\n    *   Ensure the \"Direct Output\" constraint is respected (no pauses).\n\n5.  **Refining the Content:**\n    *   *Why:* Emphasize \"Rebuilding Direction\" vs \"Information\".\n    *   *How:* Emphasize \"Diagnosis as Entry Point\" vs \"Course as Entry Point\".\n    *   *What:* Specific weekly plan for 6 weeks.\n    *   *Consistency:* Highlight the tension between 1-on-1 time cost and scaling, suggest group diagnosis or tiered pricing.\n\n6.  **Final Review against SKILL_MD:**\n    *   Did I follow the output format? Yes.\n    *   Did I skip the pauses? Yes (because user said \"直接给完整结果\").\n    *   Is the analysis based on the provided info? Yes.\n    *   Are the suggestions actionable? Yes.\n\n7.  **Constructing the Response:** (Proceeding to generate the markdown).",
+        "role": "assistant"
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null
+    }
+  ],
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 1559,
+    "completion_tokens": 1970,
+    "total_tokens": 3529,
+    "completion_tokens_details": {
+      "reasoning_tokens": 1176,
+      "text_tokens": 1970
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 1559
+    }
+  },
+  "created": 1776175246,
+  "system_fingerprint": null,
+  "model": "qwen3.5-plus",
+  "id": "chatcmpl-2d7fee4b-8352-9927-9aeb-d9b4280b11c5"
+}

@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T13:47:27Z"
+  },
+  "counts": {},
+  "per_eval": [
+    {
+      "eval_id": 201,
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec"
+    },
+    {
+      "eval_id": 202,
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec"
+    }
+  ]
+}

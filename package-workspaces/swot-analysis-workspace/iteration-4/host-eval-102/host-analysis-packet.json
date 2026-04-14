@@ -1,0 +1,57 @@
+{
+  "trigger": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_read_before_first_answer": true,
+    "first_answer_turn_index": 1,
+    "first_skill_read_turn_index": 1
+  },
+  "protocol": {
+    "direct_result_request_seen": false,
+    "followup_question_count": 0,
+    "checkpoint_count": 0,
+    "continue_branch_seen": false,
+    "revise_branch_seen": false,
+    "missing_info_detected": false
+  },
+  "output": {
+    "swot_quadrants_present": false,
+    "strategy_section_present": false,
+    "premature_full_answer": false
+  },
+  "noise": {
+    "plugin_sync_noise_present": true,
+    "cloudflare_or_html_challenge_present": true,
+    "external_noise_before_first_answer": true
+  },
+  "evidence_snippets": [
+    {
+      "label": "skill_proxy_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:6",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "skill_canonical_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:9",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:assistant_text",
+      "text": "截至 `2026-04-14` 能查到的公开数据，这件事的结论是：\n\n**值得做，但只值得做“AI + 你原有能力”的转 ... 如果你愿意，我下一条可以直接把这版改成“你的个人 SWOT”，只需要你给我 `当前岗位`、`工作年限`、`会不会代码`。",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:10",
+      "text": "这个判断会影响你后续几年投入，单靠主观感受不够。我补一层当前市场信号，用 `search-layer` 做最小量联网核验，再把结果并进 SWOT。",
+      "is_noise": false
+    }
+  ]
+}

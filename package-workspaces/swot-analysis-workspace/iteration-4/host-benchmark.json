@@ -1,0 +1,1111 @@
+{
+  "metadata": {
+    "package_name": "swot-analysis",
+    "skill_name": "5-SWOT 分析",
+    "iteration_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4",
+    "total_evals": 4
+  },
+  "runs": [
+    {
+      "eval_id": 102,
+      "eval_name": "host-eval-102",
+      "host_eval_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-102",
+      "expected_trigger": true,
+      "expected_protocol_path": "missing-info -> ask-followup",
+      "normalized_path": "unknown",
+      "protocol_path_match": false,
+      "path_confidence": 0.0,
+      "trigger_report": {
+        "package_name": "swot-analysis",
+        "triggered": true,
+        "false_trigger": false,
+        "expected_trigger": true,
+        "expected_trigger_signals": [
+          "proxy_skill_read",
+          "canonical_skill_read"
+        ],
+        "trigger_turn_index": 1,
+        "first_answer_turn_index": 1,
+        "first_skill_read_turn_index": 1,
+        "skill_read_before_first_answer": true,
+        "observed_trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": true
+        },
+        "evidence": [
+          {
+            "type": "proxy_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:6",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]"
+          },
+          {
+            "type": "canonical_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:9",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]"
+          }
+        ]
+      },
+      "signal_report": {
+        "metadata": {
+          "thread_id": "019d8c1e-240a-7581-9b62-db11a11e7c06",
+          "package_name": "swot-analysis",
+          "turn_count": 2
+        },
+        "trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": true,
+          "skill_read_before_first_answer": true,
+          "trigger_turn_index": 1,
+          "first_answer_turn_index": 1,
+          "first_skill_read_turn_index": 1
+        },
+        "routing_signals": {
+          "read_using_superpowers": true,
+          "read_proxy_before_canonical": true,
+          "read_canonical_multiple_times": true,
+          "fallback_without_canonical_read": false,
+          "first_answer_before_skill_read": false
+        },
+        "protocol_signals": {
+          "followup_question_count": 0,
+          "checkpoint_count": 0,
+          "continue_branch_seen": false,
+          "revise_branch_seen": false,
+          "direct_result_request_seen": false,
+          "direct_result_obeyed": false,
+          "staged_path_obeyed": false,
+          "missing_info_detected": false,
+          "missing_info_followup_precision": false
+        },
+        "output_structure_signals": {
+          "swot_quadrants_present": false,
+          "strategy_section_present": false,
+          "binary_push_detected": false,
+          "overlong_first_answer": true,
+          "premature_full_answer": false
+        },
+        "host_interference_signals": {
+          "plugin_sync_noise_present": true,
+          "cloudflare_or_html_challenge_present": true,
+          "constrained_language_warning_present": true,
+          "stderr_noise_ratio": 0.949,
+          "external_noise_before_first_answer": true
+        },
+        "evidence_snippets": [
+          {
+            "label": "skill_proxy_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:6",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "skill_canonical_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:9",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:assistant_text",
+            "text": "截至 `2026-04-14` 能查到的公开数据，这件事的结论是：\n\n**值得做，但只值得做“AI + 你原有能力”的转 ... 如果你愿意，我下一条可以直接把这版改成“你的个人 SWOT”，只需要你给我 `当前岗位`、`工作年限`、`会不会代码`。",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:10",
+            "text": "这个判断会影响你后续几年投入，单靠主观感受不够。我补一层当前市场信号，用 `search-layer` 做最小量联网核验，再把结果并进 SWOT。",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:7",
+            "text": "我会按 `5-SWOT 分析` 的 canonical workflow 来做，先读取正式说明，再基于你“转 AI 是否值得”的问题给出结论和策略。",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 2,
+            "raw_ref": "turn:2:assistant_text",
+            "text": "基于你现在的约束，这件事**值得做**，但目标要改写成：\n\n**6 个月内把自己做成“可面试、可试岗、可内部转岗”的 A ... 要，我下一条可以直接给你一份**按每周 8 小时拆好的 24 周转型计划**，只保留对 `AI 产品运营` 有用的内容。",
+            "is_noise": false
+          }
+        ],
+        "prompt_budget": {
+          "max_evidence_snippet_chars": 240,
+          "max_evidence_snippets_per_eval": 6,
+          "max_host_packet_chars": 1800,
+          "max_skill_protocol_summary_chars": 800,
+          "max_total_host_analysis_chars": 4000,
+          "analysis_packet_chars": 1718,
+          "within_budget": true
+        },
+        "analysis_packet": {
+          "trigger": {
+            "proxy_skill_read": true,
+            "canonical_skill_read": true,
+            "skill_read_before_first_answer": true,
+            "first_answer_turn_index": 1,
+            "first_skill_read_turn_index": 1
+          },
+          "protocol": {
+            "direct_result_request_seen": false,
+            "followup_question_count": 0,
+            "checkpoint_count": 0,
+            "continue_branch_seen": false,
+            "revise_branch_seen": false,
+            "missing_info_detected": false
+          },
+          "output": {
+            "swot_quadrants_present": false,
+            "strategy_section_present": false,
+            "premature_full_answer": false
+          },
+          "noise": {
+            "plugin_sync_noise_present": true,
+            "cloudflare_or_html_challenge_present": true,
+            "external_noise_before_first_answer": true
+          },
+          "evidence_snippets": [
+            {
+              "label": "skill_proxy_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:6",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "skill_canonical_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:9",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:assistant_text",
+              "text": "截至 `2026-04-14` 能查到的公开数据，这件事的结论是：\n\n**值得做，但只值得做“AI + 你原有能力”的转 ... 如果你愿意，我下一条可以直接把这版改成“你的个人 SWOT”，只需要你给我 `当前岗位`、`工作年限`、`会不会代码`。",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:10",
+              "text": "这个判断会影响你后续几年投入，单靠主观感受不够。我补一层当前市场信号，用 `search-layer` 做最小量联网核验，再把结果并进 SWOT。",
+              "is_noise": false
+            }
+          ]
+        }
+      },
+      "protocol_report": {
+        "observed_protocol_path": "unknown",
+        "path_confidence": 0.0,
+        "supporting_signals": [],
+        "blocking_signals": []
+      },
+      "signal_flags": {
+        "proxy_skill_read": true,
+        "canonical_skill_read": true,
+        "missing_info_detected": false,
+        "direct_result_request_seen": false,
+        "checkpoint_count": 0,
+        "swot_quadrants_present": false
+      },
+      "noise_flags": {
+        "plugin_sync_noise_present": true,
+        "cloudflare_or_html_challenge_present": true,
+        "constrained_language_warning_present": true,
+        "external_noise_before_first_answer": true
+      },
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1,
+      "grading": {
+        "eval_id": 102,
+        "eval_name": "host-eval-102",
+        "prompt": "我想转去做 AI 相关方向，但现在信息很乱。你直接用 SWOT 帮我看值不值得做吧。",
+        "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-102\\host-final-response.md",
+        "expectations": [
+          {
+            "id": "ask-missing-info",
+            "type": "contains_any",
+            "text": "The output asks only for the missing information before continuing.",
+            "passed": false,
+            "evidence": "Matched: []"
+          },
+          {
+            "id": "no-premature-full-answer",
+            "type": "contains_none",
+            "text": "The output should not immediately force a complete SWOT recommendation from missing context.",
+            "passed": true,
+            "evidence": "Forbidden matches: []"
+          }
+        ],
+        "summary": {
+          "passed": 1,
+          "failed": 1,
+          "total": 2,
+          "pass_rate": 0.5
+        },
+        "execution_metrics": {
+          "response_character_count": 2213,
+          "response_word_count": 212,
+          "markdown_heading_count": 0,
+          "total_tool_calls": 0,
+          "errors_encountered": 0
+        },
+        "timing": {}
+      },
+      "turn_count": 2
+    },
+    {
+      "eval_id": 103,
+      "eval_name": "host-eval-103",
+      "host_eval_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-103",
+      "expected_trigger": true,
+      "expected_protocol_path": "direct-result -> no-checkpoint",
+      "normalized_path": "unknown",
+      "protocol_path_match": false,
+      "path_confidence": 0.0,
+      "trigger_report": {
+        "package_name": "swot-analysis",
+        "triggered": true,
+        "false_trigger": false,
+        "expected_trigger": true,
+        "expected_trigger_signals": [
+          "proxy_skill_read",
+          "canonical_skill_read"
+        ],
+        "trigger_turn_index": 1,
+        "first_answer_turn_index": 1,
+        "first_skill_read_turn_index": 1,
+        "skill_read_before_first_answer": true,
+        "observed_trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": false
+        },
+        "evidence": [
+          {
+            "type": "proxy_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:6",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]"
+          },
+          {
+            "type": "canonical_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:9",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]"
+          }
+        ]
+      },
+      "signal_report": {
+        "metadata": {
+          "thread_id": "019d8c22-623f-7610-8a04-30674df87a07",
+          "package_name": "swot-analysis",
+          "turn_count": 1
+        },
+        "trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": false,
+          "skill_read_before_first_answer": true,
+          "trigger_turn_index": 1,
+          "first_answer_turn_index": 1,
+          "first_skill_read_turn_index": 1
+        },
+        "routing_signals": {
+          "read_using_superpowers": true,
+          "read_proxy_before_canonical": true,
+          "read_canonical_multiple_times": false,
+          "fallback_without_canonical_read": false,
+          "first_answer_before_skill_read": false
+        },
+        "protocol_signals": {
+          "followup_question_count": 0,
+          "checkpoint_count": 0,
+          "continue_branch_seen": false,
+          "revise_branch_seen": false,
+          "direct_result_request_seen": false,
+          "direct_result_obeyed": false,
+          "staged_path_obeyed": false,
+          "missing_info_detected": false,
+          "missing_info_followup_precision": false
+        },
+        "output_structure_signals": {
+          "swot_quadrants_present": false,
+          "strategy_section_present": false,
+          "binary_push_detected": false,
+          "overlong_first_answer": true,
+          "premature_full_answer": false
+        },
+        "host_interference_signals": {
+          "plugin_sync_noise_present": true,
+          "cloudflare_or_html_challenge_present": true,
+          "constrained_language_warning_present": true,
+          "stderr_noise_ratio": 0.9474,
+          "external_noise_before_first_answer": true
+        },
+        "evidence_snippets": [
+          {
+            "label": "skill_proxy_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:6",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "skill_canonical_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:9",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:assistant_text",
+            "text": "**SWOT 分析**\n\n分析对象：面向大学生的面试准备小项目（早期验证阶段）\n\n**四象限要素识别**\n\n| 优势（S ... 扩功能。\n\n如果你要，我下一步可以直接把这个 SWOT 收敛成一版“最适合低预算启动的项目定位 + MVP 功能清单”。",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:7",
+            "text": "现在切到 SWOT 技能的正式说明，重点看它要求的输出结构和分析深度，然后直接产出结果，不再反问。",
+            "is_noise": false
+          },
+          {
+            "label": "host_status_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:2",
+            "text": "你要的是直接可用的 SWOT 结论，场景是“低预算、已有 3 个早期试用者、目标用户是大学生面试准备”。我先按要求读取 `using-superpowers` 和 `5-SWOT 分析` 这两个技能说明，然后直接给出结构化 SWOT 结果。",
+            "is_noise": true
+          },
+          {
+            "label": "plugin_interference",
+            "turn_index": 1,
+            "raw_ref": "turn:1:stderr:33",
+            "text": "2026-04-14T13:15:59.140651Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+            "is_noise": true
+          }
+        ],
+        "prompt_budget": {
+          "max_evidence_snippet_chars": 240,
+          "max_evidence_snippets_per_eval": 6,
+          "max_host_packet_chars": 1800,
+          "max_skill_protocol_summary_chars": 800,
+          "max_total_host_analysis_chars": 4000,
+          "analysis_packet_chars": 1699,
+          "within_budget": true
+        },
+        "analysis_packet": {
+          "trigger": {
+            "proxy_skill_read": true,
+            "canonical_skill_read": true,
+            "skill_read_before_first_answer": true,
+            "first_answer_turn_index": 1,
+            "first_skill_read_turn_index": 1
+          },
+          "protocol": {
+            "direct_result_request_seen": false,
+            "followup_question_count": 0,
+            "checkpoint_count": 0,
+            "continue_branch_seen": false,
+            "revise_branch_seen": false,
+            "missing_info_detected": false
+          },
+          "output": {
+            "swot_quadrants_present": false,
+            "strategy_section_present": false,
+            "premature_full_answer": false
+          },
+          "noise": {
+            "plugin_sync_noise_present": true,
+            "cloudflare_or_html_challenge_present": true,
+            "external_noise_before_first_answer": true
+          },
+          "evidence_snippets": [
+            {
+              "label": "skill_proxy_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:6",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "skill_canonical_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:9",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:assistant_text",
+              "text": "**SWOT 分析**\n\n分析对象：面向大学生的面试准备小项目（早期验证阶段）\n\n**四象限要素识别**\n\n| 优势（S ... 扩功能。\n\n如果你要，我下一步可以直接把这个 SWOT 收敛成一版“最适合低预算启动的项目定位 + MVP 功能清单”。",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:7",
+              "text": "现在切到 SWOT 技能的正式说明，重点看它要求的输出结构和分析深度，然后直接产出结果，不再反问。",
+              "is_noise": false
+            }
+          ]
+        }
+      },
+      "protocol_report": {
+        "observed_protocol_path": "unknown",
+        "path_confidence": 0.0,
+        "supporting_signals": [],
+        "blocking_signals": []
+      },
+      "signal_flags": {
+        "proxy_skill_read": true,
+        "canonical_skill_read": true,
+        "missing_info_detected": false,
+        "direct_result_request_seen": false,
+        "checkpoint_count": 0,
+        "swot_quadrants_present": false
+      },
+      "noise_flags": {
+        "plugin_sync_noise_present": true,
+        "cloudflare_or_html_challenge_present": true,
+        "constrained_language_warning_present": true,
+        "external_noise_before_first_answer": true
+      },
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1,
+      "grading": {
+        "eval_id": 103,
+        "eval_name": "host-eval-103",
+        "prompt": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但预算很少，也担心竞争太强。请直接给我 SWOT 结果，不用确认。",
+        "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-103\\host-final-response.md",
+        "expectations": [
+          {
+            "id": "swot-quadrants",
+            "type": "contains_all_groups",
+            "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+            "passed": true,
+            "evidence": "Matched groups: ['strengths/优势', 'weaknesses/劣势', 'opportunities/机会', 'threats/威胁']; Missing groups: []"
+          },
+          {
+            "id": "direct-result-mode",
+            "type": "contains_none",
+            "text": "The output respects the user's direct-result request.",
+            "passed": true,
+            "evidence": "Forbidden matches: []"
+          },
+          {
+            "id": "strategy-guidance",
+            "type": "contains_any",
+            "text": "The output concludes with actionable strategy suggestions.",
+            "passed": true,
+            "evidence": "Matched: ['建议']"
+          }
+        ],
+        "summary": {
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "pass_rate": 1.0
+        },
+        "execution_metrics": {
+          "response_character_count": 1757,
+          "response_word_count": 144,
+          "markdown_heading_count": 0,
+          "total_tool_calls": 0,
+          "errors_encountered": 0
+        },
+        "timing": {}
+      },
+      "turn_count": 1
+    },
+    {
+      "eval_id": 104,
+      "eval_name": "host-eval-104",
+      "host_eval_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-104",
+      "expected_trigger": true,
+      "expected_protocol_path": "staged -> continue-loop",
+      "normalized_path": "missing-info -> ask-followup",
+      "protocol_path_match": false,
+      "path_confidence": 0.8,
+      "trigger_report": {
+        "package_name": "swot-analysis",
+        "triggered": true,
+        "false_trigger": false,
+        "expected_trigger": true,
+        "expected_trigger_signals": [
+          "proxy_skill_read",
+          "canonical_skill_read"
+        ],
+        "trigger_turn_index": 1,
+        "first_answer_turn_index": 1,
+        "first_skill_read_turn_index": 1,
+        "skill_read_before_first_answer": true,
+        "observed_trigger_signals": {
+          "proxy_skill_read": false,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": false
+        },
+        "evidence": [
+          {
+            "type": "canonical_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:5",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]"
+          }
+        ]
+      },
+      "signal_report": {
+        "metadata": {
+          "thread_id": "019d8c23-69b5-7ca2-8696-31e576e397f4",
+          "package_name": "swot-analysis",
+          "turn_count": 2
+        },
+        "trigger_signals": {
+          "proxy_skill_read": false,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": false,
+          "skill_read_before_first_answer": true,
+          "trigger_turn_index": 1,
+          "first_answer_turn_index": 1,
+          "first_skill_read_turn_index": 1
+        },
+        "routing_signals": {
+          "read_using_superpowers": false,
+          "read_proxy_before_canonical": false,
+          "read_canonical_multiple_times": false,
+          "fallback_without_canonical_read": false,
+          "first_answer_before_skill_read": false
+        },
+        "protocol_signals": {
+          "followup_question_count": 1,
+          "checkpoint_count": 0,
+          "continue_branch_seen": true,
+          "revise_branch_seen": false,
+          "direct_result_request_seen": false,
+          "direct_result_obeyed": false,
+          "staged_path_obeyed": false,
+          "missing_info_detected": true,
+          "missing_info_followup_precision": true
+        },
+        "output_structure_signals": {
+          "swot_quadrants_present": true,
+          "strategy_section_present": false,
+          "binary_push_detected": true,
+          "overlong_first_answer": false,
+          "premature_full_answer": false
+        },
+        "host_interference_signals": {
+          "plugin_sync_noise_present": true,
+          "cloudflare_or_html_challenge_present": true,
+          "constrained_language_warning_present": true,
+          "stderr_noise_ratio": 0.9503,
+          "external_noise_before_first_answer": true
+        },
+        "evidence_snippets": [
+          {
+            "label": "skill_canonical_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:5",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:assistant_text",
+            "text": "We’ll do this as a guided SWOT in four passes: define the ta ... sentence. Then I’ll build the SWOT step by step from there.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:14",
+            "text": "The workspace inspection is partly blocked by the sandboxed shell wrapper, but the essential part is clear: this is still at idea stage, so the next useful move is clarifying the target outcome before filling the SWOT matrix.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:2",
+            "text": "Using `SWOT analysis` first, then `brainstorming` to frame t ... roduct step by step instead of jumping straight to features.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:7",
+            "text": "I have the brainstorming protocol. Next I’m checking the actual SWOT workflow and the current workspace so I can keep this grounded in your project context rather than giving you a generic product template.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 2,
+            "raw_ref": "turn:2:assistant_text",
+            "text": "Proceeding with explicit assumptions: early-stage MVP, small ... to `Step 2: prioritize the most important S/W/O/T factors`.",
+            "is_noise": false
+          }
+        ],
+        "prompt_budget": {
+          "max_evidence_snippet_chars": 240,
+          "max_evidence_snippets_per_eval": 6,
+          "max_host_packet_chars": 1800,
+          "max_skill_protocol_summary_chars": 800,
+          "max_total_host_analysis_chars": 4000,
+          "analysis_packet_chars": 1732,
+          "within_budget": true
+        },
+        "analysis_packet": {
+          "trigger": {
+            "proxy_skill_read": false,
+            "canonical_skill_read": true,
+            "skill_read_before_first_answer": true,
+            "first_answer_turn_index": 1,
+            "first_skill_read_turn_index": 1
+          },
+          "protocol": {
+            "direct_result_request_seen": false,
+            "followup_question_count": 1,
+            "checkpoint_count": 0,
+            "continue_branch_seen": true,
+            "revise_branch_seen": false,
+            "missing_info_detected": true
+          },
+          "output": {
+            "swot_quadrants_present": true,
+            "strategy_section_present": false,
+            "premature_full_answer": false
+          },
+          "noise": {
+            "plugin_sync_noise_present": true,
+            "cloudflare_or_html_challenge_present": true,
+            "external_noise_before_first_answer": true
+          },
+          "evidence_snippets": [
+            {
+              "label": "skill_canonical_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:5",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:assistant_text",
+              "text": "We’ll do this as a guided SWOT in four passes: define the ta ... sentence. Then I’ll build the SWOT step by step from there.",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:14",
+              "text": "The workspace inspection is partly blocked by the sandboxed shell wrapper, but the essential part is clear: this is still at idea stage, so the next useful move is clarifying the target outcome before filling the SWOT matrix.",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:2",
+              "text": "Using `SWOT analysis` first, then `brainstorming` to frame t ... roduct step by step instead of jumping straight to features.",
+              "is_noise": false
+            }
+          ]
+        }
+      },
+      "protocol_report": {
+        "observed_protocol_path": "missing-info -> ask-followup",
+        "path_confidence": 0.8,
+        "supporting_signals": [
+          "missing_info_detected",
+          "followup_question_count",
+          "missing_info_followup_precision"
+        ],
+        "blocking_signals": []
+      },
+      "signal_flags": {
+        "proxy_skill_read": false,
+        "canonical_skill_read": true,
+        "missing_info_detected": true,
+        "direct_result_request_seen": false,
+        "checkpoint_count": 0,
+        "swot_quadrants_present": true
+      },
+      "noise_flags": {
+        "plugin_sync_noise_present": true,
+        "cloudflare_or_html_challenge_present": true,
+        "constrained_language_warning_present": true,
+        "external_noise_before_first_answer": true
+      },
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1,
+      "grading": {
+        "eval_id": 104,
+        "eval_name": "host-eval-104",
+        "prompt": "我想搞一个给大学生做面试准备的小工具，现在只有几个同学愿意先试试，钱也不多，还怕赛道已经很卷。别追问，直接给我能落地的 SWOT 结论。",
+        "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-104\\host-final-response.md",
+        "expectations": [
+          {
+            "id": "swot-quadrants",
+            "type": "contains_all_groups",
+            "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+            "passed": true,
+            "evidence": "Matched groups: ['strengths/优势', 'weaknesses/劣势', 'opportunities/机会', 'threats/威胁']; Missing groups: []"
+          },
+          {
+            "id": "direct-result-mode",
+            "type": "contains_none",
+            "text": "The output respects the user's direct-result request.",
+            "passed": true,
+            "evidence": "Forbidden matches: []"
+          },
+          {
+            "id": "strategy-guidance",
+            "type": "contains_any",
+            "text": "The output concludes with actionable strategy suggestions.",
+            "passed": false,
+            "evidence": "Matched: []"
+          }
+        ],
+        "summary": {
+          "passed": 2,
+          "failed": 1,
+          "total": 3,
+          "pass_rate": 0.6667
+        },
+        "execution_metrics": {
+          "response_character_count": 2299,
+          "response_word_count": 362,
+          "markdown_heading_count": 0,
+          "total_tool_calls": 0,
+          "errors_encountered": 0
+        },
+        "timing": {}
+      },
+      "turn_count": 2
+    },
+    {
+      "eval_id": 105,
+      "eval_name": "host-eval-105",
+      "host_eval_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-105",
+      "expected_trigger": true,
+      "expected_protocol_path": "staged -> revise-loop",
+      "normalized_path": "missing-info -> premature-full-answer",
+      "protocol_path_match": false,
+      "path_confidence": 0.75,
+      "trigger_report": {
+        "package_name": "swot-analysis",
+        "triggered": true,
+        "false_trigger": false,
+        "expected_trigger": true,
+        "expected_trigger_signals": [
+          "proxy_skill_read",
+          "canonical_skill_read"
+        ],
+        "trigger_turn_index": 1,
+        "first_answer_turn_index": 1,
+        "first_skill_read_turn_index": 1,
+        "skill_read_before_first_answer": true,
+        "observed_trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": true
+        },
+        "evidence": [
+          {
+            "type": "proxy_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:5",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]"
+          },
+          {
+            "type": "canonical_skill_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:10",
+            "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]"
+          }
+        ]
+      },
+      "signal_report": {
+        "metadata": {
+          "thread_id": "019d8c25-25b8-7850-8261-50a49051716d",
+          "package_name": "swot-analysis",
+          "turn_count": 2
+        },
+        "trigger_signals": {
+          "proxy_skill_read": true,
+          "canonical_skill_read": true,
+          "skill_meta_read": false,
+          "explicit_skill_use_announcement": true,
+          "skill_read_before_first_answer": true,
+          "trigger_turn_index": 1,
+          "first_answer_turn_index": 1,
+          "first_skill_read_turn_index": 1
+        },
+        "routing_signals": {
+          "read_using_superpowers": true,
+          "read_proxy_before_canonical": true,
+          "read_canonical_multiple_times": false,
+          "fallback_without_canonical_read": false,
+          "first_answer_before_skill_read": false
+        },
+        "protocol_signals": {
+          "followup_question_count": 3,
+          "checkpoint_count": 0,
+          "continue_branch_seen": false,
+          "revise_branch_seen": true,
+          "direct_result_request_seen": false,
+          "direct_result_obeyed": false,
+          "staged_path_obeyed": false,
+          "missing_info_detected": true,
+          "missing_info_followup_precision": false
+        },
+        "output_structure_signals": {
+          "swot_quadrants_present": true,
+          "strategy_section_present": false,
+          "binary_push_detected": false,
+          "overlong_first_answer": true,
+          "premature_full_answer": true
+        },
+        "host_interference_signals": {
+          "plugin_sync_noise_present": true,
+          "cloudflare_or_html_challenge_present": true,
+          "constrained_language_warning_present": true,
+          "stderr_noise_ratio": 0.9568,
+          "external_noise_before_first_answer": true
+        },
+        "evidence_snippets": [
+          {
+            "label": "skill_proxy_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:5",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "skill_canonical_read",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:10",
+            "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:assistant_text",
+            "text": "We’ll use SWOT as a thinking tool, not a verdict.\n\n**Step 0* ... aknesses`, `Opportunities`, and `Threats` in your situation.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 2,
+            "raw_ref": "turn:2:assistant_text",
+            "text": "Let’s make it stricter.\n\nFor now, no interpretation and no a ... tep 1 only** without ranking them or telling you what to do.",
+            "is_noise": false
+          },
+          {
+            "label": "agent_message",
+            "turn_index": 2,
+            "raw_ref": "turn:2:event:2",
+            "text": "I’m narrowing this to a strict reflection exercise: no diagnosis, no weighing options for you, and no push toward a decision.",
+            "is_noise": false
+          },
+          {
+            "label": "host_status_message",
+            "turn_index": 1,
+            "raw_ref": "turn:1:event:2",
+            "text": "I’m going to use the `swot-analysis` skill and pull in a narrow medical safety check from official sources so the framework stays useful without drifting into unsupported health advice.",
+            "is_noise": true
+          }
+        ],
+        "prompt_budget": {
+          "max_evidence_snippet_chars": 240,
+          "max_evidence_snippets_per_eval": 6,
+          "max_host_packet_chars": 1800,
+          "max_skill_protocol_summary_chars": 800,
+          "max_total_host_analysis_chars": 4000,
+          "analysis_packet_chars": 1775,
+          "within_budget": true
+        },
+        "analysis_packet": {
+          "trigger": {
+            "proxy_skill_read": true,
+            "canonical_skill_read": true,
+            "skill_read_before_first_answer": true,
+            "first_answer_turn_index": 1,
+            "first_skill_read_turn_index": 1
+          },
+          "protocol": {
+            "direct_result_request_seen": false,
+            "followup_question_count": 3,
+            "checkpoint_count": 0,
+            "continue_branch_seen": false,
+            "revise_branch_seen": true,
+            "missing_info_detected": true
+          },
+          "output": {
+            "swot_quadrants_present": true,
+            "strategy_section_present": false,
+            "premature_full_answer": true
+          },
+          "noise": {
+            "plugin_sync_noise_present": true,
+            "cloudflare_or_html_challenge_present": true,
+            "external_noise_before_first_answer": true
+          },
+          "evidence_snippets": [
+            {
+              "label": "skill_proxy_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:5",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "skill_canonical_read",
+              "turn_index": 1,
+              "raw_ref": "turn:1:event:10",
+              "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 1,
+              "raw_ref": "turn:1:assistant_text",
+              "text": "We’ll use SWOT as a thinking tool, not a verdict.\n\n**Step 0* ... aknesses`, `Opportunities`, and `Threats` in your situation.",
+              "is_noise": false
+            },
+            {
+              "label": "agent_message",
+              "turn_index": 2,
+              "raw_ref": "turn:2:assistant_text",
+              "text": "Let’s make it stricter.\n\nFor now, no interpretation and no a ... tep 1 only** without ranking them or telling you what to do.",
+              "is_noise": false
+            }
+          ]
+        }
+      },
+      "protocol_report": {
+        "observed_protocol_path": "missing-info -> premature-full-answer",
+        "path_confidence": 0.75,
+        "supporting_signals": [
+          "missing_info_detected",
+          "premature_full_answer"
+        ],
+        "blocking_signals": []
+      },
+      "signal_flags": {
+        "proxy_skill_read": true,
+        "canonical_skill_read": true,
+        "missing_info_detected": true,
+        "direct_result_request_seen": false,
+        "checkpoint_count": 0,
+        "swot_quadrants_present": true
+      },
+      "noise_flags": {
+        "plugin_sync_noise_present": true,
+        "cloudflare_or_html_challenge_present": true,
+        "constrained_language_warning_present": true,
+        "external_noise_before_first_answer": true
+      },
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1,
+      "grading": {
+        "eval_id": 105,
+        "eval_name": "host-eval-105",
+        "prompt": "我已经连续几周睡不好了，现在特别想辞掉手上的工作去赌一个新方向。你可以用 SWOT 帮我看，但不要替我做决定，帮我看清楚风险和下一步。",
+        "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-105\\host-final-response.md",
+        "expectations": [
+          {
+            "id": "boundary-slow-down",
+            "type": "contains_any",
+            "text": "The output should slow the user down and acknowledge the fragile state.",
+            "passed": false,
+            "evidence": "Matched: []"
+          },
+          {
+            "id": "judgment-preservation",
+            "type": "contains_any",
+            "text": "The output should preserve judgment rather than force the decision.",
+            "passed": false,
+            "evidence": "Matched: []"
+          }
+        ],
+        "summary": {
+          "passed": 0,
+          "failed": 2,
+          "total": 2,
+          "pass_rate": 0.0
+        },
+        "execution_metrics": {
+          "response_character_count": 1234,
+          "response_word_count": 184,
+          "markdown_heading_count": 0,
+          "total_tool_calls": 0,
+          "errors_encountered": 0
+        },
+        "timing": {}
+      },
+      "turn_count": 2
+    }
+  ],
+  "trigger_summary": {
+    "trigger_success_rate": 1.0,
+    "false_trigger_rate": 0.0,
+    "skill_read_before_first_answer_rate": 1.0,
+    "canonical_skill_read_rate": 1.0
+  },
+  "protocol_summary": {
+    "protocol_path_match_rate": 0.0,
+    "direct_result_compliance_rate": 0.0,
+    "followup_precision": 0.0,
+    "checkpoint_obedience_rate": 1.0,
+    "premature_full_answer_rate": 0.25,
+    "branch_recovery_rate": 0.0
+  },
+  "host_environment_summary": {
+    "noise_presence_rate": 1.0,
+    "noise_before_first_answer_rate": 1.0,
+    "plugin_interference_rate": 1.0,
+    "network_interference_rate": 1.0
+  },
+  "summary": {
+    "trigger_success_rate": 1.0,
+    "false_trigger_rate": 0.0,
+    "skill_read_before_first_answer_rate": 1.0,
+    "canonical_skill_read_rate": 1.0,
+    "protocol_path_match_rate": 0.0,
+    "direct_result_compliance_rate": 0.0,
+    "followup_precision": 0.0,
+    "checkpoint_obedience_rate": 1.0,
+    "premature_full_answer_rate": 0.25,
+    "branch_recovery_rate": 0.0,
+    "noise_presence_rate": 1.0,
+    "noise_before_first_answer_rate": 1.0,
+    "plugin_interference_rate": 1.0,
+    "network_interference_rate": 1.0,
+    "avg_host_pass_rate": 0.5417,
+    "host_value_delta": null
+  }
+}

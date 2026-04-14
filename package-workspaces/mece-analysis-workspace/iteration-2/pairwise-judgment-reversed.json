@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T14:17:50Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:16:15Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 65.553,
+          "tokens": 4823.0
+        },
+        "without_skill": {
+          "time_seconds": 86.548,
+          "tokens": 4204.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.78,
+        "reasoning_summary": "Both candidates deliver solid MECE analyses, but Candidate A provides significantly higher user value for this specific use case. A offers: (1) clearer hypothesis-driven structure with validation difficulty levels, (2) explicit influence×feasibility priority matrix with star ratings, (3) highly actionable 2-week execution plan with granular time allocations and specific actions (e.g., 'contact 5-10 users', 'add one-click button'), (4) concrete success metrics with baseline/target numbers. Candidate B is more educational about MECE methodology itself (verification section, key reminders) but less actionable—recommendations like 'optimize first-time bookkeeping flow' are vaguer than A's specific interventions. For a time-constrained freelancer (10 hrs/week) seeking immediate priorities, A's specificity and execution-ready plan delivers more practical value. B's caveats about MECE limitations are thoughtful but less directly useful.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "B"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:16:58Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 12.536,
+          "tokens": 2034.0
+        },
+        "without_skill": {
+          "time_seconds": 51.732,
+          "tokens": 2614.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.75,
+        "confidence": 0.85,
+        "reasoning_summary": "Candidate A provides substantially more user value by delivering a complete, usable MECE framework immediately while still asking follow-up questions for customization. The 4-dimension framework (Target/Strategy, Execution/Process, Team/Resources, External/Environment) is well-structured with clear sub-points and includes a practical application example. Candidate B only asks clarifying questions without providing any analytical content, deferring all value to a future turn. From a user value perspective, A enables immediate self-diagnosis while B requires waiting. Both appropriately acknowledge information gaps, but A empowers the user to act now.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 203,
+        "eval_name": "mece",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:17:33Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 34.501,
+          "tokens": 3433.0
+        },
+        "without_skill": {
+          "time_seconds": 69.962,
+          "tokens": 3730.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate A delivers a complete, immediately actionable MECE analysis with 6 detailed steps, clear boundary rules, decision flowcharts, practical examples, and gray area handling. Candidate B only provides Step 1 of a multi-step process and requires user confirmation to continue, leaving the user's core question unanswered. For user value, A's completeness significantly outweighs B's interactive approach - the user asked for help breaking down their business, not a framework setup. A addresses all rubric dimensions more thoroughly: thinking support (complete framework), tradeoff quality (explicitly resolves gray areas), actionability (immediately usable), and boundary safety (clear exclusion rules). B mentions these concepts but doesn't deliver them.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "A"
+        }
+      }
+    }
+  ]
+}

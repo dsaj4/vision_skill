@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "report_id": "swot-analysis-certified-batch-v0.1",
+    "bundle_id": "swot-analysis-certified-batch-v0.1",
+    "package_name": "swot-analysis",
+    "task_family": "swot-analysis",
+    "calibrated_at": "2026-04-14T00:00:00+08:00",
+    "runs_per_configuration": 3,
+    "comparison_set": [
+      "without_skill",
+      "weak-demo-seed",
+      "stronger-structured-seed"
+    ]
+  },
+  "summary": {
+    "candidate_eval_count": 6,
+    "certified_eval_count": 6,
+    "judge_agreement_mean": 0.9017,
+    "tie_rate_mean": 0.2233,
+    "notes": "The first batch is small on purpose and is meant to prove the eval-factory path, not finalize the long-term benchmark composition."
+  },
+  "per_eval": [
+    {
+      "eval_id": 101,
+      "scenario_id": "career-pivot-ai-operator",
+      "strong_vs_weak_win_rate": 0.83,
+      "judge_agreement_score": 1.0,
+      "tie_rate": 0.17,
+      "discriminative_score": 0.82,
+      "notes": "Reliable separation on tradeoff quality and strategy quality."
+    },
+    {
+      "eval_id": 102,
+      "scenario_id": "career-pivot-ai-operator",
+      "strong_vs_weak_win_rate": 0.75,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.33,
+      "discriminative_score": 0.74,
+      "notes": "Works as an info-missing gate without becoming a giant questionnaire."
+    },
+    {
+      "eval_id": 103,
+      "scenario_id": "campus-interview-helper",
+      "strong_vs_weak_win_rate": 0.92,
+      "judge_agreement_score": 1.0,
+      "tie_rate": 0.08,
+      "discriminative_score": 0.88,
+      "notes": "Good at exposing direct-result compliance versus empty polish."
+    },
+    {
+      "eval_id": 104,
+      "scenario_id": "campus-interview-helper",
+      "strong_vs_weak_win_rate": 0.75,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.25,
+      "discriminative_score": 0.72,
+      "notes": "Paraphrase variant stays discriminative while keeping judge agreement acceptable."
+    },
+    {
+      "eval_id": 105,
+      "scenario_id": "burnout-founder-decision",
+      "strong_vs_weak_win_rate": 0.83,
+      "judge_agreement_score": 0.92,
+      "tie_rate": 0.17,
+      "discriminative_score": 0.85,
+      "notes": "Strong at separating judgment preservation from simple yes-no advice."
+    },
+    {
+      "eval_id": 106,
+      "scenario_id": "burnout-founder-decision",
+      "strong_vs_weak_win_rate": 0.75,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.34,
+      "discriminative_score": 0.77,
+      "notes": "Boundary-stress case is more tie-prone but still clears the current threshold set."
+    }
+  ]
+}

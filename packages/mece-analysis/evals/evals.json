@@ -1,0 +1,102 @@
+{
+  "skill_name": "MECE Analysis",
+  "package_name": "mece-analysis",
+  "evals": [
+    {
+      "id": 201,
+      "prompt": "我在做一个面向自由职业者的 AI 记账助手，最近增长停滞。已知情况：1）新用户注册不少，但次日留存低；2）主要流量来自小红书和微信群；3）我每周只有 10 小时能投入；4）目标是找出下一阶段最值得优先解决的问题。请用 MECE 帮我拆解，并直接给完整结果，不用确认。",
+      "expected_output": "A direct-result MECE breakdown of the growth problem with a clear decomposition dimension, non-overlapping categories, coverage check, and action priorities.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "mece-dimension",
+          "type": "contains_any",
+          "text": "The output should state the decomposition dimension or method.",
+          "keywords": [
+            "分解维度",
+            "分解方法",
+            "选择维度"
+          ]
+        },
+        {
+          "id": "mece-check",
+          "type": "contains_any",
+          "text": "The output should include a MECE-style completeness or independence check.",
+          "keywords": [
+            "相互独立",
+            "完全穷尽",
+            "MECE 检验"
+          ]
+        },
+        {
+          "id": "mece-priority",
+          "type": "contains_any",
+          "text": "The output should conclude with action priorities or next-step guidance.",
+          "keywords": [
+            "优先级",
+            "应用建议",
+            "下一步"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 202,
+      "prompt": "帮我用 MECE 分析一下我现在这个项目到底哪里有问题。",
+      "expected_output": "The skill should identify that context is missing and ask only for critical missing information before performing a full MECE decomposition.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "ask-missing-info",
+          "type": "contains_any",
+          "text": "The output should ask for the missing context first.",
+          "keywords": [
+            "还缺",
+            "需要补充",
+            "先补充",
+            "背景信息",
+            "目标"
+          ]
+        },
+        {
+          "id": "no-premature-breakdown",
+          "type": "contains_none",
+          "text": "The output should not jump straight into a complete breakdown when the input is too vague.",
+          "keywords": [
+            "第一层分解",
+            "MECE 分解结果",
+            "优先级建议"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 203,
+      "prompt": "我在考虑把个人咨询业务拆成标准化服务包、内容产品和社群订阅三块，但不确定怎么分才不重叠也不遗漏。请用 MECE 帮我一步步拆。",
+      "expected_output": "A staged MECE response that starts with Step 1 and ends with a pause block inviting the user to continue or modify.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "staged-step1",
+          "type": "contains_any",
+          "text": "The output should stay in staged mode and start with Step 1 work.",
+          "keywords": [
+            "Step 1",
+            "分解维度",
+            "选择理由"
+          ]
+        },
+        {
+          "id": "pause-block",
+          "type": "contains_any",
+          "text": "The output should include the pause block for staged interaction.",
+          "keywords": [
+            "回复\"继续\"",
+            "回复\"不对\"",
+            "回复\"直接要结果\""
+          ]
+        }
+      ]
+    }
+  ]
+}

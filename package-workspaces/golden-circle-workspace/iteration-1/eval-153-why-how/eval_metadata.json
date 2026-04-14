@@ -1,0 +1,30 @@
+{
+  "eval_id": 153,
+  "eval_name": "why-how",
+  "prompt": "我在考虑做一个帮助管理者提升反馈能力的训练营，但现在 Why 还不清、How 也很乱。请用黄金圈思维一步步陪我拆。",
+  "expected_output": "A staged Golden Circle response that starts with Step 1 and pauses for confirmation.",
+  "files": [],
+  "assertions": [
+    {
+      "id": "staged-step1",
+      "type": "contains_any",
+      "text": "The output should stay in staged mode and begin with Step 1 work.",
+      "keywords": [
+        "Step 1",
+        "Why 层",
+        "核心目的"
+      ]
+    },
+    {
+      "id": "pause-block",
+      "type": "contains_any",
+      "text": "The output should include the staged pause block.",
+      "keywords": [
+        "回复\"继续\"",
+        "回复\"不对\"",
+        "回复\"直接要结果\""
+      ]
+    }
+  ],
+  "host_eval": {}
+}

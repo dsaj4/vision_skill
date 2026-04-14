@@ -1,0 +1,19 @@
+{
+  "scenario_id": "campus-interview-helper",
+  "task_family": "swot-analysis",
+  "source_ids": [
+    "sb-campus-interview-demo"
+  ],
+  "task_goal": "Produce a useful SWOT analysis for a small interview-prep project under budget pressure.",
+  "user_state": "Has a small early demand signal and wants a direct answer without checkpoint pauses.",
+  "constraints": [
+    "Very low budget",
+    "Competition is already strong"
+  ],
+  "hidden_tradeoff": "Speed of execution versus the risk of entering a crowded niche too shallowly.",
+  "boundary_axes": [
+    "format-polish-over-substance",
+    "competition-blindness"
+  ],
+  "acceptable_diversity_notes": "The strongest answers can still differ on the final recommendation, but they should make tradeoffs and next moves explicit."
+}

@@ -1,0 +1,10 @@
+{
+  "observed_protocol_path": "missing-info -> ask-followup",
+  "path_confidence": 0.8,
+  "supporting_signals": [
+    "missing_info_detected",
+    "followup_question_count",
+    "missing_info_followup_precision"
+  ],
+  "blocking_signals": []
+}

@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T14:17:50Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:15:56Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 65.553,
+          "tokens": 4823.0
+        },
+        "without_skill": {
+          "time_seconds": 86.548,
+          "tokens": 4204.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.75,
+        "reasoning_summary": "Both responses provide solid MECE analysis with clear prioritization. Candidate B edges ahead on actionability with specific 2-week execution plans, concrete hour allocations per task, realistic metrics (25% target vs A's unrealistic 100%), and embedded validation methods (specific user interview questions, data checkpoints). Candidate A excels at explaining MECE methodology explicitly but provides more generic recommendations. For a user with 10 hours/week needing immediate direction, B's hypothesis-driven approach with influence×feasibility matrix and specific North Star Metric is more practically useful.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:16:40Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 12.536,
+          "tokens": 2034.0
+        },
+        "without_skill": {
+          "time_seconds": 51.732,
+          "tokens": 2614.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.7,
+        "confidence": 0.8,
+        "reasoning_summary": "B provides significantly more user value by delivering an actual usable MECE framework immediately while still inviting customization. A only asks clarifying questions without showing what MECE analysis looks like. B's response allows the user to start self-diagnosing right away, demonstrates the MECE methodology with a concrete example, and still collects info for personalized follow-up. A forces a wait-and-see approach that delays any actionable value. Both preserve judgment appropriately by acknowledging info limitations, but B better balances immediate utility with path to customization.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 203,
+        "eval_name": "mece",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:17:14Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 34.501,
+          "tokens": 3433.0
+        },
+        "without_skill": {
+          "time_seconds": 69.962,
+          "tokens": 3730.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.75,
+        "confidence": 0.85,
+        "reasoning_summary": "Candidate B delivers substantially more user value by providing a complete MECE analysis in one response, while A only completes Step 1 and requires multiple turns to finish. B excels in: (1) Actionability - includes decision flowcharts, example tables, negative definitions, and concrete next steps; (2) Boundary Safety - explicit exclusion rules for each category directly addressing the user's 'no overlap' concern; (3) Thinking Support - complete framework covering both ME (mutual exclusivity) and CE (collective exhaustiveness) with practical examples. A's interactive approach preserves more user judgment but at the cost of immediate utility. For a user actively restructuring their business, B's comprehensive guidance is significantly more valuable than A's 'confirm before continuing' approach.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "B"
+        }
+      }
+    }
+  ]
+}

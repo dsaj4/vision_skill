@@ -1,0 +1,28 @@
+{
+  "eval_id": 101,
+  "scenario_id": "career-pivot-ai-operator",
+  "task_family": "swot-analysis",
+  "variant_type": "base",
+  "prompt": "我在考虑是否转去做 AI 产品运营。我现在有内容运营和用户研究经验，但技术不深，团队里也没有成熟带教。请你用 SWOT 帮我判断这件事值不值得继续推进。",
+  "expected_output": "A full SWOT analysis with strengths, weaknesses, opportunities, threats, and a cautious strategy recommendation.",
+  "judge_rubric": [
+    "Thinking Support",
+    "Tradeoff Quality",
+    "Actionability",
+    "Judgment Preservation",
+    "Boundary Safety"
+  ],
+  "must_preserve": [
+    "Make the tradeoff between adjacent strengths and missing support visible.",
+    "Keep the final recommendation conditional rather than absolute."
+  ],
+  "must_not_do": [
+    "Pretend the technical gap does not matter.",
+    "Push the user into an unqualified all-in career jump."
+  ],
+  "expectations": [
+    "The output identifies all four SWOT quadrants.",
+    "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+    "The output includes strategy guidance rather than only listing factors."
+  ]
+}

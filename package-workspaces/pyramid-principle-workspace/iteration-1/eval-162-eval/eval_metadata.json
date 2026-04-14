@@ -1,0 +1,34 @@
+{
+  "eval_id": 162,
+  "eval_name": "eval",
+  "prompt": "帮我用金字塔原理整理一下这个事情。",
+  "expected_output": "The skill should ask for the most important missing context before building a pyramid structure.",
+  "files": [],
+  "assertions": [
+    {
+      "id": "ask-missing-info",
+      "type": "contains_any",
+      "text": "The output should ask for missing topic, claim, audience, or support context first.",
+      "keywords": [
+        "还缺",
+        "需要补充",
+        "主题",
+        "核心观点",
+        "目标受众",
+        "支撑材料"
+      ]
+    },
+    {
+      "id": "no-premature-structure",
+      "type": "contains_none",
+      "text": "The output should not jump directly into a full pyramid structure when context is too vague.",
+      "keywords": [
+        "塔尖",
+        "核心结论",
+        "论据组",
+        "塔身"
+      ]
+    }
+  ],
+  "host_eval": {}
+}

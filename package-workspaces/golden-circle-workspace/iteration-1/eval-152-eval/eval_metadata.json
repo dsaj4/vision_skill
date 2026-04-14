@@ -1,0 +1,33 @@
+{
+  "eval_id": 152,
+  "eval_name": "eval",
+  "prompt": "帮我用黄金圈思维想一下我的项目。",
+  "expected_output": "The skill should detect missing context and ask only for the most important missing information before analyzing.",
+  "files": [],
+  "assertions": [
+    {
+      "id": "ask-missing-info",
+      "type": "contains_any",
+      "text": "The output should ask for missing context first.",
+      "keywords": [
+        "还缺",
+        "需要补充",
+        "目标",
+        "当前行动",
+        "背景信息"
+      ]
+    },
+    {
+      "id": "no-premature-full-analysis",
+      "type": "contains_none",
+      "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+      "keywords": [
+        "Why 层",
+        "How 层",
+        "What 层",
+        "一致性检验"
+      ]
+    }
+  ],
+  "host_eval": {}
+}

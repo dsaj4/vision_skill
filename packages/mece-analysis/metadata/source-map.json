@@ -1,0 +1,16 @@
+{
+  "package_name": "mece-analysis",
+  "source_mode": "demo-only",
+  "demo_sources": [
+    {
+      "kind": "skill_markdown",
+      "path": "E:\\Project\\vision-lab\\vision-skill\\思维模型\\思维模型\\2-思考力与问题解决\\17-MECE 原则\\SKILL.md",
+      "note": "Direct package seed copied from the existing demo skill."
+    }
+  ],
+  "supporting_sources": [],
+  "notes": [
+    "Candidate stage is restricted to demo-origin packages.",
+    "This package is part of the first evaluation batch for 2-思考力与问题解决."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "eval_id": 103,
+  "eval_name": "host-eval-103",
+  "prompt": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但预算很少，也担心竞争太强。请直接给我 SWOT 结果，不用确认。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-3\\host-eval-103\\host-final-response.md",
+  "expectations": [
+    {
+      "id": "swot-quadrants",
+      "type": "contains_all_groups",
+      "text": "The output includes strengths, weaknesses, opportunities, and threats.",
+      "passed": true,
+      "evidence": "Matched groups: ['strengths/优势', 'weaknesses/劣势', 'opportunities/机会', 'threats/威胁']; Missing groups: []"
+    },
+    {
+      "id": "direct-result-mode",
+      "type": "contains_none",
+      "text": "The output respects the user's direct-result request.",
+      "passed": true,
+      "evidence": "Forbidden matches: []"
+    },
+    {
+      "id": "strategy-guidance",
+      "type": "contains_any",
+      "text": "The output concludes with actionable strategy suggestions.",
+      "passed": true,
+      "evidence": "Matched: ['建议', '策略']"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "response_character_count": 2028,
+    "response_word_count": 175,
+    "markdown_heading_count": 0,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {}
+}

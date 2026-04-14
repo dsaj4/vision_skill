@@ -1,0 +1,425 @@
+{
+  "metadata": {
+    "iteration_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-1",
+    "generated_at": "2026-04-14T13:46:58Z",
+    "runs_per_configuration": 1,
+    "eval_ids": [
+      201,
+      202
+    ],
+    "level3_primary_mode": "differential"
+  },
+  "level3_summary": {
+    "primary_mode": "differential",
+    "pairwise_summary": {
+      "win_rate": 0.0,
+      "tie_rate": 0.0,
+      "avg_margin": -0.7125,
+      "judge_disagreement_rate": 0.0,
+      "cost_adjusted_value": -0.719
+    }
+  },
+  "per_eval": [
+    {
+      "eval_id": 201,
+      "eval_name": "ai-1-2-3-10-4-mece",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 56.527,
+            "stddev": 0.0,
+            "min": 56.527,
+            "max": 56.527
+          },
+          "tokens": {
+            "mean": 4542.0,
+            "stddev": 0.0,
+            "min": 4542.0,
+            "max": 4542.0
+          },
+          "expectation_variance": {
+            "mece-dimension": {
+              "text": "The output should state the decomposition dimension or method.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "mece-check": {
+              "text": "The output should include a MECE-style completeness or independence check.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "mece-priority": {
+              "text": "The output should conclude with action priorities or next-step guidance.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|llong"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.6667,
+            "stddev": 0.0,
+            "min": 0.6667,
+            "max": 0.6667
+          },
+          "time_seconds": {
+            "mean": 90.846,
+            "stddev": 0.0,
+            "min": 90.846,
+            "max": 90.846
+          },
+          "tokens": {
+            "mean": 5049.0,
+            "stddev": 0.0,
+            "min": 5049.0,
+            "max": 5049.0
+          },
+          "expectation_variance": {
+            "mece-dimension": {
+              "text": "The output should state the decomposition dimension or method.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            },
+            "mece-check": {
+              "text": "The output should include a MECE-style completeness or independence check.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "mece-priority": {
+              "text": "The output should conclude with action priorities or next-step guidance.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h8|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 201,
+          "eval_name": "ai-1-2-3-10-4-mece",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.625,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-1\\eval-201-ai-1-2-3-10-4-mece\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-1\\eval-201-ai-1-2-3-10-4-mece\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    },
+    {
+      "eval_id": 202,
+      "eval_name": "mece",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 29.43,
+            "stddev": 0.0,
+            "min": 29.43,
+            "max": 29.43
+          },
+          "tokens": {
+            "mean": 3136.0,
+            "stddev": 0.0,
+            "min": 3136.0,
+            "max": 3136.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for the missing context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-breakdown": {
+              "text": "The output should not jump straight into a complete breakdown when the input is too vague.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lshort"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 41.797,
+            "stddev": 0.0,
+            "min": 41.797,
+            "max": 41.797
+          },
+          "tokens": {
+            "mean": 2309.0,
+            "stddev": 0.0,
+            "min": 2309.0,
+            "max": 2309.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for the missing context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-breakdown": {
+              "text": "The output should not jump straight into a complete breakdown when the input is too vague.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h8|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 202,
+          "eval_name": "mece",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.8,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-1\\eval-202-mece\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-1\\eval-202-mece\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    }
+  ],
+  "overall": {
+    "configurations": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 1.0,
+          "stddev": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 42.9785,
+          "stddev": 19.1605,
+          "min": 29.43,
+          "max": 56.527
+        },
+        "tokens": {
+          "mean": 3839.0,
+          "stddev": 994.1921,
+          "min": 3136.0,
+          "max": 4542.0
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.8334,
+          "stddev": 0.2357,
+          "min": 0.6667,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 66.3215,
+          "stddev": 34.6829,
+          "min": 41.797,
+          "max": 90.846
+        },
+        "tokens": {
+          "mean": 3679.0,
+          "stddev": 1937.4726,
+          "min": 2309.0,
+          "max": 5049.0
+        }
+      }
+    },
+    "flags": [
+      "weak_stability_value"
+    ]
+  },
+  "variance_by_expectation": {
+    "expectations": [
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "with_skill",
+        "expectation_id": "mece-dimension",
+        "text": "The output should state the decomposition dimension or method.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "with_skill",
+        "expectation_id": "mece-check",
+        "text": "The output should include a MECE-style completeness or independence check.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "with_skill",
+        "expectation_id": "mece-priority",
+        "text": "The output should conclude with action priorities or next-step guidance.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "without_skill",
+        "expectation_id": "mece-dimension",
+        "text": "The output should state the decomposition dimension or method.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "without_skill",
+        "expectation_id": "mece-check",
+        "text": "The output should include a MECE-style completeness or independence check.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "configuration": "without_skill",
+        "expectation_id": "mece-priority",
+        "text": "The output should conclude with action priorities or next-step guidance.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "configuration": "with_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for the missing context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "configuration": "with_skill",
+        "expectation_id": "no-premature-breakdown",
+        "text": "The output should not jump straight into a complete breakdown when the input is too vague.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "configuration": "without_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for the missing context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "configuration": "without_skill",
+        "expectation_id": "no-premature-breakdown",
+        "text": "The output should not jump straight into a complete breakdown when the input is too vague.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      }
+    ]
+  }
+}

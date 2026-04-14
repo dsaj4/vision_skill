@@ -1,0 +1,9 @@
+{
+  "model": "qwen-plus",
+  "messages": [
+    {
+      "role": "user",
+      "content": "我想转去做 AI 相关方向，但现在信息很乱。你直接用 SWOT 帮我看值不值得做吧。"
+    }
+  ]
+}

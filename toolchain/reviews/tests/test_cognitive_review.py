@@ -115,6 +115,46 @@ def write_iteration(base: Path) -> Path:
         "failure_tag_counts": {"skill-content.reasoning-shallow": 1},
     }
     (iteration_dir / "analysis.json").write_text(json.dumps(analysis, ensure_ascii=False, indent=2), encoding="utf-8")
+    (iteration_dir / "level3-summary.json").write_text(
+        json.dumps(
+            {
+                "primary_mode": "differential",
+                "pairwise_summary": {
+                    "win_rate": 0.5,
+                    "tie_rate": 0.0,
+                    "avg_margin": 0.05,
+                    "judge_disagreement_rate": 0.0,
+                    "cost_adjusted_value": -0.1,
+                },
+                "gate_summary": benchmark["run_summary"],
+                "per_eval": [
+                    {
+                        "eval_id": 1,
+                        "eval_name": "ai-swot",
+                        "run_number": 1,
+                        "final_winner": "with_skill",
+                        "avg_margin": 0.9,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(iteration_dir / "eval-1-ai-swot" / "with_skill" / "run-1"),
+                        "without_skill_run_dir": str(iteration_dir / "eval-1-ai-swot" / "without_skill" / "run-1"),
+                    },
+                    {
+                        "eval_id": 1,
+                        "eval_name": "ai-swot",
+                        "run_number": 2,
+                        "final_winner": "without_skill",
+                        "avg_margin": 0.8,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(iteration_dir / "eval-1-ai-swot" / "with_skill" / "run-2"),
+                        "without_skill_run_dir": str(iteration_dir / "eval-1-ai-swot" / "without_skill" / "run-1"),
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
     run_specs = [
         ("with_skill", 1, "## Strengths\n- insight\n## Strategy\n- validate quickly"),
@@ -191,3 +231,13 @@ def test_write_human_review_template_and_release_recommendation_respect_manual_d
     assert recommendation["recommendation"] != "promote"
     assert "manual_review_decision:revise" in recommendation["blockers"]
     assert (iteration_dir / "release-recommendation.json").exists()
+
+
+def test_build_human_review_packet_prefers_pairwise_outcomes_over_pass_rate_only(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir = write_iteration(tmp_path / "workspace")
+
+    packet = build_human_review_packet(iteration_dir, package_dir)
+
+    assert packet["representative_runs"]["best_with_skill"]["run_number"] == 1
+    assert packet["representative_runs"]["worst_with_skill"]["run_number"] == 2

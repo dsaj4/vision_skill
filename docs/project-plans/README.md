@@ -11,6 +11,12 @@
   - 主线 A 细化版规划文档
   - 参考 `skill-creator` 的技能包、评测、workspace、benchmark 结构
   - 用于把 `vision-skill` 组织成可扩展的 skill package factory
+- `2026-04-13-vision-skill-eval-effectiveness-suite-design-v0.1.md`
+  - 第一版严格效果区分测试套件设计
+  - 用于验证当前评测系统是否具备基本区分力
+- `2026-04-13-vision-skill-differential-eval-and-eval-factory-design-v0.1.md`
+  - 第一版差异评测与轻量评测集工厂设计
+  - 用于定义 Level 3 主评分替换方向和高质量 eval 的生成路径
 
 约定：
 

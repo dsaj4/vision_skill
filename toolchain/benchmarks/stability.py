@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from toolchain.benchmarks.level3_summary import ensure_level3_summary
+
 
 PAUSE_MARKERS = ['回复"继续"', '回复"不对"', '回复"直接要结果"', "输出后暂停", "暂停确认"]
 SWOT_GROUPS = [
@@ -187,7 +189,15 @@ def _summarize_configuration(runs: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _overall_from_per_eval(per_eval: list[dict[str, Any]]) -> dict[str, Any]:
+def _pairwise_index(level3_summary: dict[str, Any]) -> dict[tuple[int, int], dict[str, Any]]:
+    return {
+        (int(item["eval_id"]), int(item["run_number"])): item
+        for item in level3_summary.get("per_eval", [])
+        if item.get("eval_id") is not None and item.get("run_number") is not None
+    }
+
+
+def _overall_from_per_eval(per_eval: list[dict[str, Any]], level3_summary: dict[str, Any]) -> dict[str, Any]:
     aggregated: dict[str, dict[str, list[float]]] = {}
     flags: list[str] = []
 
@@ -207,21 +217,15 @@ def _overall_from_per_eval(per_eval: list[dict[str, Any]]) -> dict[str, Any]:
             "tokens": _calculate_stats(metrics["tokens"]),
         }
 
-    with_skill = configurations_summary.get("with_skill", {})
-    without_skill = configurations_summary.get("without_skill", {})
-    with_pass = with_skill.get("pass_rate", {}).get("mean", 0.0)
-    without_pass = without_skill.get("pass_rate", {}).get("mean", 0.0)
-    with_time = with_skill.get("time_seconds", {}).get("mean", 0.0)
-    without_time = without_skill.get("time_seconds", {}).get("mean", 0.0)
-    with_tokens = with_skill.get("tokens", {}).get("mean", 0.0)
-    without_tokens = without_skill.get("tokens", {}).get("mean", 0.0)
-
-    if with_pass <= without_pass and (with_time > without_time or with_tokens > without_tokens):
-        flags.append("weak_stability_value")
-
-    with_std = with_skill.get("pass_rate", {}).get("stddev", 0.0)
-    without_std = without_skill.get("pass_rate", {}).get("stddev", 0.0)
+    with_std = configurations_summary.get("with_skill", {}).get("pass_rate", {}).get("stddev", 0.0)
+    without_std = configurations_summary.get("without_skill", {}).get("pass_rate", {}).get("stddev", 0.0)
     if with_std - without_std >= 0.15:
+        flags.append("instability_risk")
+
+    pairwise = level3_summary.get("pairwise_summary", {})
+    if float(pairwise.get("win_rate", 0.0) or 0.0) <= 0.5 and float(pairwise.get("cost_adjusted_value", 0.0) or 0.0) <= 0.0:
+        flags.append("weak_stability_value")
+    if float(pairwise.get("judge_disagreement_rate", 0.0) or 0.0) >= 0.25:
         flags.append("instability_risk")
 
     return {
@@ -252,14 +256,18 @@ def _variance_by_expectation(per_eval: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def generate_stability_report(iteration_dir: Path) -> dict[str, Any]:
-    iteration_dir = Path(iteration_dir)
-    loaded = _load_iteration_runs(iteration_dir)
+    iteration_path = Path(iteration_dir)
+    level3_summary = ensure_level3_summary(iteration_path)
+    loaded = _load_iteration_runs(iteration_path)
+    pairwise_results = _pairwise_index(level3_summary)
+
     per_eval: list[dict[str, Any]] = []
     runs_per_configuration = 0
-
     for eval_item in loaded["evals"]:
         config_summaries: dict[str, Any] = {}
         flags: list[str] = []
+        eval_pairwise: list[dict[str, Any]] = []
+
         for configuration, runs in eval_item["configurations"].items():
             runs_per_configuration = max(runs_per_configuration, len(runs))
             summary = _summarize_configuration(runs)
@@ -268,34 +276,42 @@ def generate_stability_report(iteration_dir: Path) -> dict[str, Any]:
                 flags.append("unstable")
             if summary["drift"]["drift_detected"]:
                 flags.append("drift_detected")
+            for run in runs:
+                pairwise = pairwise_results.get((int(eval_item["eval_id"]), int(run["run_number"])))
+                if pairwise is not None and pairwise not in eval_pairwise:
+                    eval_pairwise.append(pairwise)
 
-        with_skill_summary = config_summaries.get("with_skill")
-        without_skill_summary = config_summaries.get("without_skill")
-        if with_skill_summary and without_skill_summary:
-            if with_skill_summary["pass_rate"]["stddev"] - without_skill_summary["pass_rate"]["stddev"] >= 0.15:
-                flags.append("instability_risk")
+        if any(item.get("judge_disagreement") for item in eval_pairwise):
+            flags.append("instability_risk")
+        if eval_pairwise and not any(item.get("final_winner") == "with_skill" for item in eval_pairwise):
+            flags.append("weak_stability_value")
 
         per_eval.append(
             {
                 "eval_id": eval_item["eval_id"],
                 "eval_name": eval_item["eval_name"],
                 "configurations": config_summaries,
+                "pairwise_results": eval_pairwise,
                 "flags": sorted(set(flags)),
             }
         )
 
-    report = {
+    return {
         "metadata": {
-            "iteration_dir": str(iteration_dir),
+            "iteration_dir": str(iteration_path),
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "runs_per_configuration": runs_per_configuration,
             "eval_ids": [item["eval_id"] for item in per_eval],
+            "level3_primary_mode": level3_summary.get("primary_mode", "unknown"),
+        },
+        "level3_summary": {
+            "primary_mode": level3_summary.get("primary_mode", "unknown"),
+            "pairwise_summary": level3_summary.get("pairwise_summary", {}),
         },
         "per_eval": per_eval,
-        "overall": _overall_from_per_eval(per_eval),
+        "overall": _overall_from_per_eval(per_eval, level3_summary),
         "variance_by_expectation": _variance_by_expectation(per_eval),
     }
-    return report
 
 
 def _generate_markdown(report: dict[str, Any]) -> str:
@@ -303,6 +319,13 @@ def _generate_markdown(report: dict[str, Any]) -> str:
         "# Stability Report",
         "",
         f"**Generated At**: {report['metadata']['generated_at']}",
+        "",
+        "## Level 3",
+        "",
+        f"- Primary mode: {report['level3_summary']['primary_mode']}",
+        f"- Pairwise win rate: {report['level3_summary']['pairwise_summary'].get('win_rate', 0.0):.4f}",
+        f"- Pairwise disagreement rate: {report['level3_summary']['pairwise_summary'].get('judge_disagreement_rate', 0.0):.4f}",
+        f"- Cost-adjusted value: {report['level3_summary']['pairwise_summary'].get('cost_adjusted_value', 0.0):.4f}",
         "",
         "## Overall",
         "",
@@ -329,13 +352,19 @@ def _generate_markdown(report: dict[str, Any]) -> str:
                 f"stddev {summary['pass_rate']['stddev']:.4f}, "
                 f"drift={summary['drift']['drift_detected']}, unstable_expectations={unstable or 'none'}"
             )
+        if eval_item["pairwise_results"]:
+            pair = eval_item["pairwise_results"][0]
+            lines.append(
+                f"- pairwise: winner={pair.get('final_winner')} margin={float(pair.get('avg_margin', 0.0) or 0.0):.4f} "
+                f"disagreement={pair.get('judge_disagreement', False)}"
+            )
         lines.append("")
 
     return "\n".join(lines).strip() + "\n"
 
 
 def write_stability_artifacts(iteration_dir: Path, report: dict[str, Any]) -> None:
-    iteration_dir = Path(iteration_dir)
-    _write_json(iteration_dir / "stability.json", report)
-    _write_json(iteration_dir / "variance-by-expectation.json", report["variance_by_expectation"])
-    (iteration_dir / "stability.md").write_text(_generate_markdown(report), encoding="utf-8")
+    iteration_path = Path(iteration_dir)
+    _write_json(iteration_path / "stability.json", report)
+    _write_json(iteration_path / "variance-by-expectation.json", report["variance_by_expectation"])
+    (iteration_path / "stability.md").write_text(_generate_markdown(report), encoding="utf-8")

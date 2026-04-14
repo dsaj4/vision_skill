@@ -1,0 +1,997 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T11:00:00Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 101,
+        "eval_name": "ai-swot",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:54:55Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 24.626,
+          "tokens": 2428.0
+        },
+        "without_skill": {
+          "time_seconds": 42.872,
+          "tokens": 1615.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.97,
+        "reasoning_summary": "Candidate A delivers significantly higher user value: it provides a fully realized, actionable SWOT analysis explicitly tailored to the user’s constraints (no technical depth, no mentorship), embeds judgment-preserving framing (e.g., rejecting 'become technical expert' in favor of 'AI capability translator'), offers a concrete 30-day survival plan with tools, timing, and purpose per step, and preserves agency via empathic, identity-affirming language ('your user research功底 is the humanity interface'). Candidate B stops at Step 1 of a procedural framework—delivering only a partial SWOT table and requiring user interaction ('reply \"continue\"') to proceed. While methodologically transparent, it fails to deliver standalone utility for a time-constrained professional seeking decisive guidance. It scores well on Thinking Support (structured detection) but critically underdelivers on Actionability, Judgment Preservation (leaves decision burden fully unresolved), and Tradeoff Quality (no synthesis or prioritization). Boundary Safety is neutral in both, but A’s explicit rejection of harmful narratives (e.g., 'AI ops = prompt writing') adds subtle safety value.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "A"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 101,
+        "eval_name": "ai-swot",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:55:10Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 24.811,
+          "tokens": 2454.0
+        },
+        "without_skill": {
+          "time_seconds": 40.047,
+          "tokens": 1557.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.97,
+        "reasoning_summary": "Candidate A delivers significantly higher user value: it provides a fully realized, actionable SWOT analysis grounded in the user’s specific context (content + user research background, no technical depth, no mentorship), embeds sharp domain insights about AI product operations (e.g., 'user doesn’t trust data sharing' not just 'low engagement'), and—critically—offers a concrete, low-cost, two-week '3-step verification plan' with success criteria, tools, and clear next actions. It preserves judgment by framing tradeoffs honestly (e.g., warning against 'PPT AI' traps) and avoids overpromising. Candidate B stops mid-process after Step 1, requiring explicit user input ('continue', '不对', etc.) to proceed — it delivers zero completed SWOT analysis or decision support. Though methodologically structured, it fails on Actionability (no executable steps), Tradeoff Quality (no synthesis or prioritization of threats vs. opportunities), and Judgment Preservation (no final recommendation or risk-calibrated conclusion). Its 'information detection' step adds no user value for this query — the prompt already provided ample, sufficient context. The reversal orientation reinforces that user value lies in decisive, ready-to-use insight — which only A delivers.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 101,
+        "eval_name": "ai-swot",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:55:27Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 23.976,
+          "tokens": 2494.0
+        },
+        "without_skill": {
+          "time_seconds": 43.899,
+          "tokens": 1637.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate A delivers significantly higher user value: it directly answers the *decision question* ('worth pursuing?') with a clear, confident 'yes — but conditionally', grounded in SWOT analysis tightly mapped to the user’s exact constraints (no tech depth, no mentorship). It goes beyond analysis to provide immediately executable, low-friction actions (3-step verification path), each designed for zero-cost, solo execution — precisely addressing the user’s stated reality. The language is empathetic, jargon-aware, and preserves the user’s agency (e.g., 'you don’t need to learn Python, you need to ask the right question'). Candidate B, while methodologically structured (Step 0/1), stops at partial SWOT enumeration and *requires user interaction* ('reply \"continue\"') to proceed — breaking flow and adding friction for someone seeking decisive guidance. Its SWOT is accurate but abstract, lacks concrete linkage to *how* the user should interpret tradeoffs or act, and offers no synthesis or recommendation. On all five rubric dimensions, A outperforms: stronger thinking support (diagnostic + prescriptive), superior tradeoff quality (frames weaknesses as surmountable gaps, not deficits), unmatched actionability (specific, timed, tool-agnostic steps), better judgment preservation (centers user’s existing strengths as strategic advantage), and equal boundary safety (no overpromising, acknowledges threats realistically).",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 102,
+        "eval_name": "ai-swot",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:55:44Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 55.722,
+          "tokens": 3322.0
+        },
+        "without_skill": {
+          "time_seconds": 55.31,
+          "tokens": 2066.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate A delivers significantly higher user value for this specific request: a pragmatic, emotionally grounded, and immediately actionable SWOT analysis tailored to an AI career pivot amid information overload. It excels in Thinking Support (structures ambiguity into concrete, evidence-based dimensions), Tradeoff Quality (clearly names real tradeoffs like time cost vs. opportunity window, not abstract ideals), and Actionability (gives a 3-minute self-test, today’s first action list with live links, and role-specific examples). Crucially, it preserves Judgment by anchoring conclusions in observable behaviors ('if you can run this in Colab… then act') rather than hypotheticals. Candidate B, while technically rigorous and well-structured, over-indexes on process transparency (explaining *why* it skipped questioning) at the expense of immediacy. Its analysis is more generic, less vividly contextualized to the user’s stated pain ('information very messy'), and its actions are abstract ('list 3 workflows') without scaffolding or urgency cues. Its 'cross-strategy' section is conceptually sound but feels academic next to A’s visceral 'Dify in 2 hours → apply' directive. Both satisfy Boundary Safety, but A dominates on the core task: helping a confused person decide *right now* whether and how to jump.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 102,
+        "eval_name": "ai-swot",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:56:02Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 43.174,
+          "tokens": 3128.0
+        },
+        "without_skill": {
+          "time_seconds": 37.669,
+          "tokens": 1386.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate A delivers significantly higher user value for this specific request: a *direct, actionable, and grounded* SWOT to decide whether to pivot into AI. It anchors every point in 2024 reality (salary ranges, tool names, hiring filters, failure rates), uses vivid, concrete examples tied to user identity ('your industry', 'your current job'), and culminates in a crisp, three-path decision matrix with *immediately executable* next steps—even prescribing the first 10-minute action ('use ChatGPT + your work doc'). Candidate B, while technically rigorous and well-structured, over-indexes on internal process transparency (explicitly naming rule triggers, 'direct output mode'), adds meta-layering that distracts from urgency, and buries its strongest advice (e.g., 'SO Strategy') in dense academic formatting (code blocks, nested bullets). Its 'Action 1/2/3' is less tangible than A's 'do this today' prompt. On all five rubric dimensions—especially Actionability, Judgment Preservation (A’s 'three types of people' framing avoids false universality), and Thinking Support (A scaffolds reasoning via real-world constraints like time cost and credential bias)—A provides more usable, empathetic, and decisive support.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 102,
+        "eval_name": "ai-swot",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:56:21Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-102-ai-swot\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 47.281,
+          "tokens": 3103.0
+        },
+        "without_skill": {
+          "time_seconds": 53.617,
+          "tokens": 1855.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.28,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate A delivers significantly higher user value for this specific request: a *personalized, decision-focused SWOT* to answer 'is it worth it?' for someone overwhelmed by AI career noise. A grounds analysis in the user’s reality (non-CS background, time-constrained, seeking actionable entry), uses vivid concrete examples (e.g., HR building AI hiring tools, teacher creating AI lesson planners), and crucially — provides *immediate, role-specific next steps* with zero abstraction (e.g., 'record a screen capture of automating your CRM entry and email it to your boss'). It preserves judgment by explicitly rejecting unviable paths (hard-core algorithm roles) and framing success around problem-solving, not credentials. Candidate B, while technically proficient and well-structured, remains at the level of generalized strategic patterns (SO/ST/WO/WT), lacks personalized scaffolding (no prompts for user’s job/time/pain point), and over-indexes on abstract threats/opportunities without translating them into *the user’s first tangible action*. Its tone is more consultant-to-executive than coach-to-anxious career-changer. On all five rubric dimensions, A outperforms: deeper thinking support (contextualized constraints), superior tradeoff clarity (salary tradeoffs, time vs. ROI), unmatched actionability (specific, low-barrier, tomorrow-startable tasks), stronger judgment preservation (clear 'do/don’t' boundaries), and equal boundary safety (no harmful advice). The margin reflects A’s decisive advantage in reducing cognitive load and enabling immediate agency.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 103,
+        "eval_name": "3-swot",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:56:40Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 45.757,
+          "tokens": 3052.0
+        },
+        "without_skill": {
+          "time_seconds": 16.694,
+          "tokens": 611.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.72,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate B delivers significantly higher user value for this specific task: a low-budget, early-stage student project needing *immediately actionable*, *strategically grounded*, and *execution-ready* SWOT guidance. While Candidate A provides a clean, well-structured SWOT with good insights, it remains descriptive and static — listing factors without showing *how to use them*. Candidate B transforms the SWOT into a decision engine: it prioritizes elements (e.g., 'most fatal weakness'), performs cross-strategy analysis (SO/ST/WO/WT), and — crucially — outputs concrete, time-bound, zero-budget actions (e.g., '48-hour deliverable', '15-minute meeting script', 'Canva-free execution'). It preserves judgment by highlighting tradeoffs ('don’t build a virtual interview room yet') and enforces boundary safety via explicit budget/time constraints and scope discipline ('only solve the 48 hours before interview'). Candidate A’s analysis is sound but stops at diagnosis; Candidate B provides the treatment plan, calibrated precisely to the user’s stated constraints (3 users, low budget, high competition). The markdown formatting in B is not stylistic fluff — it structures reasoning for rapid scanning and implementation, directly serving the user’s need for speed and clarity under resource pressure.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "B"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 103,
+        "eval_name": "3-swot",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:56:57Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 40.767,
+          "tokens": 3062.0
+        },
+        "without_skill": {
+          "time_seconds": 13.525,
+          "tokens": 508.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.72,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by transforming SWOT from static analysis into an executable strategic engine. It embeds judgment preservation (e.g., prioritizing 'real user feedback loop' as *the* key advantage), provides concrete, time-bound actions with tool-specific instructions (Canva, ElevenLabs, Tencent Docs), and structures tradeoffs explicitly (e.g., rejecting app development to avoid technical debt). The cross-strategy framework (SO/WO/ST/WT) directly addresses the user’s core constraints — low budget, 3 users, competition — by converting weaknesses into co-creation opportunities (e.g., crowdsourcing answers instead of building a database) and threats into differentiation levers (human voice feedback vs. AI scoring). Candidate A is well-structured and insightful but remains descriptive: its SWOT elements are accurate and context-aware, yet it offers no prioritization, no sequencing, no implementation scaffolding, and no guidance on *how to choose among competing options*. For a user with zero budget and only 3 people, B’s '48-hour action plan' and '21-day campaign' deliver immediate next steps; A’s polished list does not. Boundary safety is equally strong in both (no overpromising, realistic framing), but B’s 'Key Reminder' section actively preserves the user’s agency and mindset — critical for early-stage founders. Thus, B dominates on Thinking Support, Tradeoff Quality, Actionability, and Judgment Preservation; tie on Boundary Safety.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 103,
+        "eval_name": "3-swot",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:57:16Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-103-3-swot\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 44.453,
+          "tokens": 3074.0
+        },
+        "without_skill": {
+          "time_seconds": 14.62,
+          "tokens": 593.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.82,
+        "confidence": 0.96,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by transforming SWOT from static analysis into an executable, context-anchored strategy engine. It preserves the user’s constraints (3 users, low budget, competition) while directly converting each SWOT element into prioritized, time-bound actions — including concrete deadlines (24/48/72h), platform-specific tactics (QQ groups, Notion, counselor outreach), and behavioral nudges (handwritten names, major-specific passwords). Crucially, it embeds judgment preservation: explicitly advising *not* to build AI simulators or cross-campus, and reframing weaknesses (no brand) as strengths (real student sourcing). Candidate A is insightful and well-structured, but remains descriptive — its opportunities/threats lack execution levers, and it offers no sequencing, resource allocation logic, or risk-mitigated rollout path. On all five rubric dimensions, B outperforms: it supports thinking via cross-strategy mapping (SO/ST/WT); surfaces critical tradeoffs (e.g., 'don’t build AI — do voice fast-charges instead'); is hyper-actionable with step-by-step field instructions; actively preserves user agency and constraints; and enforces boundary safety by rejecting infeasible paths. A is strong on Thinking Support and Boundary Safety, but falls short on Tradeoff Quality (no prioritization of which weakness hurts most *now*) and Actionability (no 'what to do first, where, with what').",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "B"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 104,
+        "eval_name": "swot",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:57:33Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 47.226,
+          "tokens": 3204.0
+        },
+        "without_skill": {
+          "time_seconds": 17.574,
+          "tokens": 677.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.82,
+        "confidence": 0.95,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by transforming SWOT from a static diagnostic into an executable, psychologically attuned startup playbook. It explicitly prioritizes *what matters most right now* (e.g., 'brand & trust缺失' as the 'most fatal weakness', 'attention fragmentation' as the 'most severe threat'), then maps each quadrant to concrete, zero-budget tactics with clear ownership ('Action 1: Today', 'Action 2: By tomorrow morning'). Crucially, it embeds behavioral insight (e.g., 'students don’t need help—they need non-shaming, instant-feedback practice') and design constraints ('≤8 sec from click to feedback') that Candidate A omits. While Candidate A is well-structured and actionable, it remains a strong *analysis*; Candidate B is a *co-pilot*—anticipating friction points (e.g., 'don’t build an app', 'don’t optimize algorithms yet'), reframing weaknesses as strategic filters ('WO strategy'), and turning threats into distribution levers ('use Niuke as a channel'). The cross-strategy layer (SO/WO/ST/WT) and embedded KPI ('7 days, ≥5 sessions') make B’s output inherently self-validating and de-risked for the user’s exact context: scarce time, zero budget, deep uncertainty.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 104,
+        "eval_name": "swot",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:57:51Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 44.596,
+          "tokens": 3138.0
+        },
+        "without_skill": {
+          "time_seconds": 17.478,
+          "tokens": 669.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.72,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by transforming SWOT from a static diagnostic into an executable, layered strategy engine. It doesn’t just list factors—it prioritizes them (e.g., 'most fatal weakness', 'most valuable opportunity'), performs rigorous cross-strategy analysis (SO/WO/ST/WT), and maps each insight directly to time-bound, channel-specific actions with clear rationale (e.g., leveraging 2024–2025 university micro-project windows). Crucially, it preserves the user’s constraints—zero budget, no dev team, fear of saturation—while reframing 'being under-resourced' as a strategic advantage ('money shortage forces one-shot precision'). Candidate A is strong on immediacy and tone but remains largely at the level of insightful observation; its 'landing page' call-to-action is vivid but lacks scaffolding for iteration, risk mitigation, or scaling logic. B anticipates downstream friction (e.g., summer slump → pivot to 'autumn prep camp') and embeds judgment preservation (e.g., explicit 'don’t build AI simulators' guardrail). On all five rubric dimensions—especially Tradeoff Quality and Actionability—B provides richer, more adaptive, and constraint-aware guidance.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 104,
+        "eval_name": "swot",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:58:09Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-104-swot\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 55.284,
+          "tokens": 3519.0
+        },
+        "without_skill": {
+          "time_seconds": 18.89,
+          "tokens": 663.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.72,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate B delivers significantly higher user value for this specific request: a *落地的 SWOT conclusion* for a cash-strapped, early-stage student-led interview prep tool facing perceived saturation. While both answers are strong, B excels across all five rubric dimensions. It provides deeper, more actionable strategic layering (SO/WO/ST/WT), embeds concrete time-bound actions (48h/3d/5d), grounds every claim in observable student behavior ('Z世代 rejects didactic learning'), and directly confronts the user’s core anxiety — not just 'is it crowded?', but 'how do I prove it’s not a waste of time for me and my peers?'. Crucially, B transforms abstract SWOT into executable micro-tactics (e.g., 'contrast录音 video', '追问链路规律' extraction from competitors) that require zero budget and leverage the user’s unique proximity to real students. Candidate A is excellent — clear, concise, and action-oriented — but operates at a higher level of abstraction (e.g., 'build a WeChat group') without B’s granular behavioral insight, tactical sequencing, or explicit framing of how each element defends against the stated fear of 'pseudo-demand'. B’s 'Key Reminder' section alone — about optimizing for 'user forwarding rationale' and hyper-localized credibility — delivers a strategic lens A doesn’t provide.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 105,
+        "eval_name": "swot",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:58:25Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 11.39,
+          "tokens": 2032.0
+        },
+        "without_skill": {
+          "time_seconds": 32.219,
+          "tokens": 1376.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.97,
+        "reasoning_summary": "Candidate A delivers significantly higher user value by immediately engaging the user’s lived reality with clinical and psychological precision (e.g., linking insomnia to prefrontal cortex impairment), offering a rich, grounded SWOT that respects ambiguity while surfacing non-obvious tradeoffs (e.g., 'new direction may be old problem transfer'). It provides three concrete, low-barrier, self-guided verification actions — each designed to reduce decision paralysis through embodied evidence (not theory). Crucially, it preserves judgment by refusing to name the new direction, anchoring analysis solely in the user’s stated experience, and closing with somatic validation ('your body will tell you'). Candidate B, while methodologically tidy and boundary-aware, stops at information collection: it defers analysis entirely behind a gate of required inputs, offering zero actionable insight or emotional scaffolding *in this response*. For a user reporting acute sleep loss and decision urgency, waiting to supply more data is neither supportive nor safe — it risks amplifying helplessness. A’s answer works *now*, with what the user has shared; B’s requires the user to perform cognitive labor they’re already too depleted to reliably execute.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 105,
+        "eval_name": "swot",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:58:45Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 11.749,
+          "tokens": 2045.0
+        },
+        "without_skill": {
+          "time_seconds": 37.695,
+          "tokens": 1610.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.97,
+        "reasoning_summary": "Candidate A delivers significantly higher user value: it directly fulfills the request—applying SWOT *now*, with exceptional fidelity to 'not deciding for the user'. It grounds analysis in the user's stated facts (chronic insomnia, strong urge to quit), surfaces non-obvious but critical tradeoffs (e.g., sleep-deprived prefrontal cortex ≈ intoxication), and embeds rigorous verification steps (sleep logs, definable micro-goals) that preserve judgment while building agency. Its actionability is concrete, sequenced, and physiologically informed. Candidate B, while skillfully using a 'Step 0' framing, stops short of delivering the requested SWOT—it defers analysis until more input is provided, leaving the user without the clarity they explicitly sought *in this moment*. Though well-intentioned, this creates delay and cognitive load when the user is already exhausted and seeking structural insight. On all five rubric dimensions—especially Judgment Preservation (A never presumes; B asks for more before acting) and Actionability (A gives immediate, executable steps; B gives none)—A provides substantially more value.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 105,
+        "eval_name": "swot",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:59:01Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-105-swot\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 8.988,
+          "tokens": 1970.0
+        },
+        "without_skill": {
+          "time_seconds": 33.62,
+          "tokens": 1492.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.85,
+        "confidence": 0.97,
+        "reasoning_summary": "Candidate A delivers significantly higher user value: it immediately honors the user's distress (insomnia as a physiological red flag), provides a rich, grounded SWOT with *actionable verification steps* for each quadrant, embeds neurocognitive awareness (e.g., how sleep loss impairs judgment), and offers concrete, low-barrier 'next 72-hour' actions — all while rigorously preserving autonomy ('no decision made for you'). Candidate B, though skillfully structured (Step 0 detection), stops at information gathering — it *withholds analysis* until the user supplies missing details. This creates friction when the user is exhausted and seeking clarity *now*. The request for clarification — however methodologically sound — fails the urgency, empathy, and immediacy the prompt demands ('I’m sleeping badly *now*, I want to see risks and next steps *now*'). A’s response is self-contained, therapeutic, and decision-enabling; B’s is procedural but inert without user input. On all five rubric dimensions, A dominates: deeper thinking support (links insomnia to prefrontal function), superior tradeoff quality (names hidden costs like 'identity switching'), higher actionability (3 specific micro-actions), stronger judgment preservation (framing 'bet' as energy + signal, not recklessness), and better boundary safety (prioritizes medical screening before major life change).",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "A",
+          "Boundary Safety": "A"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 106,
+        "eval_name": "eval",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:59:17Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 12.389,
+          "tokens": 2147.0
+        },
+        "without_skill": {
+          "time_seconds": 6.635,
+          "tokens": 300.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.72,
+        "confidence": 0.94,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by embedding rigorous, actionable crisis-response logic directly into the response—grounding the 'no' in a transparent, rule-based framework (SWOT rules), citing empirical evidence with precision, and calibrating every recommendation to the user's *exact* physiological state (e.g., 'decision bandwidth zero'). It doesn’t just advise rest—it prescribes neurobiologically informed micro-actions (4×6s breaths, voice memo constraints) that are immediately executable *while exhausted*. Crucially, it preserves judgment by deferring full analysis until recovery is evidenced ('sleep two full nights', '25-min focus'), turning boundary safety into scaffolding—not restriction. Candidate A is empathetic and well-structured, but lacks the layered justification, rule transparency, and precision-timed scaffolding that make B’s guidance *functionally safer and more empowering* for someone truly cognitively depleted. On all five rubric dimensions—especially Judgment Preservation (explicit deferral criteria) and Boundary Safety (neuro-physiological guardrails)—B exceeds A.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "B"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 106,
+        "eval_name": "eval",
+        "run_number": 2,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:59:33Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\without_skill\\run-2"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\with_skill\\run-2"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 21.139,
+          "tokens": 2514.0
+        },
+        "without_skill": {
+          "time_seconds": 7.487,
+          "tokens": 304.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.75,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by transforming the user’s exhausted, impulsive framing into a rigorously structured, physiologically grounded strategic intervention. It doesn’t just say 'no' — it *operationalizes* the 'no' via SWOT as a real-time cognitive triage tool: identifying the user’s fatigue as the dominant W (weakness) and T (threat), elevating self-awareness as the critical S (strength), and prescribing time-bound, micro-actionable steps (e.g., 'drink 200ml water now', 'set 23:00 sleep alarm') that respect decisional incapacity while preserving agency. Candidate A is empathetic and scientifically informed but remains advisory and abstract ('sleep 7 hours', 'ask three questions') — its actionability is conditional on the user’s already-depleted capacity to reflect and initiate. Candidate B bypasses the reflection bottleneck entirely: its '72-hour cognitive restart' protocol, embedded in concrete, sequenced, non-negotiable actions, directly addresses the core constraint — not lack of insight, but lack of functional bandwidth. On all five rubric dimensions, B outperforms: (1) Thinking Support — provides scaffolding *for* thinking when thinking is broken; (2) Tradeoff Quality — surfaces hidden tradeoffs (e.g., 'time window ≠入场窗口') with precision; (3) Actionability — prescribes immediate, zero-cognition-required behaviors; (4) Judgment Preservation — reframes 'not deciding' as the highest-order strategic choice; (5) Boundary Safety — enforces physiological boundaries ('stop all internal debate') as non-optional safeguards.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "B"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 106,
+        "eval_name": "eval",
+        "run_number": 3,
+        "orientation": "reversed",
+        "judge_model": "qwen-plus",
+        "generated_at": "2026-04-14T10:59:52Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\without_skill\\run-3"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-106-eval\\with_skill\\run-3"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 10.377,
+          "tokens": 2039.0
+        },
+        "without_skill": {
+          "time_seconds": 7.315,
+          "tokens": 349.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "with_skill",
+        "margin": 0.75,
+        "confidence": 0.92,
+        "reasoning_summary": "Candidate B delivers higher user value by embedding clinically grounded, time-bound, and physiologically precise interventions (e.g., 90-min rest protocol, biomarker-focused health check, 4-4-6 breathwork with explicit instruction) that directly counter the user’s stated state of 'brain shutdown'. It preserves judgment *more rigorously* than A by invoking explicit decision hygiene rules (SWOT #5 & #2), framing the 'no' not just as advice but as a neurobiological imperative — reducing self-blame. Its actionability is superior: concrete timeframes (today/48h/72h), sensory-specific micro-actions ('boil noodles', 'water plant'), and immediate somatic intervention (breathwork script) meet the user’s demand for 'no废话' while honoring exhaustion. Boundary safety is stronger: it names fatigue as a medical signal (not just stress), avoids romanticizing 'clarity later', and offers co-regulation ('need me to guide the breath?'). While A is strong on thinking support and tradeoffs, B integrates all five rubric dimensions more cohesively *under acute crisis conditions*, turning 'don’t decide now' into a scaffolded reclamation of agency.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "B"
+        }
+      }
+    }
+  ]
+}

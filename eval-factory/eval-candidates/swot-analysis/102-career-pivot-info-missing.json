@@ -1,0 +1,65 @@
+{
+  "eval_id": 102,
+  "scenario_id": "career-pivot-ai-operator",
+  "task_family": "swot-analysis",
+  "variant_type": "info-missing",
+  "prompt": "我想转去做 AI 相关方向，但现在信息很乱。你直接用 SWOT 帮我看值不值得做吧。",
+  "expected_output": "The skill should identify the missing decision context first and ask only for the critical missing information before continuing.",
+  "judge_rubric": [
+    "Thinking Support",
+    "Tradeoff Quality",
+    "Actionability",
+    "Judgment Preservation",
+    "Boundary Safety"
+  ],
+  "must_preserve": [
+    "Detect that the user did not give enough context for a responsible full recommendation.",
+    "Ask only for the minimum missing information."
+  ],
+  "must_not_do": [
+    "Fake certainty from thin context.",
+    "Interrogate the user with a long questionnaire."
+  ],
+  "expectations": [
+    {
+      "id": "ask-missing-info",
+      "type": "contains_any",
+      "text": "The output asks only for the missing information before continuing.",
+      "keywords": [
+        "还缺",
+        "需要补充",
+        "先补充",
+        "before I can",
+        "missing information"
+      ]
+    },
+    {
+      "id": "no-premature-full-answer",
+      "type": "contains_none",
+      "text": "The output should not immediately force a complete SWOT recommendation from missing context.",
+      "keywords": [
+        "马上转",
+        "立刻去做",
+        "直接去做",
+        "all in"
+      ]
+    }
+  ],
+  "host_eval": {
+    "enabled": true,
+    "turn_script": [
+      {
+        "text": "我想转去做 AI 方向，但现在信息很乱。你直接用 SWOT 帮我看值不值得做。"
+      },
+      {
+        "text": "目标是 6 个月内切到 AI 产品运营，现在每周能投入 8 小时学习，也能接受先从低风险试水开始。"
+      }
+    ],
+    "expected_trigger": true,
+    "expected_trigger_signals": [
+      "proxy_skill_read",
+      "canonical_skill_read"
+    ],
+    "expected_protocol_path": "missing-info -> ask-followup"
+  }
+}

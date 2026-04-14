@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "analyzer_model": "qwen3.5-plus",
+    "generated_at": "2026-04-14T13:47:27Z"
+  },
+  "per_eval": [
+    {
+      "eval_id": 201,
+      "winner": "tie",
+      "mechanism_findings": [],
+      "instruction_use_signals": [],
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec",
+      "summary": ""
+    },
+    {
+      "eval_id": 202,
+      "winner": "tie",
+      "mechanism_findings": [],
+      "instruction_use_signals": [],
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec",
+      "summary": ""
+    }
+  ],
+  "cross_eval_summary": {
+    "overall_pattern": "with_skill wins on pass_rate (1.0 vs 0.83) and speed (-23.3s) but loses all pairwise comparisons (0% win_rate, avg_margin -0.7125)",
+    "core_tension": "Skill enforces process compliance over output quality. Judges prefer actionable insights over structural correctness.",
+    "mechanism_gaps": [
+      "Skip mechanism not triggering reliably when user requests direct results",
+      "Step 0 info-gathering is too passive—should provide provisional value while collecting context",
+      "Output format is too rigid, producing generic decompositions rather than situation-specific insights"
+    ],
+    "stability_concern": "weak_stability_value flag present—skill behavior may be inconsistent across runs"
+  },
+  "repair_recommendations": [
+    {
+      "priority": 1,
+      "layer": "blueprint-spec",
+      "action": "Fix skip mechanism detection logic",
+      "detail": "Ensure '直接要结果', '跳过检查', '不用确认' triggers bypass of Step 1-3 pause markers. Current mechanism_signals show direct_result_mode_detected: false even when user explicitly requests it."
+    },
+    {
+      "priority": 2,
+      "layer": "blueprint-spec",
+      "action": "Revise Step 0 info-gathering protocol",
+      "detail": "When context is missing, provide a provisional framework or example decomposition alongside questions. This gives immediate value while collecting needed information (as without_skill did successfully in eval 202)."
+    },
+    {
+      "priority": 3,
+      "layer": "skill-content",
+      "action": "Strengthen reasoning depth requirements",
+      "detail": "Add explicit instructions to identify the single most critical bottleneck first, then decompose. Require ROI/resource-constraint analysis in application recommendations. Current output is structurally MECE but analytically shallow."
+    },
+    {
+      "priority": 4,
+      "layer": "blueprint-spec",
+      "action": "Relax output format rigidity",
+      "detail": "The current output_format template produces generic-looking decompositions. Allow more flexible structure that emphasizes insight over format compliance. Judges consistently prefer substance over structure."
+    }
+  ],
+  "failure_tag_counts": {}
+}

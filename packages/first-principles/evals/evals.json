@@ -1,0 +1,104 @@
+{
+  "skill_name": "First Principles",
+  "package_name": "first-principles",
+  "evals": [
+    {
+      "id": 301,
+      "prompt": "我想做一个帮助应届生练面试的 AI 产品。行业常见做法是做题库 + 模拟面试，但我预算只有 2 万、3 个月内要拿到第一批付费用户、也没有大团队。请用第一性原理帮我重新思考这件事，直接给完整结果。",
+      "expected_output": "A direct-result first-principles analysis that identifies assumptions, reduces them to fundamentals, and rebuilds a practical plan.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "assumption-identification",
+          "type": "contains_any",
+          "text": "The output should identify hidden assumptions.",
+          "keywords": [
+            "隐含假设",
+            "假设 1",
+            "行业惯例"
+          ]
+        },
+        {
+          "id": "fundamental-principles",
+          "type": "contains_any",
+          "text": "The output should include basic principles or irreducible truths.",
+          "keywords": [
+            "基本原理",
+            "不可简化的真理",
+            "经济规律",
+            "人性规律"
+          ]
+        },
+        {
+          "id": "rebuild-plan",
+          "type": "contains_any",
+          "text": "The output should rebuild a concrete solution or validation path.",
+          "keywords": [
+            "重构方案",
+            "从零设计",
+            "验证路径",
+            "最小验证实验"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 302,
+      "prompt": "帮我用第一性原理重想一下我的业务。",
+      "expected_output": "The skill should identify that the request is underspecified and ask only for the most important missing context first.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "ask-missing-info",
+          "type": "contains_any",
+          "text": "The output should ask for the missing business context before analyzing.",
+          "keywords": [
+            "还缺",
+            "需要补充",
+            "当前方案",
+            "约束条件",
+            "创新目标"
+          ]
+        },
+        {
+          "id": "no-full-rebuild-yet",
+          "type": "contains_none",
+          "text": "The output should not jump straight into a full rebuild when context is missing.",
+          "keywords": [
+            "重构方案",
+            "最小验证实验",
+            "假设 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 303,
+      "prompt": "我们公司现在做内部知识库，大家默认思路都是继续堆文档和搜索。我怀疑方向不对，但还没想清楚。请用第一性原理一步步陪我拆。",
+      "expected_output": "A staged first-principles response that starts with Step 1 and pauses for confirmation.",
+      "files": [],
+      "expectations": [
+        {
+          "id": "staged-assumption-work",
+          "type": "contains_any",
+          "text": "The output should begin the staged analysis rather than jumping to a full answer.",
+          "keywords": [
+            "Step 1",
+            "识别隐含假设",
+            "理所当然"
+          ]
+        },
+        {
+          "id": "pause-block",
+          "type": "contains_any",
+          "text": "The output should include a staged pause block.",
+          "keywords": [
+            "回复\"继续\"",
+            "回复\"不对\"",
+            "回复\"直接要结果\""
+          ]
+        }
+      ]
+    }
+  ]
+}

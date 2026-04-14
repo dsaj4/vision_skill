@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T14:09:36Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:07:15Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-151-1-2-3-6-20-4\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-151-1-2-3-6-20-4\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 45.4,
+          "tokens": 3529.0
+        },
+        "without_skill": {
+          "time_seconds": 76.666,
+          "tokens": 3208.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.6,
+        "confidence": 0.75,
+        "reasoning_summary": "Candidate A provides significantly more actionable guidance for the user's specific 6-week, 20-user validation goal. A includes concrete pricing (1999-2999元), a detailed weekly execution table with specific action items, explicit risk mitigation strategies (time trap, expectation management, traffic sources), and a clear refund policy to reduce user decision risk. Candidate B offers a cleaner Golden Circle structure with a valuable consistency check section, but lacks the specificity needed for immediate execution (no pricing guidance, vague weekly breakdown, less detailed risk handling). For a user needing to validate a paid product in 6 weeks, A's depth in tradeoff analysis and actionability provides substantially more user value despite being longer.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 152,
+        "eval_name": "eval",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:08:17Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-152-eval\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-152-eval\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 33.648,
+          "tokens": 3160.0
+        },
+        "without_skill": {
+          "time_seconds": 47.916,
+          "tokens": 2052.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.78,
+        "reasoning_summary": "Candidate A delivers substantially more immediate user value by providing comprehensive framework education, concrete examples (Apple, healthy food delivery), guiding questions for each layer, and a fill-in template—all in the first response. Candidate B takes a more cautious information-gathering approach that delays value delivery until follow-up exchanges. For an open-ended request like this, A's approach of educating while inviting collaboration is more actionable and supportive. Both preserve user judgment and are safe, but A excels in Thinking Support (framework + examples), Actionability (template + clear next steps), and Tradeoff Quality (shows Why-focused vs What-focused thinking). B's step-by-step clarification has merit but provides less immediate scaffolding for the user's thinking process.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 153,
+        "eval_name": "why-how",
+        "run_number": 1,
+        "orientation": "reversed",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:09:12Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\without_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\with_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 113.949,
+          "tokens": 6254.0
+        },
+        "without_skill": {
+          "time_seconds": 85.968,
+          "tokens": 2891.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "without_skill",
+        "margin": 0.55,
+        "confidence": 0.75,
+        "reasoning_summary": "Both responses use the Golden Circle framework appropriately. Candidate A provides significantly more value through: (1) concrete options at each layer with clear tradeoffs (3 Why directions, 3 How pain points), (2) specific homework assignments with right/wrong examples, (3) a complete sample narrative showing how layers connect, and (4) targeted follow-up questions. Candidate B takes a more cautious step-by-step approach with confirmation checkpoints, which preserves user judgment well but delivers less immediate actionable content. For a user who explicitly stated their Why is unclear and How is messy, A's comprehensive framework with multiple concrete options provides better thinking support and actionability. B's approach is valid but feels incomplete for the first interaction.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "B",
+          "Boundary Safety": "tie"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,583 @@
+{
+  "metadata": {
+    "iteration_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1",
+    "generated_at": "2026-04-14T14:09:36Z",
+    "runs_per_configuration": 1,
+    "eval_ids": [
+      151,
+      152,
+      153
+    ],
+    "level3_primary_mode": "differential"
+  },
+  "level3_summary": {
+    "primary_mode": "differential",
+    "pairwise_summary": {
+      "win_rate": 0.0,
+      "tie_rate": 0.0,
+      "avg_margin": -0.5417,
+      "judge_disagreement_rate": 0.0,
+      "cost_adjusted_value": -0.6299
+    }
+  },
+  "per_eval": [
+    {
+      "eval_id": 151,
+      "eval_name": "1-2-3-6-20-4",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 45.4,
+            "stddev": 0.0,
+            "min": 45.4,
+            "max": 45.4
+          },
+          "tokens": {
+            "mean": 3529.0,
+            "stddev": 0.0,
+            "min": 3529.0,
+            "max": 3529.0
+          },
+          "expectation_variance": {
+            "why-layer": {
+              "text": "The output should identify the Why layer.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "how-layer": {
+              "text": "The output should identify the How layer.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "what-layer": {
+              "text": "The output should identify the What layer and action output.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lmedium"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 76.666,
+            "stddev": 0.0,
+            "min": 76.666,
+            "max": 76.666
+          },
+          "tokens": {
+            "mean": 3208.0,
+            "stddev": 0.0,
+            "min": 3208.0,
+            "max": 3208.0
+          },
+          "expectation_variance": {
+            "why-layer": {
+              "text": "The output should identify the Why layer.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "how-layer": {
+              "text": "The output should identify the How layer.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "what-layer": {
+              "text": "The output should identify the What layer and action output.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h7|q1010|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 151,
+          "eval_name": "1-2-3-6-20-4",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.425,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-151-1-2-3-6-20-4\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-151-1-2-3-6-20-4\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    },
+    {
+      "eval_id": 152,
+      "eval_name": "eval",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 33.648,
+            "stddev": 0.0,
+            "min": 33.648,
+            "max": 33.648
+          },
+          "tokens": {
+            "mean": 3160.0,
+            "stddev": 0.0,
+            "min": 3160.0,
+            "max": 3160.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for missing context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-full-analysis": {
+              "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Forbidden matches: ['Why 层']"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h0|q0000|p0|d0|lshort"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 47.916,
+            "stddev": 0.0,
+            "min": 47.916,
+            "max": 47.916
+          },
+          "tokens": {
+            "mean": 2052.0,
+            "stddev": 0.0,
+            "min": 2052.0,
+            "max": 2052.0
+          },
+          "expectation_variance": {
+            "ask-missing-info": {
+              "text": "The output should ask for missing context first.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "no-premature-full-analysis": {
+              "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h9|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 152,
+          "eval_name": "eval",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.65,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-152-eval\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-152-eval\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    },
+    {
+      "eval_id": 153,
+      "eval_name": "why-how",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": {
+            "mean": 1.0,
+            "stddev": 0.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "time_seconds": {
+            "mean": 113.949,
+            "stddev": 0.0,
+            "min": 113.949,
+            "max": 113.949
+          },
+          "tokens": {
+            "mean": 6254.0,
+            "stddev": 0.0,
+            "min": 6254.0,
+            "max": 6254.0
+          },
+          "expectation_variance": {
+            "staged-step1": {
+              "text": "The output should stay in staged mode and begin with Step 1 work.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "pause-block": {
+              "text": "The output should include the staged pause block.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h2|q0000|p1|d0|lmedium"
+            ]
+          }
+        },
+        "without_skill": {
+          "pass_rate": {
+            "mean": 0.5,
+            "stddev": 0.0,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "time_seconds": {
+            "mean": 85.968,
+            "stddev": 0.0,
+            "min": 85.968,
+            "max": 85.968
+          },
+          "tokens": {
+            "mean": 2891.0,
+            "stddev": 0.0,
+            "min": 2891.0,
+            "max": 2891.0
+          },
+          "expectation_variance": {
+            "staged-step1": {
+              "text": "The output should stay in staged mode and begin with Step 1 work.",
+              "passed_runs": 1,
+              "total_runs": 1,
+              "pass_rate": 1.0,
+              "unstable": false,
+              "failures": []
+            },
+            "pause-block": {
+              "text": "The output should include the staged pause block.",
+              "passed_runs": 0,
+              "total_runs": 1,
+              "pass_rate": 0.0,
+              "unstable": false,
+              "failures": [
+                "Matched: []"
+              ]
+            }
+          },
+          "drift": {
+            "drift_detected": false,
+            "unique_fingerprint_count": 1,
+            "fingerprints": [
+              "h5|q0000|p0|d0|llong"
+            ]
+          }
+        }
+      },
+      "pairwise_results": [
+        {
+          "eval_id": 153,
+          "eval_name": "why-how",
+          "run_number": 1,
+          "final_winner": "without_skill",
+          "avg_margin": 0.55,
+          "judge_disagreement": false,
+          "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\with_skill\\run-1",
+          "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\without_skill\\run-1"
+        }
+      ],
+      "flags": [
+        "weak_stability_value"
+      ]
+    }
+  ],
+  "overall": {
+    "configurations": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 0.8333,
+          "stddev": 0.2887,
+          "min": 0.5,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 64.3323,
+          "stddev": 43.3692,
+          "min": 33.648,
+          "max": 113.949
+        },
+        "tokens": {
+          "mean": 4314.3333,
+          "stddev": 1689.9025,
+          "min": 3160.0,
+          "max": 6254.0
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.8333,
+          "stddev": 0.2887,
+          "min": 0.5,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 70.1833,
+          "stddev": 19.837,
+          "min": 47.916,
+          "max": 85.968
+        },
+        "tokens": {
+          "mean": 2717.0,
+          "stddev": 597.3198,
+          "min": 2052.0,
+          "max": 3208.0
+        }
+      }
+    },
+    "flags": [
+      "weak_stability_value"
+    ]
+  },
+  "variance_by_expectation": {
+    "expectations": [
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "with_skill",
+        "expectation_id": "why-layer",
+        "text": "The output should identify the Why layer.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "with_skill",
+        "expectation_id": "how-layer",
+        "text": "The output should identify the How layer.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "with_skill",
+        "expectation_id": "what-layer",
+        "text": "The output should identify the What layer and action output.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "without_skill",
+        "expectation_id": "why-layer",
+        "text": "The output should identify the Why layer.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "without_skill",
+        "expectation_id": "how-layer",
+        "text": "The output should identify the How layer.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 151,
+        "eval_name": "1-2-3-6-20-4",
+        "configuration": "without_skill",
+        "expectation_id": "what-layer",
+        "text": "The output should identify the What layer and action output.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 152,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for missing context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 152,
+        "eval_name": "eval",
+        "configuration": "with_skill",
+        "expectation_id": "no-premature-full-analysis",
+        "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 152,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "ask-missing-info",
+        "text": "The output should ask for missing context first.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 152,
+        "eval_name": "eval",
+        "configuration": "without_skill",
+        "expectation_id": "no-premature-full-analysis",
+        "text": "The output should not jump straight into a full Golden Circle analysis when the request is too vague.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 153,
+        "eval_name": "why-how",
+        "configuration": "with_skill",
+        "expectation_id": "staged-step1",
+        "text": "The output should stay in staged mode and begin with Step 1 work.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 153,
+        "eval_name": "why-how",
+        "configuration": "with_skill",
+        "expectation_id": "pause-block",
+        "text": "The output should include the staged pause block.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 153,
+        "eval_name": "why-how",
+        "configuration": "without_skill",
+        "expectation_id": "staged-step1",
+        "text": "The output should stay in staged mode and begin with Step 1 work.",
+        "passed_runs": 1,
+        "total_runs": 1,
+        "pass_rate": 1.0,
+        "unstable": false
+      },
+      {
+        "eval_id": 153,
+        "eval_name": "why-how",
+        "configuration": "without_skill",
+        "expectation_id": "pause-block",
+        "text": "The output should include the staged pause block.",
+        "passed_runs": 0,
+        "total_runs": 1,
+        "pass_rate": 0.0,
+        "unstable": false
+      }
+    ]
+  }
+}

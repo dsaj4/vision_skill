@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-14T14:16:39Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:14:46Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 39.668,
+          "tokens": 3724.0
+        },
+        "without_skill": {
+          "time_seconds": 51.697,
+          "tokens": 2666.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.15,
+        "confidence": 0.72,
+        "reasoning_summary": "Both responses apply pyramid principle effectively with clear structure. Candidate B provides higher user value for the specific use case (10-min CEO presentation) by including: 1) explicit time allocation breakdown for the 10-minute constraint, 2) concrete approval requests and next steps that CEOs expect, 3) expected outcomes with metric placeholders, 4) SCQA opening framework. Candidate A offers better meta-guidance on pyramid structure verification but is less immediately actionable for actually delivering the presentation. For a time-constrained executive briefing, B's presentation-ready format with time management and decision requests provides more practical value.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "tie",
+          "Tradeoff Quality": "tie",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:15:21Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 31.442,
+          "tokens": 3285.0
+        },
+        "without_skill": {
+          "time_seconds": 30.858,
+          "tokens": 1652.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.65,
+        "confidence": 0.8,
+        "reasoning_summary": "Both candidates correctly identified missing content and asked clarifying questions. However, B provides significantly more user value through: (1) educational content explaining the 4 core Pyramid Principle concepts, (2) a concrete Before & After example showing expected output quality, (3) a more detailed information template. This helps the user understand what to expect and potentially rethink their content before submitting. A is concise but lacks demonstrative value. Per rubric rule 'Judge user value, not verbosity', B's additional length serves clear purpose.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-14T14:15:54Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 40.381,
+          "tokens": 3788.0
+        },
+        "without_skill": {
+          "time_seconds": 55.349,
+          "tokens": 3034.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.8,
+        "confidence": 0.9,
+        "reasoning_summary": "Candidate B provides significantly higher immediate user value. The user explicitly stated they haven't sorted out their thoughts yet and asked for help building the structure. Candidate B delivers a complete 5-step framework with concrete examples, templates, and actionable advice that the user can apply immediately to organize their thinking. Candidate A, while methodologically sound (consultant style), halts progress to request more information before providing any structural guidance. For a user seeking help to 'sort out' their thoughts, seeing a concrete scaffold (B) is more effective than answering intake questions (A). B empowers the user to start working right away while still inviting further refinement.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    }
+  ]
+}

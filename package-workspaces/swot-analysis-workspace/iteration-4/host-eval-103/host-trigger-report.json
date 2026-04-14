@@ -1,0 +1,34 @@
+{
+  "package_name": "swot-analysis",
+  "triggered": true,
+  "false_trigger": false,
+  "expected_trigger": true,
+  "expected_trigger_signals": [
+    "proxy_skill_read",
+    "canonical_skill_read"
+  ],
+  "trigger_turn_index": 1,
+  "first_answer_turn_index": 1,
+  "first_skill_read_turn_index": 1,
+  "skill_read_before_first_answer": true,
+  "observed_trigger_signals": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_meta_read": false,
+    "explicit_skill_use_announcement": false
+  },
+  "evidence": [
+    {
+      "type": "proxy_skill_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:6",
+      "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]"
+    },
+    {
+      "type": "canonical_skill_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:9",
+      "detail": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]"
+    }
+  ]
+}

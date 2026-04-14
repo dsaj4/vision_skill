@@ -1,0 +1,170 @@
+{
+  "metadata": {
+    "skill_name": "17-MECE 原则",
+    "skill_path": "E:\\Project\\vision-lab\\vision-skill\\packages\\mece-analysis",
+    "judge_model": "",
+    "generated_at": "2026-04-14T14:17:50Z",
+    "eval_ids": [
+      201,
+      202,
+      203
+    ]
+  },
+  "pairs": [
+    {
+      "metadata": {
+        "eval_id": 201,
+        "eval_name": "ai-1-2-3-10-4-mece",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:16:40Z"
+      },
+      "eval_id": 201,
+      "eval_name": "ai-1-2-3-10-4-mece",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.65,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 65.553,
+          "tokens": 4823.0
+        },
+        "without_skill": {
+          "time_seconds": 86.548,
+          "tokens": 4204.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-201-ai-1-2-3-10-4-mece\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 202,
+        "eval_name": "mece",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:17:14Z"
+      },
+      "eval_id": 202,
+      "eval_name": "mece",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.725,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 12.536,
+          "tokens": 2034.0
+        },
+        "without_skill": {
+          "time_seconds": 51.732,
+          "tokens": 2614.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-202-mece\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 203,
+        "eval_name": "mece",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:17:50Z"
+      },
+      "eval_id": 203,
+      "eval_name": "mece",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.8,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 34.501,
+          "tokens": 3433.0
+        },
+        "without_skill": {
+          "time_seconds": 69.962,
+          "tokens": 3730.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\mece-analysis-workspace\\iteration-2\\eval-203-mece\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    }
+  ],
+  "summary": {
+    "pair_count": 3,
+    "comparable_pair_count": 3,
+    "not_comparable_count": 0,
+    "win_rate": 0.0,
+    "loss_rate": 1.0,
+    "tie_rate": 0.0,
+    "avg_margin": -0.725,
+    "judge_disagreement_rate": 0.0,
+    "cost_adjusted_value": -0.725,
+    "supporting_metrics": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 1.0,
+          "stddev": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 37.53,
+          "stddev": 26.638,
+          "min": 12.536,
+          "max": 65.553
+        },
+        "tokens": {
+          "mean": 3430.0,
+          "stddev": 1394.5024,
+          "min": 2034,
+          "max": 4823
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.4444,
+          "stddev": 0.5092,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 69.414,
+          "stddev": 17.4145,
+          "min": 51.732,
+          "max": 86.548
+        },
+        "tokens": {
+          "mean": 3516.0,
+          "stddev": 816.3161,
+          "min": 2614,
+          "max": 4204
+        }
+      }
+    }
+  }
+}

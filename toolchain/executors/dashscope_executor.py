@@ -24,6 +24,16 @@ def _write_json(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def _run_is_complete(run_dir: Path) -> bool:
+    required_paths = [
+        run_dir / "raw_response.json",
+        run_dir / "transcript.json",
+        run_dir / "timing.json",
+        run_dir / "outputs" / "final_response.md",
+    ]
+    return all(path.exists() for path in required_paths)
+
+
 def _resolve_model(model: str | None) -> str:
     return (
         model
@@ -276,12 +286,14 @@ def execute_iteration(
     endpoint: str | None = None,
     timeout_seconds: int | None = None,
     stop_on_error: bool = False,
+    skip_completed: bool = False,
 ) -> dict[str, Any]:
     iteration_dir = Path(iteration_path)
     package_dir = Path(package_path)
 
     completed_runs: list[dict[str, Any]] = []
     failed_runs: list[dict[str, str]] = []
+    skipped_runs: list[dict[str, str]] = []
 
     for eval_dir in sorted(iteration_dir.glob("eval-*")):
         for configuration in configurations:
@@ -289,6 +301,14 @@ def execute_iteration(
             if not configuration_dir.exists():
                 continue
             for run_dir in sorted(configuration_dir.glob("run-*")):
+                if skip_completed and _run_is_complete(run_dir):
+                    skipped_runs.append(
+                        {
+                            "run_dir": str(run_dir),
+                            "configuration": configuration,
+                        }
+                    )
+                    continue
                 try:
                     result = execute_run(
                         run_dir,
@@ -316,7 +336,8 @@ def execute_iteration(
         "iteration_dir": str(iteration_dir),
         "package_dir": str(package_dir),
         "completed_runs": completed_runs,
+        "skipped_runs": skipped_runs,
         "failed_runs": failed_runs,
-        "total_runs": len(completed_runs) + len(failed_runs),
-        "successful_runs": len(completed_runs),
+        "total_runs": len(completed_runs) + len(skipped_runs) + len(failed_runs),
+        "successful_runs": len(completed_runs) + len(skipped_runs),
     }

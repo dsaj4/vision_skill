@@ -1,0 +1,1699 @@
+{
+  "metadata": {
+    "thread_id": "019d8c23-69b5-7ca2-8696-31e576e397f4",
+    "package_name": "swot-analysis",
+    "package_dir": "E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis",
+    "proxy_skill_path": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-4\\host-eval-104\\session\\.codex\\skills\\swot-analysis\\SKILL.md",
+    "canonical_skill_path": "E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md",
+    "turn_count": 2,
+    "prompt_budget": {
+      "max_evidence_snippet_chars": 240,
+      "max_evidence_snippets_per_eval": 6,
+      "max_host_packet_chars": 1800,
+      "max_skill_protocol_summary_chars": 800,
+      "max_total_host_analysis_chars": 4000
+    }
+  },
+  "events": [
+    {
+      "turn_index": 1,
+      "event_type": "turn_started",
+      "source": "transcript.turn",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:user_text",
+      "evidence_text": "I want to build a small interview-prep tool for university students. Use SWOT to help me think step by step.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "agent_message",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:2",
+      "evidence_text": "Using `SWOT analysis` first, then `brainstorming` to frame t ... roduct step by step instead of jumping straight to features.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:3",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... eval-104\\\\session\\\\.codex\\\\skills\\\\swot-analysis\\\\SKILL.md'\"",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:4",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\Administrator\\\\.codex\\\\superpowers\\\\skills\\\\brainstorming\\\\SKILL.md'\"",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "skill_canonical_read",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:5",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:6",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ign?\";\n\"User approves design?\" -> \"Present design sections\" [label=\"no, revise\"];\n\"User approves design?\" -> \"Write design doc\" [label=\"yes\"];\n\"Write ... iedEr ...[truncated]",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "agent_message",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:7",
+      "evidence_text": "I have the brainstorming protocol. Next I’m checking the actual SWOT workflow and the current workspace so I can keep this grounded in your project context rather than giving you a generic product template.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:8",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command \"Get-Content -Raw 'E:\\\\Project\\\\vision-lab\\\\vision-skill\\\\packages\\\\swot-analysis\\\\SKILL.md'\"",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:9",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command 'rg --files'",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:10",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command 'git status --short'",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:11",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... and \"Get-Content -Raw 'E:\\\\Project\\\\vision-lab\\\\vision-skill\\\\packages\\\\swot-analysis\\\\SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä ... –éƒ¨å› ...[truncated]",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:12",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... obal --add safe.directory E:/Project/vision-lab/vision-skill",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:13",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... iedErrorId : PropertySetterNotSupportedInConstrainedLanguage",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "agent_message",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:14",
+      "evidence_text": "The workspace inspection is partly blocked by the sandboxed shell wrapper, but the essential part is clear: this is still at idea stage, so the next useful move is clarifying the target outcome before filling the SWOT matrix.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_started",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:15",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command 'Get-ChildItem -Force | Select-Object Name, Mode, Length'",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "command_completed",
+      "source": "transcript.events",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:event:16",
+      "evidence_text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... lect-Object Name, Mode, Length'` rejected: blocked by policy",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:0",
+      "evidence_text": "2026-04-14T13:17:04.307212Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\a-stock-analysis-1.0.0\\SKILL.md: invalid YAML: mapping values are not allowed in this context at line 2 column 103",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:1",
+      "evidence_text": "2026-04-14T13:17:04.307245Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\debug-pro-1.0.0\\SKILL.md: missing YAML frontmatter delimited by ---",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:2",
+      "evidence_text": "2026-04-14T13:17:04.307247Z ERROR codex_core::codex: failed ... 13 column 1, while scanning a simple key at line 12 column 1",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:3",
+      "evidence_text": "2026-04-14T13:17:04.307250Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\test-runner-1.0.0\\SKILL.md: missing YAML frontmatter delimited by ---",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:4",
+      "evidence_text": "2026-04-14T13:17:04.323176Z WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:5",
+      "evidence_text": "2026-04-14T13:17:05.981799Z WARN codex_core::plugins::manager: failed to warm featured plugin ids cache error=remote plugin sync request to https://chatgpt.com/backend-api/plugins/featured failed with status 403 Forbidden:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:8",
+      "evidence_text": "body{font-family:Arial,Helvetica,sans-serif}.container{align ... me:dark){body{background-color:#343541}.logo{color:#acacbe}}",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:13",
+      "evidence_text": "<svg",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:14",
+      "evidence_text": "width=\"41\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:15",
+      "evidence_text": "height=\"41\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:16",
+      "evidence_text": "viewBox=\"0 0 41 41\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:17",
+      "evidence_text": "fill=\"none\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:18",
+      "evidence_text": "xmlns=\"http://www.w3.org/2000/svg\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:19",
+      "evidence_text": "strokeWidth=\"2\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:20",
+      "evidence_text": "class=\"scale-appear\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:21",
+      "evidence_text": ">",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:22",
+      "evidence_text": "<path",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:23",
+      "evidence_text": "d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 ... 325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:24",
+      "evidence_text": "fill=\"currentColor\"",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:25",
+      "evidence_text": "/>",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "network_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:28",
+      "evidence_text": "Enable JavaScript and cookies to continue (function(){window ... ocument.getElementsByTagName('head')[0].appendChild(a);}());",
+      "is_noise": true,
+      "noise_kind": "network_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:31",
+      "evidence_text": "2026-04-14T13:17:06.391459Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:32",
+      "evidence_text": "2026-04-14T13:17:06.391722Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:33",
+      "evidence_text": "2026-04-14T13:17:06.488600Z WARN codex_core::plugins::startu ... quest for url (https://chatgpt.com/backend-api/plugins/list)",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:34",
+      "evidence_text": "2026-04-14T13:17:17.945509Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:35",
+      "evidence_text": "2026-04-14T13:17:17.945755Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:36",
+      "evidence_text": "2026-04-14T13:17:17.947047Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:37",
+      "evidence_text": "2026-04-14T13:17:17.947254Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:38",
+      "evidence_text": "2026-04-14T13:17:17.949482Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:39",
+      "evidence_text": "2026-04-14T13:17:17.949693Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:40",
+      "evidence_text": "2026-04-14T13:17:17.953582Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:41",
+      "evidence_text": "2026-04-14T13:17:17.953790Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:42",
+      "evidence_text": "2026-04-14T13:17:17.956392Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:43",
+      "evidence_text": "2026-04-14T13:17:17.956598Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:44",
+      "evidence_text": "2026-04-14T13:17:17.960791Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:45",
+      "evidence_text": "2026-04-14T13:17:17.961000Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:46",
+      "evidence_text": "2026-04-14T13:17:17.965807Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:47",
+      "evidence_text": "2026-04-14T13:17:17.966019Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:48",
+      "evidence_text": "2026-04-14T13:17:17.972942Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:49",
+      "evidence_text": "2026-04-14T13:17:17.973161Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:50",
+      "evidence_text": "2026-04-14T13:17:19.399453Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:51",
+      "evidence_text": "2026-04-14T13:17:19.399693Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:52",
+      "evidence_text": "2026-04-14T13:17:19.401061Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:53",
+      "evidence_text": "2026-04-14T13:17:19.401272Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:54",
+      "evidence_text": "2026-04-14T13:17:19.403456Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:55",
+      "evidence_text": "2026-04-14T13:17:19.403670Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:56",
+      "evidence_text": "2026-04-14T13:17:19.407595Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:57",
+      "evidence_text": "2026-04-14T13:17:19.407809Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:58",
+      "evidence_text": "2026-04-14T13:17:19.410441Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:59",
+      "evidence_text": "2026-04-14T13:17:19.410651Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:60",
+      "evidence_text": "2026-04-14T13:17:19.414891Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:61",
+      "evidence_text": "2026-04-14T13:17:19.415111Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:62",
+      "evidence_text": "2026-04-14T13:17:19.419953Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:63",
+      "evidence_text": "2026-04-14T13:17:19.420170Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:64",
+      "evidence_text": "2026-04-14T13:17:19.426625Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:65",
+      "evidence_text": "2026-04-14T13:17:19.426842Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:66",
+      "evidence_text": "2026-04-14T13:17:41.180030Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:67",
+      "evidence_text": "2026-04-14T13:17:41.180287Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:68",
+      "evidence_text": "2026-04-14T13:17:41.181604Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:69",
+      "evidence_text": "2026-04-14T13:17:41.181814Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:70",
+      "evidence_text": "2026-04-14T13:17:41.184066Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:71",
+      "evidence_text": "2026-04-14T13:17:41.184289Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:72",
+      "evidence_text": "2026-04-14T13:17:41.188325Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:73",
+      "evidence_text": "2026-04-14T13:17:41.188549Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:74",
+      "evidence_text": "2026-04-14T13:17:41.191264Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:75",
+      "evidence_text": "2026-04-14T13:17:41.191480Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:76",
+      "evidence_text": "2026-04-14T13:17:41.195808Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:77",
+      "evidence_text": "2026-04-14T13:17:41.196028Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:78",
+      "evidence_text": "2026-04-14T13:17:41.201008Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:79",
+      "evidence_text": "2026-04-14T13:17:41.201228Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:80",
+      "evidence_text": "2026-04-14T13:17:41.208709Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:81",
+      "evidence_text": "2026-04-14T13:17:41.208992Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:82",
+      "evidence_text": "2026-04-14T13:17:50.557014Z ERROR codex_core::tools::router: error=Exit code: 1",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:83",
+      "evidence_text": "Wall time: 0.3 seconds",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:84",
+      "evidence_text": "Output:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:85",
+      "evidence_text": "无法设置属性。此语言模式仅支持核心类型的属性设置。",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:86",
+      "evidence_text": "所在位置 行:1 字符: 1",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:87",
+      "evidence_text": "+ [Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:88",
+      "evidence_text": "+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:89",
+      "evidence_text": "+ CategoryInfo : InvalidOperation: (:) []，RuntimeException",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:90",
+      "evidence_text": "+ FullyQualifiedErrorId : PropertySetterNotSupportedInConstrainedLanguage",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:91",
+      "evidence_text": "fatal: detected dubious ownership in repository at 'E:/Project/vision-lab/vision-skill'",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:92",
+      "evidence_text": "'E:/Project/vision-lab/vision-skill' is owned by:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:93",
+      "evidence_text": "BUILTIN/Administrators (S-1-5-32-544)",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:94",
+      "evidence_text": "but the current user is:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:95",
+      "evidence_text": "WIN-8UL2NL3OHV9/CodexSandboxOffline (S-1-5-21-3548608797-1836131960-2560064421-1001)",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:96",
+      "evidence_text": "To add an exception for this directory, call:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:97",
+      "evidence_text": "git config --global --add safe.directory E:/Project/vision-lab/vision-skill",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:98",
+      "evidence_text": "2026-04-14T13:17:50.637140Z ERROR codex_core::tools::router: error=Exit code: 1",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:99",
+      "evidence_text": "Wall time: 0.4 seconds",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:100",
+      "evidence_text": "2026-04-14T13:17:50.642711Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:101",
+      "evidence_text": "2026-04-14T13:17:50.642969Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:102",
+      "evidence_text": "2026-04-14T13:17:50.644288Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:103",
+      "evidence_text": "2026-04-14T13:17:50.644498Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:104",
+      "evidence_text": "2026-04-14T13:17:50.646679Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:105",
+      "evidence_text": "2026-04-14T13:17:50.646897Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:106",
+      "evidence_text": "2026-04-14T13:17:50.650813Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:107",
+      "evidence_text": "2026-04-14T13:17:50.651028Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:108",
+      "evidence_text": "2026-04-14T13:17:50.653636Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:109",
+      "evidence_text": "2026-04-14T13:17:50.653843Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:110",
+      "evidence_text": "2026-04-14T13:17:50.658114Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:111",
+      "evidence_text": "2026-04-14T13:17:50.658344Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:112",
+      "evidence_text": "2026-04-14T13:17:50.663288Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:113",
+      "evidence_text": "2026-04-14T13:17:50.663506Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:114",
+      "evidence_text": "2026-04-14T13:17:50.669971Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:115",
+      "evidence_text": "2026-04-14T13:17:50.670180Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:116",
+      "evidence_text": "2026-04-14T13:18:06.486066Z ERROR codex_core::tools::router: error=`\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" -Command 'Get-ChildItem -Force | Select-Object Name, Mode, Length'` rejected: blocked by policy",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:117",
+      "evidence_text": "2026-04-14T13:18:06.491642Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:118",
+      "evidence_text": "2026-04-14T13:18:06.491907Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:119",
+      "evidence_text": "2026-04-14T13:18:06.493227Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:120",
+      "evidence_text": "2026-04-14T13:18:06.494317Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:121",
+      "evidence_text": "2026-04-14T13:18:06.496531Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:122",
+      "evidence_text": "2026-04-14T13:18:06.496773Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:123",
+      "evidence_text": "2026-04-14T13:18:06.501433Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:124",
+      "evidence_text": "2026-04-14T13:18:06.501648Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:125",
+      "evidence_text": "2026-04-14T13:18:06.504297Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:126",
+      "evidence_text": "2026-04-14T13:18:06.504518Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:127",
+      "evidence_text": "2026-04-14T13:18:06.509634Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:128",
+      "evidence_text": "2026-04-14T13:18:06.509850Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:129",
+      "evidence_text": "2026-04-14T13:18:06.515515Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:130",
+      "evidence_text": "2026-04-14T13:18:06.515725Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:131",
+      "evidence_text": "2026-04-14T13:18:06.523016Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:stderr:132",
+      "evidence_text": "2026-04-14T13:18:06.523230Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 1,
+      "event_type": "agent_message",
+      "source": "transcript.turn",
+      "timestamp_hint": "",
+      "raw_ref": "turn:1:assistant_text",
+      "evidence_text": "We’ll do this as a guided SWOT in four passes: define the ta ... sentence. Then I’ll build the SWOT step by step from there.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 2,
+      "event_type": "turn_started",
+      "source": "transcript.turn",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:user_text",
+      "evidence_text": "Continue.",
+      "is_noise": false,
+      "noise_kind": ""
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:0",
+      "evidence_text": "2026-04-14T13:18:21.985513Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\a-stock-analysis-1.0.0\\SKILL.md: invalid YAML: mapping values are not allowed in this context at line 2 column 103",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:1",
+      "evidence_text": "2026-04-14T13:18:21.985548Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\debug-pro-1.0.0\\SKILL.md: missing YAML frontmatter delimited by ---",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:2",
+      "evidence_text": "2026-04-14T13:18:21.985550Z ERROR codex_core::codex: failed ... 13 column 1, while scanning a simple key at line 12 column 1",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:3",
+      "evidence_text": "2026-04-14T13:18:21.985552Z ERROR codex_core::codex: failed to load skill C:\\Users\\Administrator\\.agents\\skills\\test-runner-1.0.0\\SKILL.md: missing YAML frontmatter delimited by ---",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:4",
+      "evidence_text": "2026-04-14T13:18:22.006214Z WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:5",
+      "evidence_text": "2026-04-14T13:18:22.669977Z WARN codex_core::plugins::manager: failed to warm featured plugin ids cache error=remote plugin sync request to https://chatgpt.com/backend-api/plugins/featured failed with status 403 Forbidden:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:31",
+      "evidence_text": "2026-04-14T13:18:23.454977Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:32",
+      "evidence_text": "2026-04-14T13:18:23.455289Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:33",
+      "evidence_text": "2026-04-14T13:18:23.518450Z WARN codex_core::plugins::startu ... m/backend-api/plugins/list failed with status 403 Forbidden:",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "noise_warning",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:35",
+      "evidence_text": "2026-04-14T13:18:24.217011Z WARN codex_core::codex: failed t ... ue): client error (Connect): unexpected EOF during handshake",
+      "is_noise": true,
+      "noise_kind": "noise_warning"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:36",
+      "evidence_text": "2026-04-14T13:18:34.929502Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:37",
+      "evidence_text": "2026-04-14T13:18:34.929759Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:38",
+      "evidence_text": "2026-04-14T13:18:34.931052Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:39",
+      "evidence_text": "2026-04-14T13:18:34.931258Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:40",
+      "evidence_text": "2026-04-14T13:18:34.933591Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:41",
+      "evidence_text": "2026-04-14T13:18:34.933809Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:42",
+      "evidence_text": "2026-04-14T13:18:34.937960Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:43",
+      "evidence_text": "2026-04-14T13:18:34.938201Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:44",
+      "evidence_text": "2026-04-14T13:18:34.940974Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:45",
+      "evidence_text": "2026-04-14T13:18:34.941195Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:46",
+      "evidence_text": "2026-04-14T13:18:34.945746Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:47",
+      "evidence_text": "2026-04-14T13:18:34.945972Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:48",
+      "evidence_text": "2026-04-14T13:18:34.951549Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:49",
+      "evidence_text": "2026-04-14T13:18:34.951779Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:50",
+      "evidence_text": "2026-04-14T13:18:34.959635Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "plugin_interference",
+      "source": "transcript.stderr",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:stderr:51",
+      "evidence_text": "2026-04-14T13:18:34.959887Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\life-science-research\\.codex-plugin/plugin.json",
+      "is_noise": true,
+      "noise_kind": "plugin_interference"
+    },
+    {
+      "turn_index": 2,
+      "event_type": "agent_message",
+      "source": "transcript.turn",
+      "timestamp_hint": "",
+      "raw_ref": "turn:2:assistant_text",
+      "evidence_text": "Proceeding with explicit assumptions: early-stage MVP, small ... to `Step 2: prioritize the most important S/W/O/T factors`.",
+      "is_noise": false,
+      "noise_kind": ""
+    }
+  ]
+}

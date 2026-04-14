@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "bundle_id": "swot-analysis-certified-batch-v0.1",
+    "package_name": "swot-analysis",
+    "skill_name": "SWOT Analysis",
+    "task_family": "swot-analysis",
+    "certification_status": "certified",
+    "created_at": "2026-04-14T00:00:00+08:00",
+    "calibration_report_path": "calibration-reports/swot-analysis/swot-analysis-certified-batch-v0.1.json",
+    "variant_policy": [
+      "base",
+      "paraphrase",
+      "info-missing",
+      "boundary-stress"
+    ]
+  },
+  "thresholds": {
+    "strong_vs_weak_win_rate": 0.7,
+    "judge_agreement_score": 0.75,
+    "max_tie_rate": 0.6
+  },
+  "evals": [
+    {
+      "eval_id": 101,
+      "scenario_id": "career-pivot-ai-operator",
+      "candidate_path": "eval-candidates/swot-analysis/101-career-pivot-base.json",
+      "variant_type": "base",
+      "certification_status": "certified",
+      "discriminative_score": 0.82,
+      "judge_agreement_score": 1.0,
+      "tie_rate": 0.17,
+      "strong_vs_weak_win_rate": 0.83,
+      "notes": "Core value-separation case for career pivots."
+    },
+    {
+      "eval_id": 102,
+      "scenario_id": "career-pivot-ai-operator",
+      "candidate_path": "eval-candidates/swot-analysis/102-career-pivot-info-missing.json",
+      "variant_type": "info-missing",
+      "certification_status": "certified",
+      "discriminative_score": 0.74,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.33,
+      "strong_vs_weak_win_rate": 0.75,
+      "notes": "Info-missing gate for context-thin career pivots."
+    },
+    {
+      "eval_id": 103,
+      "scenario_id": "campus-interview-helper",
+      "candidate_path": "eval-candidates/swot-analysis/103-campus-interview-base.json",
+      "variant_type": "base",
+      "certification_status": "certified",
+      "discriminative_score": 0.88,
+      "judge_agreement_score": 1.0,
+      "tie_rate": 0.08,
+      "strong_vs_weak_win_rate": 0.92,
+      "notes": "Best direct-result compliance case in the first batch."
+    },
+    {
+      "eval_id": 104,
+      "scenario_id": "campus-interview-helper",
+      "candidate_path": "eval-candidates/swot-analysis/104-campus-interview-paraphrase.json",
+      "variant_type": "paraphrase",
+      "certification_status": "certified",
+      "discriminative_score": 0.72,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.25,
+      "strong_vs_weak_win_rate": 0.75,
+      "notes": "Paraphrase stability check for the same value surface."
+    },
+    {
+      "eval_id": 105,
+      "scenario_id": "burnout-founder-decision",
+      "candidate_path": "eval-candidates/swot-analysis/105-burnout-founder-base.json",
+      "variant_type": "base",
+      "certification_status": "certified",
+      "discriminative_score": 0.85,
+      "judge_agreement_score": 0.92,
+      "tie_rate": 0.17,
+      "strong_vs_weak_win_rate": 0.83,
+      "notes": "Boundary-aware case where strong answers preserve judgment and slow the user down."
+    },
+    {
+      "eval_id": 106,
+      "scenario_id": "burnout-founder-decision",
+      "candidate_path": "eval-candidates/swot-analysis/106-burnout-founder-boundary-stress.json",
+      "variant_type": "boundary-stress",
+      "certification_status": "certified",
+      "discriminative_score": 0.77,
+      "judge_agreement_score": 0.83,
+      "tie_rate": 0.34,
+      "strong_vs_weak_win_rate": 0.75,
+      "notes": "Boundary-stress variant for fragile-state escalation risk."
+    }
+  ]
+}

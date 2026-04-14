@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "thread_id": "019d8c22-623f-7610-8a04-30674df87a07",
+    "package_name": "swot-analysis",
+    "turn_count": 1
+  },
+  "trigger_signals": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_meta_read": false,
+    "explicit_skill_use_announcement": false,
+    "skill_read_before_first_answer": true,
+    "trigger_turn_index": 1,
+    "first_answer_turn_index": 1,
+    "first_skill_read_turn_index": 1
+  },
+  "routing_signals": {
+    "read_using_superpowers": true,
+    "read_proxy_before_canonical": true,
+    "read_canonical_multiple_times": false,
+    "fallback_without_canonical_read": false,
+    "first_answer_before_skill_read": false
+  },
+  "protocol_signals": {
+    "followup_question_count": 0,
+    "checkpoint_count": 0,
+    "continue_branch_seen": false,
+    "revise_branch_seen": false,
+    "direct_result_request_seen": false,
+    "direct_result_obeyed": false,
+    "staged_path_obeyed": false,
+    "missing_info_detected": false,
+    "missing_info_followup_precision": false
+  },
+  "output_structure_signals": {
+    "swot_quadrants_present": false,
+    "strategy_section_present": false,
+    "binary_push_detected": false,
+    "overlong_first_answer": true,
+    "premature_full_answer": false
+  },
+  "host_interference_signals": {
+    "plugin_sync_noise_present": true,
+    "cloudflare_or_html_challenge_present": true,
+    "constrained_language_warning_present": true,
+    "stderr_noise_ratio": 0.9474,
+    "external_noise_before_first_answer": true
+  },
+  "evidence_snippets": [
+    {
+      "label": "skill_proxy_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:6",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "skill_canonical_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:9",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:assistant_text",
+      "text": "**SWOT 分析**\n\n分析对象：面向大学生的面试准备小项目（早期验证阶段）\n\n**四象限要素识别**\n\n| 优势（S ... 扩功能。\n\n如果你要，我下一步可以直接把这个 SWOT 收敛成一版“最适合低预算启动的项目定位 + MVP 功能清单”。",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:7",
+      "text": "现在切到 SWOT 技能的正式说明，重点看它要求的输出结构和分析深度，然后直接产出结果，不再反问。",
+      "is_noise": false
+    },
+    {
+      "label": "host_status_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:2",
+      "text": "你要的是直接可用的 SWOT 结论，场景是“低预算、已有 3 个早期试用者、目标用户是大学生面试准备”。我先按要求读取 `using-superpowers` 和 `5-SWOT 分析` 这两个技能说明，然后直接给出结构化 SWOT 结果。",
+      "is_noise": true
+    },
+    {
+      "label": "plugin_interference",
+      "turn_index": 1,
+      "raw_ref": "turn:1:stderr:33",
+      "text": "2026-04-14T13:15:59.140651Z WARN codex_core::plugins::manifest: ignoring interface.defaultPrompt: prompt must be at most 128 characters path=C:\\Users\\Administrator\\.codex\\.tmp\\plugins\\plugins\\build-ios-apps\\.codex-plugin/plugin.json",
+      "is_noise": true
+    }
+  ],
+  "prompt_budget": {
+    "max_evidence_snippet_chars": 240,
+    "max_evidence_snippets_per_eval": 6,
+    "max_host_packet_chars": 1800,
+    "max_skill_protocol_summary_chars": 800,
+    "max_total_host_analysis_chars": 4000,
+    "analysis_packet_chars": 1699,
+    "within_budget": true
+  },
+  "analysis_packet": {
+    "trigger": {
+      "proxy_skill_read": true,
+      "canonical_skill_read": true,
+      "skill_read_before_first_answer": true,
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1
+    },
+    "protocol": {
+      "direct_result_request_seen": false,
+      "followup_question_count": 0,
+      "checkpoint_count": 0,
+      "continue_branch_seen": false,
+      "revise_branch_seen": false,
+      "missing_info_detected": false
+    },
+    "output": {
+      "swot_quadrants_present": false,
+      "strategy_section_present": false,
+      "premature_full_answer": false
+    },
+    "noise": {
+      "plugin_sync_noise_present": true,
+      "cloudflare_or_html_challenge_present": true,
+      "external_noise_before_first_answer": true
+    },
+    "evidence_snippets": [
+      {
+        "label": "skill_proxy_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:6",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "skill_canonical_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:9",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 1,
+        "raw_ref": "turn:1:assistant_text",
+        "text": "**SWOT 分析**\n\n分析对象：面向大学生的面试准备小项目（早期验证阶段）\n\n**四象限要素识别**\n\n| 优势（S ... 扩功能。\n\n如果你要，我下一步可以直接把这个 SWOT 收敛成一版“最适合低预算启动的项目定位 + MVP 功能清单”。",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:7",
+        "text": "现在切到 SWOT 技能的正式说明，重点看它要求的输出结构和分析深度，然后直接产出结果，不再反问。",
+        "is_noise": false
+      }
+    ]
+  }
+}

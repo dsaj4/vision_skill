@@ -166,14 +166,14 @@ def _evaluate_assertion(assertion: dict[str, Any], response_text: str) -> dict[s
     }
 
 
-def grade_run(run_path: str | Path) -> dict[str, Any]:
-    run_dir = Path(run_path)
-    eval_dir = run_dir.parent.parent
-    eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+def grade_response_text(
+    response_text: str,
+    eval_metadata: dict[str, Any],
+    *,
+    output_file: str = "<inline-response>",
+    timing: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     assertions = eval_metadata.get("assertions", [])
-    output_file = _find_output_file(run_dir / "outputs")
-    response_text = output_file.read_text(encoding="utf-8")
-
     expectation_results = [
         _evaluate_assertion(_normalize_assertion(assertion), response_text)
         for assertion in assertions
@@ -191,14 +191,11 @@ def grade_run(run_path: str | Path) -> dict[str, Any]:
         "errors_encountered": 0,
     }
 
-    timing_path = run_dir / "timing.json"
-    timing = _load_json(timing_path) if timing_path.exists() else {}
-
-    grading = {
+    return {
         "eval_id": eval_metadata.get("eval_id"),
-        "eval_name": eval_metadata.get("eval_name", eval_dir.name),
+        "eval_name": eval_metadata.get("eval_name", ""),
         "prompt": eval_metadata.get("prompt", ""),
-        "output_file": str(output_file),
+        "output_file": output_file,
         "expectations": expectation_results,
         "summary": {
             "passed": passed,
@@ -207,9 +204,32 @@ def grade_run(run_path: str | Path) -> dict[str, Any]:
             "pass_rate": pass_rate,
         },
         "execution_metrics": metrics,
-        "timing": timing,
+        "timing": timing or {},
     }
 
+
+def grade_run(run_path: str | Path) -> dict[str, Any]:
+    run_dir = Path(run_path)
+    eval_dir = run_dir.parent.parent
+    eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+    assertions = eval_metadata.get("assertions", [])
+    output_file = _find_output_file(run_dir / "outputs")
+    response_text = output_file.read_text(encoding="utf-8")
+
+    timing_path = run_dir / "timing.json"
+    timing = _load_json(timing_path) if timing_path.exists() else {}
+    grading = grade_response_text(
+        response_text,
+        {
+            "eval_id": eval_metadata.get("eval_id"),
+            "eval_name": eval_metadata.get("eval_name", eval_dir.name),
+            "prompt": eval_metadata.get("prompt", ""),
+            "assertions": assertions,
+        },
+        output_file=str(output_file),
+        timing=timing,
+    )
+
     _write_json(run_dir / "grading.json", grading)
-    _write_json(run_dir / "metrics.json", metrics)
+    _write_json(run_dir / "metrics.json", grading["execution_metrics"])
     return grading

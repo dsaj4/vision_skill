@@ -26,30 +26,31 @@ def write_package(base: Path) -> Path:
         "\n".join(
             [
                 "---",
-                "name: SWOT 分析",
-                "description: 使用 SWOT 结构分析决策。",
+                "name: SWOT Analysis",
+                "description: Help the user think through a decision with SWOT.",
                 "---",
                 "",
-                "## 交互模式",
-                "分步执行；支持直接要结果。",
+                "## Interaction Mode",
+                "Support staged interaction and direct-result mode.",
                 "",
                 "### Step 0:",
-                "判断信息是否充分，不足时只追问缺失项。",
+                "Ask only for missing information when necessary.",
                 "",
                 "### Step 1:",
-                "输出四象限并暂停确认。",
+                "Draft the four quadrants and pause for confirmation.",
                 "",
                 "### Step 2:",
-                "做优先级排序并暂停确认。",
+                "Prioritize insights and pause for confirmation.",
                 "",
                 "### Step 3:",
-                "给出交叉策略并暂停确认。",
+                "Propose cross-quadrant strategy and pause for confirmation.",
                 "",
-                "## 输出格式",
-                "输出 Strengths / Weaknesses / Opportunities / Threats / Strategy。",
+                "## Output Format",
+                "Output Strengths / Weaknesses / Opportunities / Threats / Strategy.",
                 "",
-                "## 规则",
-                "信息充分时禁止重复提问；每步完成后必须暂停确认。",
+                "## Rules",
+                "Do not repeat questions when information is sufficient.",
+                "Pause after each staged step.",
             ]
         ),
         encoding="utf-8",
@@ -66,8 +67,8 @@ def write_iteration(base: Path) -> Path:
             {
                 "eval_id": 1,
                 "eval_name": "swot",
-                "prompt": "请直接给我 SWOT 结果。",
-                "expected_output": "完整 SWOT",
+                "prompt": "Give me a direct SWOT result for an AI note-taking app.",
+                "expected_output": "A complete SWOT with strategy guidance.",
                 "assertions": [
                     {
                         "id": "all-quadrants",
@@ -78,7 +79,7 @@ def write_iteration(base: Path) -> Path:
                     {
                         "id": "strategy-guidance",
                         "type": "contains_any",
-                        "keywords": ["strategy", "建议", "行动"],
+                        "keywords": ["strategy", "actions"],
                         "text": "Must include strategy guidance.",
                     },
                 ],
@@ -106,14 +107,21 @@ def write_iteration(base: Path) -> Path:
             (run_dir / "outputs").mkdir(parents=True, exist_ok=True)
             (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
             (run_dir / "request.json").write_text(
-                json.dumps({"model": "qwen-test", "messages": [{"role": "user", "content": "请直接给我 SWOT 结果。"}]}, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "model": "qwen-test",
+                        "messages": [{"role": "user", "content": "Give me the SWOT result."}],
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
                 encoding="utf-8",
             )
             (run_dir / "transcript.json").write_text(
                 json.dumps(
                     {
                         "configuration": configuration,
-                        "messages": [{"role": "user", "content": "请直接给我 SWOT 结果。"}],
+                        "messages": [{"role": "user", "content": "Give me the SWOT result."}],
                         "assistant_response": response,
                     },
                     ensure_ascii=False,
@@ -122,14 +130,94 @@ def write_iteration(base: Path) -> Path:
                 encoding="utf-8",
             )
             (run_dir / "raw_response.json").write_text(
-                json.dumps({"choices": [{"message": {"content": response}}], "usage": {"total_tokens": 800}}, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "choices": [{"message": {"content": response}}],
+                        "usage": {"total_tokens": 800},
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
                 encoding="utf-8",
             )
             (run_dir / "timing.json").write_text(
-                json.dumps({"total_tokens": 900 if configuration == "with_skill" else 700, "total_duration_seconds": 10.0 + index}, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "total_tokens": 900 if configuration == "with_skill" else 700,
+                        "total_duration_seconds": 10.0 + index,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
                 encoding="utf-8",
             )
     return iteration_dir
+
+
+def write_level3_summary(iteration_dir: Path) -> None:
+    eval_dir = iteration_dir / "eval-1-swot"
+    (iteration_dir / "level3-summary.json").write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "iteration_dir": str(iteration_dir),
+                    "skill_name": "SWOT Analysis",
+                    "skill_path": str(iteration_dir.parent.parent / "packages" / "swot-analysis"),
+                    "generated_at": "2026-04-14T00:00:00Z",
+                    "eval_ids": [1],
+                },
+                "primary_mode": "differential",
+                "primary_artifact_path": str(iteration_dir / "differential-benchmark.json"),
+                "supporting_gate_artifact_path": str(iteration_dir / "benchmark.json"),
+                "pairwise_summary": {
+                    "win_rate": 0.6667,
+                    "tie_rate": 0.0,
+                    "avg_margin": 0.3667,
+                    "judge_disagreement_rate": 0.0,
+                    "cost_adjusted_value": 0.05,
+                },
+                "gate_summary": {
+                    "with_skill": {"pass_rate": {"mean": 0.8333}},
+                    "without_skill": {"pass_rate": {"mean": 0.5}},
+                },
+                "per_eval": [
+                    {
+                        "eval_id": 1,
+                        "eval_name": "swot",
+                        "run_number": 1,
+                        "final_winner": "with_skill",
+                        "avg_margin": 0.45,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(eval_dir / "with_skill" / "run-1"),
+                        "without_skill_run_dir": str(eval_dir / "without_skill" / "run-1"),
+                    },
+                    {
+                        "eval_id": 1,
+                        "eval_name": "swot",
+                        "run_number": 2,
+                        "final_winner": "with_skill",
+                        "avg_margin": 0.4,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(eval_dir / "with_skill" / "run-2"),
+                        "without_skill_run_dir": str(eval_dir / "without_skill" / "run-2"),
+                    },
+                    {
+                        "eval_id": 1,
+                        "eval_name": "swot",
+                        "run_number": 3,
+                        "final_winner": "without_skill",
+                        "avg_margin": 0.25,
+                        "judge_disagreement": False,
+                        "with_skill_run_dir": str(eval_dir / "with_skill" / "run-3"),
+                        "without_skill_run_dir": str(eval_dir / "without_skill" / "run-3"),
+                    },
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
 
 def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
@@ -143,11 +231,11 @@ def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int
                                 {
                                     "eval_id": 1,
                                     "winner": "with_skill",
-                                    "mechanism_findings": ["the skill improved structure but remained unstable"],
-                                    "instruction_use_signals": ["the skill shaped the output sections"],
+                                    "mechanism_findings": ["The skill improved structure but remained unstable."],
+                                    "instruction_use_signals": ["The skill shaped the output sections."],
                                     "failure_tags": ["skill-content.reasoning-shallow"],
                                     "repair_layer": "skill-content",
-                                    "summary": "good structure, weak consistency",
+                                    "summary": "Good structure, weak consistency.",
                                 }
                             ],
                             "cross_eval_summary": {
@@ -170,7 +258,8 @@ def test_level456_pipeline_runs_end_to_end_on_synthetic_iteration(tmp_path: Path
     package_dir = write_package(tmp_path / "packages")
     iteration_dir = write_iteration(tmp_path / "workspace")
 
-    grade_iteration_runs(iteration_dir, skill_name="SWOT 分析", skill_path=str(package_dir))
+    grade_iteration_runs(iteration_dir, skill_name="SWOT Analysis", skill_path=str(package_dir))
+    write_level3_summary(iteration_dir)
     stability = generate_stability_report(iteration_dir)
     write_stability_artifacts(iteration_dir, stability)
     analyze_iteration(iteration_dir, package_dir, sender=fake_sender, api_key="test-key", analyzer_model="qwen-analyzer-test")

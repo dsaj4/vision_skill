@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "analyzer_model": "qwen3.5-plus",
+    "generated_at": "2026-04-14T14:10:13Z"
+  },
+  "per_eval": [
+    {
+      "eval_id": 151,
+      "winner": "tie",
+      "mechanism_findings": [],
+      "instruction_use_signals": [],
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec",
+      "summary": ""
+    },
+    {
+      "eval_id": 152,
+      "winner": "tie",
+      "mechanism_findings": [],
+      "instruction_use_signals": [],
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec",
+      "summary": ""
+    },
+    {
+      "eval_id": 153,
+      "winner": "tie",
+      "mechanism_findings": [],
+      "instruction_use_signals": [],
+      "failure_tags": [],
+      "repair_layer": "blueprint-spec",
+      "summary": ""
+    }
+  ],
+  "cross_eval_summary": {
+    "win_rate": 0.0,
+    "total_evals": 3,
+    "skill_wins": 0,
+    "baseline_wins": 3,
+    "avg_margin": -0.5417,
+    "token_overhead": "+58.9%",
+    "time_delta": "-5.9 seconds",
+    "pass_rate_delta": "0.00",
+    "primary_failure_pattern": "Protocol adherence creates mechanical output that judges rate lower than natural baseline responses",
+    "critical_issues": [
+      "Step 0 info-gathering leaks premature analysis markers (Eval 152)",
+      "Pause markers reduce perceived output quality despite correct implementation (Eval 153)",
+      "Token usage 59% higher with no quality improvement to justify cost",
+      "Output format too rigid compared to baseline's engaging structure"
+    ]
+  },
+  "repair_recommendations": [
+    {
+      "repair_layer": "blueprint-spec",
+      "priority": 1,
+      "issue": "Step 0 protocol contradicts no-premature-analysis rule",
+      "action": "Rewrite Step 0 instructions to explicitly forbid mentioning layer names (Why/How/What) during info-gathering phase. Only ask questions without revealing analysis structure.",
+      "expected_impact": "Fix Eval 152 failure pattern, prevent protocol self-contradiction"
+    },
+    {
+      "repair_layer": "blueprint-spec",
+      "priority": 2,
+      "issue": "Pause markers create mechanical feel that reduces output quality perception",
+      "action": "Redesign pause block to be less intrusive. Consider softer language or integrate confirmation request more naturally into output flow.",
+      "expected_impact": "Improve pairwise comparison scores while maintaining interaction protocol"
+    },
+    {
+      "repair_layer": "skill-content",
+      "priority": 3,
+      "issue": "Output quality lags baseline despite correct protocol adherence",
+      "action": "Add examples showing engaging output patterns (Slogans, case references, visual formatting) within the protocol constraints. Improve content depth to justify token overhead.",
+      "expected_impact": "Close quality gap with baseline, improve win rate in pairwise comparisons"
+    },
+    {
+      "repair_layer": "blueprint-spec",
+      "priority": 4,
+      "issue": "Token efficiency - 59% overhead with no quality benefit",
+      "action": "Add token budget guidance to skill spec. Require concise output in direct-result mode. Optimize pause marker verbosity.",
+      "expected_impact": "Reduce cost_adjusted_value from -0.6299 toward neutral or positive"
+    }
+  ],
+  "failure_tag_counts": {}
+}

@@ -1,0 +1,44 @@
+{
+  "eval_id": 153,
+  "eval_name": "why-how",
+  "prompt": "我在考虑做一个帮助管理者提升反馈能力的训练营，但现在 Why 还不清、How 也很乱。请用黄金圈思维一步步陪我拆。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\with_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "staged-step1",
+      "type": "contains_any",
+      "text": "The output should stay in staged mode and begin with Step 1 work.",
+      "passed": true,
+      "evidence": "Matched: ['Step 1', 'Why 层', '核心目的']"
+    },
+    {
+      "id": "pause-block",
+      "type": "contains_any",
+      "text": "The output should include the staged pause block.",
+      "passed": true,
+      "evidence": "Matched: ['回复\"继续\"', '回复\"不对\"', '回复\"直接要结果\"']"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "response_character_count": 957,
+    "response_word_count": 93,
+    "markdown_heading_count": 2,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T14:03:23Z",
+    "finished_at": "2026-04-14T14:05:17Z",
+    "duration_ms": 113949.11,
+    "total_duration_seconds": 113.949,
+    "prompt_tokens": 1506,
+    "completion_tokens": 4748,
+    "total_tokens": 6254
+  }
+}

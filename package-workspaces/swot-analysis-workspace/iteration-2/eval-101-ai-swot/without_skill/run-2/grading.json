@@ -1,0 +1,51 @@
+{
+  "eval_id": 101,
+  "eval_name": "ai-swot",
+  "prompt": "我在考虑是否转去做 AI 产品运营。我现在有内容运营和用户研究经验，但技术不深，团队里也没有成熟带教。请你用 SWOT 帮我判断这件事值不值得继续推进。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-2\\eval-101-ai-swot\\without_skill\\run-2\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "swot-quadrants",
+      "type": "contains_all_groups",
+      "text": "The output identifies all four SWOT quadrants.",
+      "passed": true,
+      "evidence": "Matched groups: ['strengths/优势', 'weaknesses/劣势', 'opportunities/机会', 'threats/威胁']; Missing groups: []"
+    },
+    {
+      "id": "interaction-mode",
+      "type": "staged_or_full_result",
+      "text": "The output preserves the staged interaction pattern or an explicit direct-result mode.",
+      "passed": true,
+      "evidence": "Pause matches: []; Full result groups: ['strengths/优势', 'weaknesses/劣势', 'opportunities/机会', 'threats/威胁']"
+    },
+    {
+      "id": "strategy-guidance",
+      "type": "contains_any",
+      "text": "The output includes strategy guidance rather than only listing factors.",
+      "passed": true,
+      "evidence": "Matched: ['建议']"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "response_character_count": 2589,
+    "response_word_count": 123,
+    "markdown_heading_count": 3,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T10:38:52Z",
+    "finished_at": "2026-04-14T10:39:32Z",
+    "duration_ms": 40047.05,
+    "total_duration_seconds": 40.047,
+    "prompt_tokens": 55,
+    "completion_tokens": 1502,
+    "total_tokens": 1557
+  }
+}

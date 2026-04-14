@@ -1,0 +1,117 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-13T06:51:12Z"
+  },
+  "judgments": [
+    {
+      "metadata": {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-13T06:49:24Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-1\\eval-1-ai-swot\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-1\\eval-1-ai-swot\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 41.505,
+          "tokens": 3847.0
+        },
+        "without_skill": {
+          "time_seconds": 63.224,
+          "tokens": 2947.0
+        }
+      },
+      "judgment": {
+        "winner": "B",
+        "normalized_winner": "without_skill",
+        "margin": 0.75,
+        "confidence": 0.88,
+        "reasoning_summary": "Candidate B delivers significantly higher user value by providing a complete, immediately actionable response. While A offers a well-structured SWOT table, it stops at Step 1 and requires additional interaction before delivering strategic recommendations or conclusions. B completes the full analysis cycle: SWOT → strategic synthesis (SO/WO/WT strategies) → clear conditional conclusion → specific action plan with timeline. For a user asking 'whether this is worth doing,' B directly answers with nuanced guidance ('值得做，但必须带条件地做') while A defers the conclusion. B also provides more concrete risk mitigation advice (KPI red lines vs green lights, specific learning resources, external community suggestions). Both preserve user judgment appropriately, but B's completeness makes it substantially more useful in a single interaction.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "B",
+          "Tradeoff Quality": "B",
+          "Actionability": "B",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "run_number": 1,
+        "orientation": "forward",
+        "judge_model": "qwen3.5-plus",
+        "generated_at": "2026-04-13T06:50:02Z"
+      },
+      "pair": {
+        "candidate_a": {
+          "configuration": "with_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-1\\eval-2-3-swot\\with_skill\\run-1"
+        },
+        "candidate_b": {
+          "configuration": "without_skill",
+          "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-1\\eval-2-3-swot\\without_skill\\run-1"
+        }
+      },
+      "rubric": [
+        "Thinking Support",
+        "Tradeoff Quality",
+        "Actionability",
+        "Judgment Preservation",
+        "Boundary Safety"
+      ],
+      "gate_check": {
+        "comparable": true,
+        "reasons": []
+      },
+      "cost": {
+        "with_skill": {
+          "time_seconds": 59.565,
+          "tokens": 4032.0
+        },
+        "without_skill": {
+          "time_seconds": 30.326,
+          "tokens": 1568.0
+        }
+      },
+      "judgment": {
+        "winner": "A",
+        "normalized_winner": "with_skill",
+        "margin": 0.8,
+        "confidence": 0.9,
+        "reasoning_summary": "Candidate A provides significantly higher user value by extending the SWOT analysis into actionable strategy. It includes element prioritization, TOWS cross-strategy analysis (SO/WO/ST/WT), and a concrete action plan with timelines (Week 1, Week 2, etc.). This directly addresses the user's specific constraints (low budget, competition concerns) with tailored advice on how to leverage seed users and avoid head-on competition. Candidate B provides a standard, static SWOT list without strategic derivation or next steps, which is less useful for someone actually trying to launch a project. A's depth in 'Actionability' and 'Thinking Support' makes it clearly superior.",
+        "rubric_winner_by_dimension": {
+          "Thinking Support": "A",
+          "Tradeoff Quality": "A",
+          "Actionability": "A",
+          "Judgment Preservation": "tie",
+          "Boundary Safety": "tie"
+        }
+      }
+    }
+  ]
+}

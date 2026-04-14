@@ -1,0 +1,9 @@
+{
+  "model": "qwen3.5-plus",
+  "messages": [
+    {
+      "role": "user",
+      "content": "帮我用 MECE 分析一下我现在这个项目到底哪里有问题。"
+    }
+  ]
+}

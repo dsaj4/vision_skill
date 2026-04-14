@@ -27,9 +27,13 @@ For developers:
 
 1. `project-plans/2026-04-08-vision-skill-mainline-a-system-overview-v0.1.md`
 2. `package-specs/package-contract-v0.1.md`
-3. `code-guides/2026-04-08-vision-skill-code-understanding-guide-v0.1.md`
+3. `package-specs/eval-factory-contract-v0.1.md`
+4. `package-specs/agent-host-adapter-contract-v0.1.md`
+5. `code-guides/2026-04-08-vision-skill-code-understanding-guide-v0.1.md`
 
 For evaluation and review work:
 
 1. `package-specs/deep-eval-framework-v0.1.md`
 2. `package-specs/capability-rubric-v0.1.md`
+3. `package-specs/eval-factory-contract-v0.1.md`
+4. `package-specs/agent-host-adapter-contract-v0.1.md`

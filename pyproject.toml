@@ -15,7 +15,7 @@ dev = ["pytest>=8.0"]
 [tool.pytest.ini_options]
 testpaths = ["toolchain"]
 python_files = ["test_*.py"]
-addopts = "-q"
+addopts = "-q -p no:cacheprovider"
 
 [tool.setuptools.packages.find]
 include = ["toolchain*"]

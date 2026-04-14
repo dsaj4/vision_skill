@@ -1,0 +1,51 @@
+{
+  "eval_id": 151,
+  "eval_name": "1-2-3-6-20-4",
+  "prompt": "我想把一个面向被裁员产品经理的职业转型社群做成付费产品。已知：1）很多人焦虑，但不愿意为纯信息买单；2）我最擅长的是一对一诊断和路径规划；3）目标是在 6 周内验证首批 20 个付费用户；4）我希望这个品牌不只是卖课，而是帮助用户重建职业方向。请用黄金圈思维帮我分析，直接给完整结果。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-151-1-2-3-6-20-4\\with_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "why-layer",
+      "type": "contains_any",
+      "text": "The output should identify the Why layer.",
+      "passed": true,
+      "evidence": "Matched: ['Why 层', '核心目的', '价值意义', '为什么']"
+    },
+    {
+      "id": "how-layer",
+      "type": "contains_any",
+      "text": "The output should identify the How layer.",
+      "passed": true,
+      "evidence": "Matched: ['How 层', '核心策略', '方法原则', '怎么做']"
+    },
+    {
+      "id": "what-layer",
+      "type": "contains_any",
+      "text": "The output should identify the What layer and action output.",
+      "passed": true,
+      "evidence": "Matched: ['What 层', '具体行动', '产出成果', '行动建议']"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "response_character_count": 1234,
+    "response_word_count": 110,
+    "markdown_heading_count": 0,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T13:59:59Z",
+    "finished_at": "2026-04-14T14:00:45Z",
+    "duration_ms": 45399.69,
+    "total_duration_seconds": 45.4,
+    "prompt_tokens": 1559,
+    "completion_tokens": 1970,
+    "total_tokens": 3529
+  }
+}

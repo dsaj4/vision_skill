@@ -176,7 +176,61 @@ def prepare_benchmarked_iteration(tmp_path: Path) -> tuple[Path, Path]:
     package_dir = write_package(tmp_path / "packages")
     iteration_dir = write_iteration(tmp_path / "workspace")
     grade_iteration_runs(iteration_dir, skill_name="SWOT Analysis", skill_path=str(package_dir))
+    write_level3_summary(iteration_dir)
     return package_dir, iteration_dir
+
+
+def write_level3_summary(iteration_dir: Path) -> None:
+    eval_dir = iteration_dir / "eval-1-swot"
+    pairs = []
+    winners = ["with_skill", "with_skill", "without_skill"]
+    margins = [0.4, 0.35, 0.2]
+    disagreements = [False, False, False]
+    for run_number in (1, 2, 3):
+        pairs.append(
+            {
+                "eval_id": 1,
+                "eval_name": "swot",
+                "run_number": run_number,
+                "final_winner": winners[run_number - 1],
+                "avg_margin": margins[run_number - 1],
+                "judge_disagreement": disagreements[run_number - 1],
+                "with_skill_run_dir": str(eval_dir / "with_skill" / f"run-{run_number}"),
+                "without_skill_run_dir": str(eval_dir / "without_skill" / f"run-{run_number}"),
+            }
+        )
+
+    (iteration_dir / "level3-summary.json").write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "iteration_dir": str(iteration_dir),
+                    "skill_name": "SWOT Analysis",
+                    "skill_path": str(iteration_dir.parent.parent / "packages" / "swot-analysis"),
+                    "generated_at": "2026-04-14T00:00:00Z",
+                    "eval_ids": [1],
+                },
+                "primary_mode": "differential",
+                "primary_artifact_path": str(iteration_dir / "differential-benchmark.json"),
+                "supporting_gate_artifact_path": str(iteration_dir / "benchmark.json"),
+                "pairwise_summary": {
+                    "win_rate": 0.6667,
+                    "tie_rate": 0.0,
+                    "avg_margin": 0.3167,
+                    "judge_disagreement_rate": 0.0,
+                    "cost_adjusted_value": 0.08,
+                },
+                "gate_summary": {
+                    "with_skill": {"pass_rate": {"mean": 0.8333}},
+                    "without_skill": {"pass_rate": {"mean": 0.6667}},
+                },
+                "per_eval": pairs,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
 
 def test_run_level456_writes_artifacts_and_preserves_existing_review(tmp_path: Path) -> None:

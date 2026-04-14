@@ -1,0 +1,21 @@
+{
+  "package_name": "swot-analysis",
+  "triggered": true,
+  "false_trigger": false,
+  "expected_trigger": true,
+  "observed_protocol_path": "staged -> pause-after-step1",
+  "observed_signals": {
+    "followup_present": false,
+    "checkpoint_present": true,
+    "direct_result_present": true,
+    "revise_branch_observed": false,
+    "continue_branch_observed": false
+  },
+  "evidence": [
+    {
+      "type": "canonical_skill_read",
+      "turn_index": 1,
+      "detail": "E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md"
+    }
+  ]
+}

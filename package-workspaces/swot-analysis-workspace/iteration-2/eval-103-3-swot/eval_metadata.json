@@ -1,0 +1,12 @@
+{
+  "eval_id": 103,
+  "eval_name": "3-swot",
+  "prompt": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但预算很少，也担心竞争太强。请直接给我 SWOT 结果，不用确认。",
+  "expected_output": "A direct-result SWOT answer without checkpoint pauses, plus concrete next-step strategy.",
+  "files": [],
+  "assertions": [
+    "The output includes strengths, weaknesses, opportunities, and threats.",
+    "The output respects the user's direct-result request.",
+    "The output concludes with actionable strategy suggestions."
+  ]
+}

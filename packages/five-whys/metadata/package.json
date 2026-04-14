@@ -1,0 +1,12 @@
+{
+  "package_name": "five-whys",
+  "skill_name": "22-5Why 分析法",
+  "category": "thinking-problem-solving",
+  "status": "candidate",
+  "version": "0.1.0",
+  "owner": "vision-skill",
+  "core_track": "mainline-a-package-factory",
+  "release_stage": "candidate",
+  "source_mode": "demo-only",
+  "candidate_origin": "demo-migration"
+}

@@ -5,6 +5,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from toolchain.eval_factory.sync import resolve_package_evals
+
 
 def _slugify(text: str, max_length: int = 48) -> str:
     text = text.lower()
@@ -37,15 +39,33 @@ def _ensure_history(workspace_dir: Path, package_name: str, skill_name: str) -> 
     return history_path
 
 
+def _filter_evals(
+    evals: list[dict[str, Any]],
+    *,
+    eval_ids: list[int] | None = None,
+    max_evals: int | None = None,
+) -> list[dict[str, Any]]:
+    filtered = evals
+    if eval_ids:
+        selected = {int(item) for item in eval_ids}
+        filtered = [item for item in filtered if int(item["id"]) in selected]
+    if max_evals is not None:
+        filtered = filtered[:max(0, int(max_evals))]
+    return filtered
+
+
 def prepare_iteration(
     package_path: str | Path,
     workspace_path: str | Path,
     iteration_number: int,
     runs_per_configuration: int = 1,
+    eval_ids: list[int] | None = None,
+    max_evals: int | None = None,
 ) -> dict[str, Any]:
     package_dir = Path(package_path)
     workspace_dir = Path(workspace_path)
-    evals_data = _load_json(package_dir / "evals" / "evals.json")
+    eval_resolution = resolve_package_evals(package_dir)
+    evals_data = eval_resolution["data"]
     package_meta = _load_json(package_dir / "metadata" / "package.json")
 
     package_name = package_meta["package_name"]
@@ -56,8 +76,14 @@ def prepare_iteration(
     iteration_dir = workspace_dir / f"iteration-{iteration_number}"
     iteration_dir.mkdir(parents=True, exist_ok=True)
 
+    selected_evals = _filter_evals(
+        list(evals_data["evals"]),
+        eval_ids=eval_ids,
+        max_evals=max_evals,
+    )
+
     created_eval_dirs: list[str] = []
-    for eval_item in evals_data["evals"]:
+    for eval_item in selected_evals:
         eval_name = _slugify(eval_item["prompt"])
         eval_dir = iteration_dir / f"eval-{eval_item['id']}-{eval_name}"
         eval_dir.mkdir(parents=True, exist_ok=True)
@@ -71,6 +97,7 @@ def prepare_iteration(
                 "expected_output": eval_item["expected_output"],
                 "files": eval_item.get("files", []),
                 "assertions": eval_item.get("expectations", []),
+                "host_eval": eval_item.get("host_eval", {}),
             },
         )
 
@@ -116,4 +143,7 @@ def prepare_iteration(
         "iteration_dir": str(iteration_dir),
         "eval_directories": created_eval_dirs,
         "runs_per_configuration": runs_per_configuration,
+        "eval_source_mode": eval_resolution["source_mode"],
+        "selected_eval_ids": [int(item["id"]) for item in selected_evals],
+        "selected_eval_count": len(selected_evals),
     }

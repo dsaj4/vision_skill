@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "thread_id": "019d8c1e-240a-7581-9b62-db11a11e7c06",
+    "package_name": "swot-analysis",
+    "turn_count": 2
+  },
+  "trigger_signals": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_meta_read": false,
+    "explicit_skill_use_announcement": true,
+    "skill_read_before_first_answer": true,
+    "trigger_turn_index": 1,
+    "first_answer_turn_index": 1,
+    "first_skill_read_turn_index": 1
+  },
+  "routing_signals": {
+    "read_using_superpowers": true,
+    "read_proxy_before_canonical": true,
+    "read_canonical_multiple_times": true,
+    "fallback_without_canonical_read": false,
+    "first_answer_before_skill_read": false
+  },
+  "protocol_signals": {
+    "followup_question_count": 0,
+    "checkpoint_count": 0,
+    "continue_branch_seen": false,
+    "revise_branch_seen": false,
+    "direct_result_request_seen": false,
+    "direct_result_obeyed": false,
+    "staged_path_obeyed": false,
+    "missing_info_detected": false,
+    "missing_info_followup_precision": false
+  },
+  "output_structure_signals": {
+    "swot_quadrants_present": false,
+    "strategy_section_present": false,
+    "binary_push_detected": false,
+    "overlong_first_answer": true,
+    "premature_full_answer": false
+  },
+  "host_interference_signals": {
+    "plugin_sync_noise_present": true,
+    "cloudflare_or_html_challenge_present": true,
+    "constrained_language_warning_present": true,
+    "stderr_noise_ratio": 0.949,
+    "external_noise_before_first_answer": true
+  },
+  "evidence_snippets": [
+    {
+      "label": "skill_proxy_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:6",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "skill_canonical_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:9",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:assistant_text",
+      "text": "截至 `2026-04-14` 能查到的公开数据，这件事的结论是：\n\n**值得做，但只值得做“AI + 你原有能力”的转 ... 如果你愿意，我下一条可以直接把这版改成“你的个人 SWOT”，只需要你给我 `当前岗位`、`工作年限`、`会不会代码`。",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:10",
+      "text": "这个判断会影响你后续几年投入，单靠主观感受不够。我补一层当前市场信号，用 `search-layer` 做最小量联网核验，再把结果并进 SWOT。",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:7",
+      "text": "我会按 `5-SWOT 分析` 的 canonical workflow 来做，先读取正式说明，再基于你“转 AI 是否值得”的问题给出结论和策略。",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 2,
+      "raw_ref": "turn:2:assistant_text",
+      "text": "基于你现在的约束，这件事**值得做**，但目标要改写成：\n\n**6 个月内把自己做成“可面试、可试岗、可内部转岗”的 A ... 要，我下一条可以直接给你一份**按每周 8 小时拆好的 24 周转型计划**，只保留对 `AI 产品运营` 有用的内容。",
+      "is_noise": false
+    }
+  ],
+  "prompt_budget": {
+    "max_evidence_snippet_chars": 240,
+    "max_evidence_snippets_per_eval": 6,
+    "max_host_packet_chars": 1800,
+    "max_skill_protocol_summary_chars": 800,
+    "max_total_host_analysis_chars": 4000,
+    "analysis_packet_chars": 1718,
+    "within_budget": true
+  },
+  "analysis_packet": {
+    "trigger": {
+      "proxy_skill_read": true,
+      "canonical_skill_read": true,
+      "skill_read_before_first_answer": true,
+      "first_answer_turn_index": 1,
+      "first_skill_read_turn_index": 1
+    },
+    "protocol": {
+      "direct_result_request_seen": false,
+      "followup_question_count": 0,
+      "checkpoint_count": 0,
+      "continue_branch_seen": false,
+      "revise_branch_seen": false,
+      "missing_info_detected": false
+    },
+    "output": {
+      "swot_quadrants_present": false,
+      "strategy_section_present": false,
+      "premature_full_answer": false
+    },
+    "noise": {
+      "plugin_sync_noise_present": true,
+      "cloudflare_or_html_challenge_present": true,
+      "external_noise_before_first_answer": true
+    },
+    "evidence_snippets": [
+      {
+        "label": "skill_proxy_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:6",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "skill_canonical_read",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:9",
+        "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... -Command \"Get-Content -Raw 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md'\"\n---\nname: 5-SWOT åˆ†æž\ndescription: é€šè¿‡å†…éƒ¨ä¼ ... –éƒ¨å› ...[truncated]",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 1,
+        "raw_ref": "turn:1:assistant_text",
+        "text": "截至 `2026-04-14` 能查到的公开数据，这件事的结论是：\n\n**值得做，但只值得做“AI + 你原有能力”的转 ... 如果你愿意，我下一条可以直接把这版改成“你的个人 SWOT”，只需要你给我 `当前岗位`、`工作年限`、`会不会代码`。",
+        "is_noise": false
+      },
+      {
+        "label": "agent_message",
+        "turn_index": 1,
+        "raw_ref": "turn:1:event:10",
+        "text": "这个判断会影响你后续几年投入，单靠主观感受不够。我补一层当前市场信号，用 `search-layer` 做最小量联网核验，再把结果并进 SWOT。",
+        "is_noise": false
+      }
+    ]
+  }
+}

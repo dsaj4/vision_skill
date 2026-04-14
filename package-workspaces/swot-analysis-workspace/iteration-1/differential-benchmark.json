@@ -1,0 +1,131 @@
+{
+  "metadata": {
+    "skill_name": "SWOT Analysis",
+    "skill_path": "E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis",
+    "judge_model": "qwen3.5-plus",
+    "generated_at": "2026-04-13T06:51:12Z",
+    "eval_ids": [
+      1,
+      2
+    ]
+  },
+  "pairs": [
+    {
+      "metadata": {
+        "eval_id": 1,
+        "eval_name": "ai-swot",
+        "run_number": 1,
+        "generated_at": "2026-04-13T06:50:02Z"
+      },
+      "eval_id": 1,
+      "eval_name": "ai-swot",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.75,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 41.505,
+          "tokens": 3847.0
+        },
+        "without_skill": {
+          "time_seconds": 63.224,
+          "tokens": 2947.0
+        }
+      },
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 2,
+        "eval_name": "3-swot",
+        "run_number": 1,
+        "generated_at": "2026-04-13T06:51:12Z"
+      },
+      "eval_id": 2,
+      "eval_name": "3-swot",
+      "run_number": 1,
+      "forward_winner": "with_skill",
+      "reversed_winner": "with_skill",
+      "final_winner": "with_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.8,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 59.565,
+          "tokens": 4032.0
+        },
+        "without_skill": {
+          "time_seconds": 30.326,
+          "tokens": 1568.0
+        }
+      },
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    }
+  ],
+  "summary": {
+    "pair_count": 2,
+    "comparable_pair_count": 2,
+    "not_comparable_count": 0,
+    "win_rate": 0.5,
+    "loss_rate": 0.5,
+    "tie_rate": 0.0,
+    "avg_margin": 0.025,
+    "judge_disagreement_rate": 0.0,
+    "cost_adjusted_value": -0.0948,
+    "supporting_metrics": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 0.8334,
+          "stddev": 0.2357,
+          "min": 0.6667,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 50.535,
+          "stddev": 12.7703,
+          "min": 41.505,
+          "max": 59.565
+        },
+        "tokens": {
+          "mean": 3939.5,
+          "stddev": 130.8148,
+          "min": 3847,
+          "max": 4032
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.8334,
+          "stddev": 0.2357,
+          "min": 0.6667,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 46.775,
+          "stddev": 23.2624,
+          "min": 30.326,
+          "max": 63.224
+        },
+        "tokens": {
+          "mean": 2257.5,
+          "stddev": 975.1003,
+          "min": 1568,
+          "max": 2947
+        }
+      }
+    }
+  }
+}

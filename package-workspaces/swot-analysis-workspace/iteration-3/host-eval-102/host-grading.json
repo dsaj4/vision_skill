@@ -1,0 +1,36 @@
+{
+  "eval_id": 102,
+  "eval_name": "host-eval-102",
+  "prompt": "我想转去做 AI 相关方向，但现在信息很乱。你直接用 SWOT 帮我看值不值得做吧。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\swot-analysis-workspace\\iteration-3\\host-eval-102\\host-final-response.md",
+  "expectations": [
+    {
+      "id": "ask-missing-info",
+      "type": "contains_any",
+      "text": "The output asks only for the missing information before continuing.",
+      "passed": false,
+      "evidence": "Matched: []"
+    },
+    {
+      "id": "no-premature-full-answer",
+      "type": "contains_none",
+      "text": "The output should not immediately force a complete SWOT recommendation from missing context.",
+      "passed": true,
+      "evidence": "Forbidden matches: []"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "response_character_count": 1622,
+    "response_word_count": 190,
+    "markdown_heading_count": 0,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {}
+}

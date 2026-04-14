@@ -1,0 +1,57 @@
+{
+  "trigger": {
+    "proxy_skill_read": true,
+    "canonical_skill_read": true,
+    "skill_read_before_first_answer": true,
+    "first_answer_turn_index": 1,
+    "first_skill_read_turn_index": 1
+  },
+  "protocol": {
+    "direct_result_request_seen": false,
+    "followup_question_count": 3,
+    "checkpoint_count": 0,
+    "continue_branch_seen": false,
+    "revise_branch_seen": true,
+    "missing_info_detected": true
+  },
+  "output": {
+    "swot_quadrants_present": true,
+    "strategy_section_present": false,
+    "premature_full_answer": true
+  },
+  "noise": {
+    "plugin_sync_noise_present": true,
+    "cloudflare_or_html_challenge_present": true,
+    "external_noise_before_first_answer": true
+  },
+  "evidence_snippets": [
+    {
+      "label": "skill_proxy_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:5",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... ct\\vision-lab\\vision-skill\\packages\\swot-analysis\nCanonical skill file: E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\SKILL.md\n\nWhen this skill tri ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "skill_canonical_read",
+      "turn_index": 1,
+      "raw_ref": "turn:1:event:10",
+      "text": "\"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell. ... Command \"Get-Content -Path 'E:/Project/vision-lab/vision-skill/packages/swot-analysis/SKILL.md' -TotalCount 260\"\n---\nname: 5-SWOT åˆ†æž\ndescription ... –éƒ¨å› ...[truncated]",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 1,
+      "raw_ref": "turn:1:assistant_text",
+      "text": "We’ll use SWOT as a thinking tool, not a verdict.\n\n**Step 0* ... aknesses`, `Opportunities`, and `Threats` in your situation.",
+      "is_noise": false
+    },
+    {
+      "label": "agent_message",
+      "turn_index": 2,
+      "raw_ref": "turn:2:assistant_text",
+      "text": "Let’s make it stricter.\n\nFor now, no interpretation and no a ... tep 1 only** without ranking them or telling you what to do.",
+      "is_noise": false
+    }
+  ]
+}

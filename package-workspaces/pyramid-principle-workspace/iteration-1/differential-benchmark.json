@@ -1,0 +1,170 @@
+{
+  "metadata": {
+    "skill_name": "16-金字塔原理",
+    "skill_path": "E:\\Project\\vision-lab\\vision-skill\\packages\\pyramid-principle",
+    "judge_model": "",
+    "generated_at": "2026-04-14T14:16:39Z",
+    "eval_ids": [
+      161,
+      162,
+      163
+    ]
+  },
+  "pairs": [
+    {
+      "metadata": {
+        "eval_id": 161,
+        "eval_name": "1-2-ramp-up-3-4-ceo-10",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:15:21Z"
+      },
+      "eval_id": 161,
+      "eval_name": "1-2-ramp-up-3-4-ceo-10",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.425,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 39.668,
+          "tokens": 3724.0
+        },
+        "without_skill": {
+          "time_seconds": 51.697,
+          "tokens": 2666.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 162,
+        "eval_name": "eval",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:15:54Z"
+      },
+      "eval_id": 162,
+      "eval_name": "eval",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.5,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 31.442,
+          "tokens": 3285.0
+        },
+        "without_skill": {
+          "time_seconds": 30.858,
+          "tokens": 1652.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-162-eval\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    },
+    {
+      "metadata": {
+        "eval_id": 163,
+        "eval_name": "eval",
+        "run_number": 1,
+        "generated_at": "2026-04-14T14:16:39Z"
+      },
+      "eval_id": 163,
+      "eval_name": "eval",
+      "run_number": 1,
+      "forward_winner": "without_skill",
+      "reversed_winner": "without_skill",
+      "final_winner": "without_skill",
+      "judge_disagreement": false,
+      "tiebreak_used": false,
+      "avg_margin": 0.75,
+      "cost": {
+        "with_skill": {
+          "time_seconds": 40.381,
+          "tokens": 3788.0
+        },
+        "without_skill": {
+          "time_seconds": 55.349,
+          "tokens": 3034.0
+        }
+      },
+      "with_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\with_skill\\run-1",
+      "without_skill_run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-163-eval\\without_skill\\run-1",
+      "evidence": {
+        "forward_orientation": "forward",
+        "reversed_orientation": "reversed",
+        "tiebreak_orientation": ""
+      }
+    }
+  ],
+  "summary": {
+    "pair_count": 3,
+    "comparable_pair_count": 3,
+    "not_comparable_count": 0,
+    "win_rate": 0.0,
+    "loss_rate": 1.0,
+    "tie_rate": 0.0,
+    "avg_margin": -0.5583,
+    "judge_disagreement_rate": 0.0,
+    "cost_adjusted_value": -0.6286,
+    "supporting_metrics": {
+      "with_skill": {
+        "pass_rate": {
+          "mean": 0.6667,
+          "stddev": 0.2887,
+          "min": 0.5,
+          "max": 1.0
+        },
+        "time_seconds": {
+          "mean": 37.1637,
+          "stddev": 4.9679,
+          "min": 31.442,
+          "max": 40.381
+        },
+        "tokens": {
+          "mean": 3599.0,
+          "stddev": 273.8083,
+          "min": 3285,
+          "max": 3788
+        }
+      },
+      "without_skill": {
+        "pass_rate": {
+          "mean": 0.4444,
+          "stddev": 0.0962,
+          "min": 0.3333,
+          "max": 0.5
+        },
+        "time_seconds": {
+          "mean": 45.968,
+          "stddev": 13.2124,
+          "min": 30.858,
+          "max": 55.349
+        },
+        "tokens": {
+          "mean": 2450.6667,
+          "stddev": 715.7215,
+          "min": 1652,
+          "max": 3034
+        }
+      }
+    }
+  }
+}

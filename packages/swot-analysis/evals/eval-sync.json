@@ -1,0 +1,7 @@
+{
+  "source_mode": "certified-bundle",
+  "bundle_id": "swot-analysis-certified-batch-v0.1",
+  "bundle_path": "E:\\Project\\vision-lab\\vision-skill\\eval-factory\\certified-evals\\swot-analysis\\swot-analysis-certified-batch-v0.1.json",
+  "output_path": "E:\\Project\\vision-lab\\vision-skill\\packages\\swot-analysis\\evals\\evals.json",
+  "exported_eval_count": 6
+}

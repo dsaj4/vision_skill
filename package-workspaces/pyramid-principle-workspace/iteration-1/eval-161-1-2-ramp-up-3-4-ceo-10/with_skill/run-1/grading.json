@@ -1,0 +1,51 @@
+{
+  "eval_id": 161,
+  "eval_name": "1-2-ramp-up-3-4-ceo-10",
+  "prompt": "我要给公司管理层汇报：为什么今年不应该继续扩招销售，而应该先重构销售流程和客户分层。已知：1）目前线索不少但成交率低；2）新人 ramp-up 慢；3）销售经理大量时间花在救火；4）CEO 只给我 10 分钟汇报时间。请用金字塔原理帮我直接整理成可表达的结构，不用确认。",
+  "output_file": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\pyramid-principle-workspace\\iteration-1\\eval-161-1-2-ramp-up-3-4-ceo-10\\with_skill\\run-1\\outputs\\final_response.md",
+  "expectations": [
+    {
+      "id": "core-conclusion",
+      "type": "contains_any",
+      "text": "The output should state the core conclusion first.",
+      "passed": true,
+      "evidence": "Matched: ['核心结论', '一句话概括', '结论先行']"
+    },
+    {
+      "id": "argument-groups",
+      "type": "contains_any",
+      "text": "The output should organize key supporting arguments.",
+      "passed": true,
+      "evidence": "Matched: ['论据组', '关键论据', '塔身']"
+    },
+    {
+      "id": "expression-guidance",
+      "type": "contains_any",
+      "text": "The output should include communication or expression guidance.",
+      "passed": true,
+      "evidence": "Matched: ['表达建议', '开场方式', '逻辑检验']"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "response_character_count": 1064,
+    "response_word_count": 107,
+    "markdown_heading_count": 0,
+    "total_tool_calls": 0,
+    "errors_encountered": 0
+  },
+  "timing": {
+    "started_at": "2026-04-14T14:10:37Z",
+    "finished_at": "2026-04-14T14:11:16Z",
+    "duration_ms": 39668.3,
+    "total_duration_seconds": 39.668,
+    "prompt_tokens": 1673,
+    "completion_tokens": 2051,
+    "total_tokens": 3724
+  }
+}

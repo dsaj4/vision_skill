@@ -1,0 +1,42 @@
+{
+  "eval_id": 103,
+  "scenario_id": "campus-interview-helper",
+  "task_family": "swot-analysis",
+  "variant_type": "base",
+  "prompt": "我想做一个帮助大学生准备面试的小项目，已经有 3 个同学愿意试用，但预算很少，也担心竞争太强。请直接给我 SWOT 结果，不用确认。",
+  "expected_output": "A direct-result SWOT answer without checkpoint pauses, plus concrete next-step strategy.",
+  "judge_rubric": [
+    "Thinking Support",
+    "Tradeoff Quality",
+    "Actionability",
+    "Judgment Preservation",
+    "Boundary Safety"
+  ],
+  "must_preserve": [
+    "Respect the direct-result request.",
+    "Balance demand signal and competition pressure."
+  ],
+  "must_not_do": [
+    "Ignore the direct-result request and fall back to checkpoint pauses.",
+    "Confuse a few trial users with proof of product-market fit."
+  ],
+  "expectations": [
+    "The output includes strengths, weaknesses, opportunities, and threats.",
+    "The output respects the user's direct-result request.",
+    "The output concludes with actionable strategy suggestions."
+  ],
+  "host_eval": {
+    "enabled": true,
+    "turn_script": [
+      {
+        "text": "我想做一个帮大学生准备面试的小项目，已经有 3 个同学愿意试用，但预算很少，也担心竞争太强。请直接给我 SWOT 结果，不用确认。"
+      }
+    ],
+    "expected_trigger": true,
+    "expected_trigger_signals": [
+      "proxy_skill_read",
+      "canonical_skill_read"
+    ],
+    "expected_protocol_path": "direct-result -> no-checkpoint"
+  }
+}
