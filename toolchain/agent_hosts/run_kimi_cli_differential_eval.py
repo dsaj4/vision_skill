@@ -13,6 +13,7 @@ from typing import Any, Sequence
 from toolchain.agent_hosts.kimi_code_host import KimiCodeHost
 from toolchain.eval_factory.sync import resolve_package_evals
 from toolchain.graders.capability_grader import grade_response_text
+from toolchain.kimi_command import resolve_kimi_command
 
 
 DEFAULT_JUDGE_MAX_CHARS = 4000
@@ -104,7 +105,7 @@ def _run_plain_kimi_turns(
 
     for turn_index, text in enumerate(turns, start=1):
         args = [
-            "kimi",
+            resolve_kimi_command(),
             "--print",
             "--final-message-only",
             "--work-dir",

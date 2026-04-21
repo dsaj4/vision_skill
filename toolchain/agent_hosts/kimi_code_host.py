@@ -8,6 +8,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from toolchain.kimi_command import resolve_kimi_command
 from toolchain.agent_hosts.codex_host import (
     CommandRunner,
     _extract_frontmatter,
@@ -137,7 +138,7 @@ def _build_kimi_args(
     model: str | None,
 ) -> list[str]:
     args = [
-        "kimi",
+        resolve_kimi_command(),
         "--print",
         "--output-format=stream-json",
         "--work-dir",

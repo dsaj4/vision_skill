@@ -177,12 +177,26 @@ The new Kimi production loop sits one layer above both lanes:
 
 ```text
 Codex controller
-  -> Kimi eval generation
-  -> Kimi skill rewrite
+  -> prepare workspace task bundle
+  -> Kimi reads workspace docs and writes outputs/
+  -> Codex normalizes and validates outputs
   -> Codex validation and apply
   -> Kimi differential eval
   -> optional Kimi host validation
 ```
+
+For generation stages, Kimi no longer needs to return the full eval JSON or full `SKILL.md` in the terminal response. Codex now prepares a bounded workspace task with:
+
+- `task.md`
+- `workspace-manifest.json`
+- compact `inputs/package-packet.json`
+- compact `inputs/recent-context.json`
+- truncated `inputs/current-skill.md`
+- truncated `inputs/examples.md`
+- `contracts/output-contract.md`
+- output examples under `examples/`
+
+Kimi is prompted to read those files and write only the required files under `workspace/outputs/`. This keeps prompts short, makes multi-step file reading possible, and preserves a strict artifact contract for downstream validation.
 
 ## Current Eval Factory Output
 

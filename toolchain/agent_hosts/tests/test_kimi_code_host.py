@@ -134,7 +134,8 @@ def test_kimi_code_host_prepares_proxy_skill_and_parses_stream_json(tmp_path: Pa
     assert transcript["host_backend"] == "kimi-code"
     assert len(transcript["turns"]) == 2
     assert transcript["turns"][-1]["assistant_text"].startswith("## Strengths")
-    assert recorded_commands[0][0:3] == ["kimi", "--print", "--output-format=stream-json"]
+    assert Path(recorded_commands[0][0]).name.lower() in {"kimi", "kimi.exe", "kimi.cmd", "kimi-cli.exe"}
+    assert recorded_commands[0][1:3] == ["--print", "--output-format=stream-json"]
     assert "--work-dir" in recorded_commands[0]
     assert "--add-dir" in recorded_commands[0]
     assert "--skills-dir" in recorded_commands[0]

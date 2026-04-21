@@ -3,11 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .context import compact_json_block, load_json, load_recent_cycle_context, read_text, write_json, write_text
-from .kimi_cli import compact_text, extract_json_object, run_kimi_prompt
+from .context import load_json, load_recent_cycle_context, read_text, write_json, write_text
+from .kimi_cli import compact_text, extract_json_object, run_kimi_workspace_task
+from .workspace_tasks import prepare_workspace_bundle, to_pretty_json
 
 
 DEFAULT_SKILL_MAX_CHARS = 12000
+DEFAULT_EXAMPLES_MAX_CHARS = 1600
 
 
 def _normalize_expectations(value: Any, eval_id: int) -> list[dict[str, Any]]:
@@ -118,15 +120,49 @@ def normalize_generated_eval_set(
     }
 
 
-def build_eval_generation_prompt(
+def _eval_contract_markdown() -> str:
+    return "\n".join(
+        [
+            "# Output Contract",
+            "",
+            "Write two files under `outputs/` only:",
+            "",
+            "- `outputs/eval-draft.json`",
+            "- `outputs/run-report.json`",
+            "",
+            "Rules for `outputs/eval-draft.json`:",
+            "- must be valid JSON",
+            "- root object must contain `skill_name`, `package_name`, and `evals`",
+            "- `evals` must be a non-empty array",
+            "- each eval must contain `id`, `prompt`, `expected_output`, `files`, `expectations`",
+            "- optional `host_eval` is allowed",
+            "- keep package identity stable",
+            "- prefer 4 to 6 evals",
+            "- cover rich-input direct-result, info-missing, staged continue, staged revise, explicit direct-result across the set",
+            "",
+            "Rules for `outputs/run-report.json`:",
+            "- must be valid JSON",
+            "- include `task`, `status`, `files_written`, and optional `notes`",
+            "",
+        ]
+    ).strip() + "\n"
+
+
+def prepare_eval_generation_workspace(
     package_dir: str | Path,
     workspace_dir: str | Path,
-) -> str:
+    cycle_dir: str | Path,
+) -> dict[str, Any]:
     package_path = Path(package_dir)
     workspace_path = Path(workspace_dir)
+    cycle_path = Path(cycle_dir) / "eval-generation"
+    task_dir = cycle_path / "workspace"
+
     package_meta = load_json(package_path / "metadata" / "package.json")
     current_evals = load_json(package_path / "evals" / "evals.json")
     skill_text = read_text(package_path / "SKILL.md")
+    examples_path = package_path / "references" / "examples.md"
+    examples_text = read_text(examples_path) if examples_path.exists() else ""
     recent_context = load_recent_cycle_context(workspace_path)
 
     packet = {
@@ -136,63 +172,108 @@ def build_eval_generation_prompt(
             "category": package_meta.get("category", ""),
         },
         "current_eval_count": len(current_evals.get("evals", [])),
-        "current_evals": current_evals.get("evals", []),
-        "recent_context": recent_context,
+        "current_eval_ids": [item.get("id") for item in current_evals.get("evals", []) if isinstance(item, dict)],
     }
 
-    return "\n".join(
+    objective = "\n".join(
         [
-            "You are helping Codex generate a stronger eval set for one Vision Skill package.",
-            "Codex is the controller. Return JSON only. Do not use markdown fences.",
-            "Revise the package-local eval set so it is more discriminative when the skill is tested with Kimi Code.",
-            "Keep package_name and skill_name unchanged.",
-            "Prefer 4 to 6 evals.",
-            "Cover these paths across the whole set: rich-input direct-result, info-missing, staged continue, staged revise, explicit direct-result.",
-            "Preserve strong existing eval ids when possible. Add new ids only when needed.",
-            "Each eval must contain: id, prompt, expected_output, files, expectations, optional host_eval.",
-            "Use short keyword-based expectations. expectation.type must be contains_any or contains_none.",
-            "Only include host_eval when multi-turn behavior needs to be verified.",
-            "",
-            "Return this exact JSON shape:",
-            '{"skill_name":"","package_name":"","evals":[{"id":101,"prompt":"","expected_output":"","files":[],"expectations":[{"id":"","type":"contains_any","text":"","keywords":[""]}],"host_eval":{"enabled":true,"turn_script":[""],"expected_trigger":true,"expected_trigger_signals":[""],"expected_protocol_path":""}}]}',
-            "",
-            "Current package packet:",
-            compact_json_block(packet, 16000),
-            "",
-            "Current SKILL.md:",
-            skill_text[:DEFAULT_SKILL_MAX_CHARS] if len(skill_text) > DEFAULT_SKILL_MAX_CHARS else skill_text,
+            "Revise the package-local eval set for this Vision Skill package.",
+            "Make it more discriminative for Kimi Code evaluation while keeping the package identity stable.",
+            "Read the provided inputs, contract, and examples before writing outputs.",
         ]
     )
 
+    return prepare_workspace_bundle(
+        task_dir,
+        task_name="Eval Generation",
+        objective=objective,
+        input_files={
+            "inputs/package-packet.json": to_pretty_json(packet),
+            "inputs/recent-context.json": to_pretty_json(recent_context),
+            "inputs/current-evals.json": to_pretty_json(current_evals),
+            "inputs/current-skill.md": (
+                skill_text[:DEFAULT_SKILL_MAX_CHARS] if len(skill_text) > DEFAULT_SKILL_MAX_CHARS else skill_text
+            ),
+            "inputs/examples.md": (
+                examples_text[:DEFAULT_EXAMPLES_MAX_CHARS]
+                if len(examples_text) > DEFAULT_EXAMPLES_MAX_CHARS
+                else examples_text
+            )
+            or "# Examples\n\nNo package-local examples were provided.\n",
+        },
+        contract_files={
+            "contracts/output-contract.md": _eval_contract_markdown(),
+        },
+        example_files={
+            "examples/eval-draft.example.json": to_pretty_json(
+                {
+                    "skill_name": package_meta.get("skill_name", package_path.name),
+                    "package_name": package_meta.get("package_name", package_path.name),
+                    "evals": [
+                        {
+                            "id": 101,
+                            "prompt": "User request",
+                            "expected_output": "Expected response pattern",
+                            "files": [],
+                            "expectations": [
+                                {
+                                    "id": "exp-1",
+                                    "type": "contains_any",
+                                    "text": "Should mention the core result",
+                                    "keywords": ["result"],
+                                }
+                            ],
+                            "host_eval": {
+                                "enabled": True,
+                                "turn_script": ["first turn", "continue"],
+                                "expected_trigger": True,
+                                "expected_trigger_signals": ["skill read"],
+                                "expected_protocol_path": "staged -> continue-loop",
+                            },
+                        }
+                    ],
+                }
+            ),
+            "examples/run-report.example.json": to_pretty_json(
+                {
+                    "task": "eval-generation",
+                    "status": "completed",
+                    "files_written": ["outputs/eval-draft.json", "outputs/run-report.json"],
+                    "notes": "Kept package identity stable and refreshed the eval mix.",
+                }
+            ),
+        },
+        required_outputs=["outputs/eval-draft.json", "outputs/run-report.json"],
+    )
 
-def _repair_eval_json(
-    raw_text: str,
-    cycle_path: Path,
+
+def _repair_eval_output_in_workspace(
+    task_dir: Path,
+    error_text: str,
     *,
     model: str | None = None,
     timeout_seconds: int | None = None,
-) -> str:
+) -> dict[str, Any]:
     prompt = "\n".join(
         [
-            "You are fixing invalid JSON.",
-            "Do not change semantics, ids, or field names.",
-            "Only repair JSON syntax such as quotes, escaping, commas, and brackets.",
-            "Return valid JSON only. Do not use markdown fences.",
+            "Read `task.md`, `workspace-manifest.json`, `contracts/output-contract.md`, and `outputs/eval-draft.json`.",
+            "Fix `outputs/eval-draft.json` in place so it becomes valid JSON and follows the contract.",
+            "Preserve semantics and eval intent as much as possible.",
+            "Update `outputs/run-report.json` if needed.",
+            "Return one short completion note.",
             "",
-            "Invalid JSON:",
-            compact_text(raw_text, 18000),
+            "Repair reason:",
+            compact_text(error_text, 2400),
         ]
     )
-    write_text(cycle_path / "repair-prompt.txt", prompt)
-    repair_result = run_kimi_prompt(
+    write_text(task_dir / "repair-request.md", prompt)
+    return run_kimi_workspace_task(
         prompt,
-        cycle_path / "repair-run",
+        task_dir,
+        required_outputs=["outputs/eval-draft.json", "outputs/run-report.json"],
         model=model,
         timeout_seconds=timeout_seconds,
     )
-    repaired_text = repair_result["assistant_text"] or repair_result["stdout"]
-    write_text(cycle_path / "repair-response.txt", repaired_text)
-    return repaired_text
 
 
 def generate_eval_draft(
@@ -205,20 +286,24 @@ def generate_eval_draft(
 ) -> dict[str, Any]:
     package_path = Path(package_dir)
     cycle_path = Path(cycle_dir) / "eval-generation"
-    prompt = build_eval_generation_prompt(package_path, workspace_dir)
-    write_text(cycle_path / "prompt.txt", prompt)
+    workspace_bundle = prepare_eval_generation_workspace(package_path, workspace_dir, cycle_dir)
+    write_text(cycle_path / "prompt.txt", workspace_bundle["task_prompt"])
 
-    kimi_result = run_kimi_prompt(
-        prompt,
-        cycle_path / "run",
+    kimi_result = run_kimi_workspace_task(
+        workspace_bundle["task_prompt"],
+        workspace_bundle["task_dir"],
+        required_outputs=workspace_bundle["required_outputs"],
         model=model,
         timeout_seconds=timeout_seconds,
     )
-    write_text(cycle_path / "raw-response.txt", kimi_result["assistant_text"] or kimi_result["stdout"])
+    write_text(cycle_path / "assistant-message.txt", kimi_result["assistant_text"])
+    write_text(cycle_path / "raw-response.txt", kimi_result["stdout"])
+    write_text(cycle_path / "stderr.txt", kimi_result["stderr"])
 
     package_meta = load_json(package_path / "metadata" / "package.json")
     current_evals = load_json(package_path / "evals" / "evals.json")
-    raw_text = kimi_result["assistant_text"] or kimi_result["stdout"]
+    draft_output_path = Path(kimi_result["resolved_outputs"]["outputs/eval-draft.json"])
+    raw_text = read_text(draft_output_path)
     repair_used = False
     try:
         generated = normalize_generated_eval_set(
@@ -226,34 +311,37 @@ def generate_eval_draft(
             package_meta,
             current_evals,
         )
-    except Exception:
-        repaired_text = _repair_eval_json(
-            raw_text,
-            cycle_path,
+    except Exception as exc:
+        repair_result = _repair_eval_output_in_workspace(
+            Path(workspace_bundle["task_dir"]),
+            str(exc),
             model=model,
             timeout_seconds=timeout_seconds,
         )
+        write_text(cycle_path / "repair-response.txt", repair_result["assistant_text"])
+        repaired_text = read_text(Path(repair_result["resolved_outputs"]["outputs/eval-draft.json"]))
         generated = normalize_generated_eval_set(
             repaired_text,
             package_meta,
             current_evals,
         )
         repair_used = True
-    write_json(cycle_path / "eval-draft.json", generated)
+    write_json(draft_output_path, generated)
     write_json(
         cycle_path / "result.json",
         {
             "generator": "kimi-cli",
             "package_name": package_meta.get("package_name", package_path.name),
-            "output_path": str(cycle_path / "eval-draft.json"),
+            "output_path": str(draft_output_path),
             "generated_eval_count": len(generated["evals"]),
             "model": kimi_result["model"],
             "repair_used": repair_used,
+            "workspace_task_dir": workspace_bundle["task_dir"],
         },
     )
     return {
         "cycle_dir": str(cycle_path),
-        "draft_path": str(cycle_path / "eval-draft.json"),
+        "draft_path": str(draft_output_path),
         "result_path": str(cycle_path / "result.json"),
         "generated_eval_count": len(generated["evals"]),
     }

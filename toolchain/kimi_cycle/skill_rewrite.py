@@ -9,8 +9,9 @@ from typing import Any
 from toolchain.validators.package_validator import validate_package
 from toolchain.validators.protocol_validator import validate_protocol
 
-from .context import compact_json_block, load_json, load_recent_cycle_context, read_text, write_json, write_text
-from .kimi_cli import extract_markdown_document, run_kimi_prompt
+from .context import load_json, load_recent_cycle_context, read_text, write_json, write_text
+from .kimi_cli import extract_markdown_document, run_kimi_workspace_task
+from .workspace_tasks import prepare_workspace_bundle, to_pretty_json
 
 
 DEFAULT_SKILL_MAX_CHARS = 14000
@@ -79,12 +80,43 @@ def validate_rewritten_skill(package_dir: str | Path, rewritten_skill: str) -> d
         }
 
 
-def build_skill_rewrite_prompt(
+def _skill_contract_markdown() -> str:
+    return "\n".join(
+        [
+            "# Output Contract",
+            "",
+            "Write two files under `outputs/` only:",
+            "",
+            "- `outputs/SKILL.generated.md`",
+            "- `outputs/run-report.json`",
+            "",
+            "Rules for `outputs/SKILL.generated.md`:",
+            "- must be a full markdown document",
+            "- must begin with valid YAML frontmatter",
+            "- frontmatter must contain `name` and `description`",
+            "- must contain a markdown title",
+            "- keep the package identity stable",
+            "- improve direct-result quality, protocol fit, and user value using the provided eval context",
+            "- keep the skill concise and executable",
+            "",
+            "Rules for `outputs/run-report.json`:",
+            "- must be valid JSON",
+            "- include `task`, `status`, `files_written`, and optional `notes`",
+            "",
+        ]
+    ).strip() + "\n"
+
+
+def prepare_skill_rewrite_workspace(
     package_dir: str | Path,
     workspace_dir: str | Path,
-) -> str:
+    cycle_dir: str | Path,
+) -> dict[str, Any]:
     package_path = Path(package_dir)
     workspace_path = Path(workspace_dir)
+    cycle_path = Path(cycle_dir) / "skill-rewrite"
+    task_dir = cycle_path / "workspace"
+
     package_meta = load_json(package_path / "metadata" / "package.json")
     current_skill = read_text(package_path / "SKILL.md")
     current_evals = load_json(package_path / "evals" / "evals.json")
@@ -99,30 +131,97 @@ def build_skill_rewrite_prompt(
             "category": package_meta.get("category", ""),
         },
         "current_eval_ids": [item.get("id") for item in current_evals.get("evals", []) if isinstance(item, dict)],
-        "recent_context": recent_context,
     }
 
-    return "\n".join(
+    objective = "\n".join(
         [
-            "You are revising one Vision Skill package for Codex.",
-            "Codex is the controller. Output only the final full SKILL.md markdown.",
-            "Do not explain your changes. Do not add markdown fences.",
-            "Keep the package identity stable. Improve user value, direct-result quality, and protocol fit using the recent eval findings.",
-            "The rewritten skill must remain concise, readable, and executable.",
-            "Preserve a valid YAML frontmatter with name and description.",
-            "",
-            "Package packet:",
-            compact_json_block(packet, 12000),
-            "",
-            "Optimization guide summary:",
-            GUIDE_SUMMARY,
-            "",
-            "Current SKILL.md:",
-            current_skill[:DEFAULT_SKILL_MAX_CHARS] if len(current_skill) > DEFAULT_SKILL_MAX_CHARS else current_skill,
-            "",
-            "Current examples reference:",
-            examples_text[:DEFAULT_EXAMPLES_MAX_CHARS] if len(examples_text) > DEFAULT_EXAMPLES_MAX_CHARS else examples_text,
+            "Rewrite the package skill as a controlled workspace edit task.",
+            "Use the recent eval findings to improve direct-result quality, protocol fit, and overall usefulness.",
+            "Read the provided inputs, contract, and examples before writing outputs.",
         ]
+    )
+
+    return prepare_workspace_bundle(
+        task_dir,
+        task_name="Skill Rewrite",
+        objective=objective,
+        input_files={
+            "inputs/package-packet.json": to_pretty_json(packet),
+            "inputs/recent-context.json": to_pretty_json(recent_context),
+            "inputs/current-skill.md": (
+                current_skill[:DEFAULT_SKILL_MAX_CHARS] if len(current_skill) > DEFAULT_SKILL_MAX_CHARS else current_skill
+            ),
+            "inputs/examples.md": (
+                examples_text[:DEFAULT_EXAMPLES_MAX_CHARS]
+                if len(examples_text) > DEFAULT_EXAMPLES_MAX_CHARS
+                else examples_text
+            )
+            or "# Examples\n\nNo package-local examples were provided.\n",
+        },
+        contract_files={
+            "contracts/output-contract.md": _skill_contract_markdown(),
+        },
+        example_files={
+            "examples/SKILL.example.md": "\n".join(
+                [
+                    "---",
+                    "name: example-skill",
+                    "description: Use when an example is needed.",
+                    "---",
+                    "",
+                    "# Example Skill",
+                    "",
+                    "## Core Task",
+                    "",
+                    "Give a useful direct result when the input is already rich enough.",
+                    "",
+                    "## Interaction Modes",
+                    "",
+                    "- Direct result when context is sufficient",
+                    "- Ask only for missing information when context is thin",
+                    "- Use staged checkpoints only for real co-creation",
+                    "",
+                ]
+            ).strip()
+            + "\n",
+            "examples/run-report.example.json": to_pretty_json(
+                {
+                    "task": "skill-rewrite",
+                    "status": "completed",
+                    "files_written": ["outputs/SKILL.generated.md", "outputs/run-report.json"],
+                    "notes": "Rewritten skill keeps identity stable and improves protocol fit.",
+                }
+            ),
+        },
+        required_outputs=["outputs/SKILL.generated.md", "outputs/run-report.json"],
+    )
+
+
+def _repair_skill_output_in_workspace(
+    task_dir: Path,
+    error_text: str,
+    *,
+    model: str | None = None,
+    timeout_seconds: int | None = None,
+) -> dict[str, Any]:
+    prompt = "\n".join(
+        [
+            "Read `task.md`, `workspace-manifest.json`, `contracts/output-contract.md`, and `outputs/SKILL.generated.md`.",
+            "Fix `outputs/SKILL.generated.md` in place so it satisfies the contract and the validation feedback.",
+            "Update `outputs/run-report.json` if needed.",
+            "Return one short completion note.",
+            "",
+            "Validation feedback:",
+            error_text,
+        ]
+    )
+    write_text(task_dir / "repair-request.md", prompt)
+    return run_kimi_workspace_task(
+        prompt,
+        task_dir,
+        required_outputs=["outputs/SKILL.generated.md", "outputs/run-report.json"],
+        model=model,
+        timeout_seconds=timeout_seconds,
     )
 
 
@@ -136,40 +235,72 @@ def generate_skill_rewrite(
 ) -> dict[str, Any]:
     package_path = Path(package_dir)
     cycle_path = Path(cycle_dir) / "skill-rewrite"
-    generated_skill_path = cycle_path / "SKILL.generated.md"
     validation_path = cycle_path / "validation.json"
-    prompt = build_skill_rewrite_prompt(package_path, workspace_dir)
-    write_text(cycle_path / "prompt.txt", prompt)
+    workspace_bundle = prepare_skill_rewrite_workspace(package_path, workspace_dir, cycle_dir)
+    generated_skill_path = Path(workspace_bundle["task_dir"]) / "outputs" / "SKILL.generated.md"
+    write_text(cycle_path / "prompt.txt", workspace_bundle["task_prompt"])
 
-    kimi_result = run_kimi_prompt(
-        prompt,
-        cycle_path / "run",
+    kimi_result = run_kimi_workspace_task(
+        workspace_bundle["task_prompt"],
+        workspace_bundle["task_dir"],
+        required_outputs=workspace_bundle["required_outputs"],
         model=model,
         timeout_seconds=timeout_seconds,
     )
-    raw_output = kimi_result["assistant_text"] or kimi_result["stdout"]
+    write_text(cycle_path / "assistant-message.txt", kimi_result["assistant_text"])
+    write_text(cycle_path / "raw-response.txt", kimi_result["stdout"])
+    write_text(cycle_path / "stderr.txt", kimi_result["stderr"])
+
+    raw_output = read_text(generated_skill_path)
     write_text(cycle_path / "raw-response.md", raw_output)
 
+    normalization_error: str | None = None
+    repair_used = False
     try:
         rewritten_skill = normalize_rewritten_skill(raw_output)
         write_text(generated_skill_path, rewritten_skill)
         validation = validate_rewritten_skill(package_path, rewritten_skill)
+        if not validation["valid"]:
+            raise ValueError(
+                "Validation failed: "
+                f"package errors={validation['package_validator']['summary']['errors']}, "
+                f"protocol errors={validation['protocol_validator']['summary']['errors']}"
+            )
     except Exception as exc:
-        write_text(generated_skill_path, raw_output)
-        validation = {
-            "valid": False,
-            "normalization_error": str(exc),
-            "package_validator": {
+        normalization_error = str(exc)
+        repair_result = _repair_skill_output_in_workspace(
+            Path(workspace_bundle["task_dir"]),
+            normalization_error,
+            model=model,
+            timeout_seconds=timeout_seconds,
+        )
+        write_text(cycle_path / "repair-response.txt", repair_result["assistant_text"])
+        repaired_output = read_text(generated_skill_path)
+        write_text(cycle_path / "repaired-response.md", repaired_output)
+        repair_used = True
+        try:
+            rewritten_skill = normalize_rewritten_skill(repaired_output)
+            write_text(generated_skill_path, rewritten_skill)
+            validation = validate_rewritten_skill(package_path, rewritten_skill)
+        except Exception as repair_exc:
+            normalization_error = str(repair_exc)
+            validation = {
                 "valid": False,
-                "issues": [],
-                "summary": {"errors": 0, "warnings": 0},
-            },
-            "protocol_validator": {
-                "valid": False,
-                "issues": [],
-                "summary": {"errors": 0, "warnings": 0},
-            },
-        }
+                "normalization_error": normalization_error,
+                "package_validator": {
+                    "valid": False,
+                    "issues": [],
+                    "summary": {"errors": 0, "warnings": 0},
+                },
+                "protocol_validator": {
+                    "valid": False,
+                    "issues": [],
+                    "summary": {"errors": 0, "warnings": 0},
+                },
+            }
+    if normalization_error and "normalization_error" not in validation:
+        validation["normalization_error"] = normalization_error
+    validation["repair_used"] = repair_used
     write_json(validation_path, validation)
 
     return {
