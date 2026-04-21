@@ -215,6 +215,7 @@ def test_run_host_eval_generates_host_artifacts_and_summary(tmp_path: Path) -> N
     benchmark = json.loads((iteration_dir / "host-benchmark.json").read_text(encoding="utf-8"))
     signal_report = json.loads((host_eval_102 / "host-signal-report.json").read_text(encoding="utf-8"))
 
+    assert result["host_backend"] == "codex"
     assert result["selected_eval_ids"] == [102, 103]
     assert (host_eval_102 / "host-session.json").exists()
     assert (host_eval_102 / "host-transcript.json").exists()

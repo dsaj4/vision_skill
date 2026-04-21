@@ -320,6 +320,44 @@ def test_analyze_iteration_recovers_failure_tags_from_repair_recommendations(tmp
     assert result["analysis"]["failure_tag_counts"]["blueprint-spec.eval-gap"] == 1
 
 
+def malformed_cross_eval_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+    content = json.dumps(
+        {
+            "per_eval": [
+                {
+                    "eval_id": 1,
+                    "winner": "with_skill",
+                }
+            ],
+            "cross_eval_summary": "Skill improved structure, but the summary was returned as plain text.",
+            "repair_recommendations": [],
+        },
+        ensure_ascii=False,
+        indent=2,
+    )
+    return {
+        "choices": [{"message": {"content": content}}],
+        "usage": {"prompt_tokens": 120, "completion_tokens": 80, "total_tokens": 200},
+    }
+
+
+def test_analyze_iteration_tolerates_string_cross_eval_summary(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir, taxonomy = write_iteration(tmp_path / "workspace")
+
+    result = analyze_iteration(
+        iteration_dir,
+        package_dir,
+        taxonomy=taxonomy,
+        sender=malformed_cross_eval_sender,
+        api_key="test-key",
+        analyzer_model="qwen-analyzer-test",
+    )
+
+    assert result["analysis"]["cross_eval_summary"]["critical_issue"] == "Skill improved structure, but the summary was returned as plain text."
+    assert result["analysis"]["per_eval"][0]["winner"] == "with_skill"
+
+
 def test_build_analysis_packet_includes_level3_pairwise_signals(tmp_path: Path) -> None:
     package_dir = write_package(tmp_path / "packages")
     iteration_dir, taxonomy = write_iteration(tmp_path / "workspace")

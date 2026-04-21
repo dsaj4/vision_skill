@@ -79,7 +79,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run Vision Skill Level 4-6 post-benchmark pipeline.")
     parser.add_argument("--iteration-dir", required=True, help="Path to the prepared and benchmarked iteration directory.")
     parser.add_argument("--package-dir", required=True, help="Path to the package directory containing SKILL.md.")
-    parser.add_argument("--api-key", default=None, help="Optional DashScope API key override for analyzer calls.")
+    parser.add_argument("--api-key", default=None, help="Optional model provider API key override for analyzer calls.")
     parser.add_argument("--analyzer-model", default=None, help="Optional analyzer model override.")
     parser.add_argument("--endpoint", default=None, help="Optional analyzer endpoint override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional analyzer timeout override.")

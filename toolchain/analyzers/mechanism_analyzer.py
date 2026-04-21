@@ -196,15 +196,48 @@ def _extract_json_object(text: str) -> dict[str, Any]:
     return json.loads(candidate[start : end + 1])
 
 
+def _normalize_cross_eval_summary(value: Any) -> dict[str, Any]:
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str):
+        stripped = value.strip()
+        if not stripped:
+            return {}
+        return {
+            "summary_text": stripped,
+            "critical_issue": stripped,
+        }
+    return {}
+
+
+def _normalize_repair_recommendations(value: Any) -> list[Any]:
+    if isinstance(value, list):
+        return value
+    if value is None:
+        return []
+    return [value]
+
+
+def _normalize_per_eval_items(value: Any) -> list[dict[str, Any]]:
+    if isinstance(value, dict):
+        return [value]
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, dict)]
+
+
 def _normalize_analysis(raw: dict[str, Any], taxonomy: dict[str, Any], analyzer_model: str) -> dict[str, Any]:
+    repair_recommendations = _normalize_repair_recommendations(raw.get("repair_recommendations", []))
+    cross_eval_summary = _normalize_cross_eval_summary(raw.get("cross_eval_summary", {}))
+    per_eval_items = _normalize_per_eval_items(raw.get("per_eval", []))
     allowed_failure_tags = _collect_allowed_failure_tags(taxonomy)
     recommendation_tags = [
         recommendation.get("category") or recommendation.get("issue_id")
-        for recommendation in raw.get("repair_recommendations", [])
+        for recommendation in repair_recommendations
         if isinstance(recommendation, dict) and (recommendation.get("category") or recommendation.get("issue_id")) in allowed_failure_tags
     ]
     fallback_layer = ""
-    for recommendation in raw.get("repair_recommendations", []):
+    for recommendation in repair_recommendations:
         if not isinstance(recommendation, dict):
             continue
         if recommendation.get("repair_layer") in ALLOWED_REPAIR_LAYERS:
@@ -217,9 +250,8 @@ def _normalize_analysis(raw: dict[str, Any], taxonomy: dict[str, Any], analyzer_
 
     per_eval: list[dict[str, Any]] = []
     failure_counts: dict[str, int] = {}
-    cross_eval_summary = raw.get("cross_eval_summary", {})
 
-    for item in raw.get("per_eval", []):
+    for item in per_eval_items:
         failure_tags = [tag for tag in item.get("failure_tags", []) if tag in allowed_failure_tags]
         if not failure_tags and recommendation_tags:
             failure_tags = recommendation_tags[:1]
@@ -277,7 +309,7 @@ def _normalize_analysis(raw: dict[str, Any], taxonomy: dict[str, Any], analyzer_
         },
         "per_eval": per_eval,
         "cross_eval_summary": cross_eval_summary,
-        "repair_recommendations": raw.get("repair_recommendations", []),
+        "repair_recommendations": repair_recommendations,
         "failure_tag_counts": failure_counts,
     }
 

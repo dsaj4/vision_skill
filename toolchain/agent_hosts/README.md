@@ -2,24 +2,46 @@
 
 This module contains the real host-eval lane.
 
-Current purpose:
+Purpose:
 
 - verify that a skill is discoverable inside a real host
 - verify that multi-turn protocol behavior survives the host layer
 - keep host evidence separate from the API eval lane
 - extract richer rule-based host signals without sending raw transcripts to a model
 
-Current backend:
+Current backends:
 
 - `CodexHost`
   - creates a workspace-local `.codex/skills/<package>/SKILL.md` proxy
   - points the host back to the canonical package `SKILL.md`
   - captures JSON event output from `codex exec` and `codex exec resume`
+- `KimiCodeHost`
+  - creates a workspace-local `.kimi/skills/<package>/SKILL.md` proxy
+  - runs Kimi Code through `kimi --print --output-format=stream-json`
+  - uses `--work-dir`, `--add-dir`, `--skills-dir`, and `--session` so the host can read the canonical package while keeping eval artifacts isolated
+  - forces UTF-8 Python subprocess output on Windows to avoid GBK failures when a skill contains Chinese text or emoji
+  - runs `kimi` directly instead of through a PowerShell wrapper so normal stderr lines like `To resume this session` do not become false failures
 
-Current entry point:
+Model selection:
+
+- default: let Kimi CLI use the model from its own login/config state
+- optional override: set `KIMI_CLI_MODEL`
+- do not reuse `KIMI_CODE_MODEL` for the host lane; that variable belongs to the API endpoint path
+
+Kimi Code note:
+
+- Kimi Code is primarily a coding-agent product, not a generic scripted Chat Completions backend.
+- The API lane can resolve `VISION_LLM_PROVIDER=kimi-code`, but Kimi's coding endpoint may reject generic direct API calls outside supported coding agents.
+- For real Kimi Code skill validation, use this host lane with Kimi CLI installed and authenticated.
+
+Current entry points:
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.agent_hosts.run_host_eval --host-backend codex --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
 ```
 
 Current artifacts:

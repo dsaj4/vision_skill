@@ -4,7 +4,7 @@
 
 This contract defines how a real host agent plugs into the Vision host-eval lane.
 
-The current reference backend is `Codex`, but the contract is written so other source-reading hosts can join later without changing the rest of the evaluation pipeline.
+The current reference backends are `Codex` and `Kimi Code`, but the contract is written so other source-reading hosts can join later without changing the rest of the evaluation pipeline.
 
 ## Lane Split
 
@@ -238,21 +238,38 @@ This file is intentionally normalized so the host lane can reuse the current gra
 
 These fields are optional and must not break the API lane.
 
-## Current Codex Backend
+## Current Backends
 
-The current reference backend is `toolchain.agent_hosts.codex_host.CodexHost`.
+The current backends are:
 
-Current strategy:
+- `toolchain.agent_hosts.codex_host.CodexHost`
+- `toolchain.agent_hosts.kimi_code_host.KimiCodeHost`
+
+Codex strategy:
 
 1. create a workspace-local proxy skill in `.codex/skills/<package>/SKILL.md`
 2. keep the canonical package `SKILL.md` as the source of truth
 3. run `codex exec` / `codex exec resume`
 4. reconstruct trigger evidence from Codex event output
 
+Kimi Code strategy:
+
+1. create a workspace-local proxy skill in `.kimi/skills/<package>/SKILL.md`
+2. keep the canonical package `SKILL.md` as the source of truth
+3. run `kimi --print --output-format=stream-json`
+4. pass `--work-dir`, `--add-dir`, `--skills-dir`, and `--session` to isolate the eval session while allowing the host to read the canonical package
+5. convert Kimi stream-json messages into the common host transcript contract
+
+Kimi Code is treated as a host backend. Its coding endpoint may reject generic direct API-lane calls outside supported coding agents, so release-preflight Kimi validation should use `KimiCodeHost`.
+
 ## Runner Entry Point
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.agent_hosts.run_host_eval --host-backend codex --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
 ```
 
 Current artifacts:
@@ -272,5 +289,5 @@ Current artifacts:
 
 - v0.1 focuses on `trigger + multi-turn protocol`
 - tool calling and long-lived external state are out of scope
-- `Codex` is the only implemented backend
+- `Codex` and `Kimi Code` are the implemented backends
 - host lane remains parallel to current `release-recommendation.json`

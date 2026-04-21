@@ -68,6 +68,7 @@ Implemented modules:
   - human review packet generation and release recommendation
 - Host Agent Eval Lane
   - `Codex` host adapter
+  - `Kimi Code` host adapter
   - real-host trigger validation
   - multi-turn protocol validation
 
@@ -105,10 +106,16 @@ Command demo path:
 
 1. Run `pytest`
 2. Run `python -m toolchain.run_eval_pipeline --smoke`
-3. Run `python -m toolchain.agent_hosts.run_host_eval --max-evals 2`
+3. Run `python -m toolchain.agent_hosts.run_host_eval --host-backend codex --max-evals 2`
 4. Confirm the generated iteration contains `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, `stability.json`, `analysis.json`, and `release-recommendation.json`
 5. Confirm host artifacts contain `host-transcript.json`, `host-trigger-report.json`, and `host-benchmark.json`
 6. Run `pytest toolchain/eval_factory/tests/test_catalog.py`
+
+Optional Kimi Code host demo:
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 2
+```
 
 ## Recommended Submission Narrative
 

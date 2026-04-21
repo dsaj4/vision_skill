@@ -3,12 +3,21 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import sys
+import urllib.error
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from toolchain.executors.dashscope_executor import build_messages, execute_iteration, execute_run
+from toolchain.executors.dashscope_executor import (
+    build_messages,
+    execute_iteration,
+    execute_run,
+    _post_chat_completion,
+    _resolve_api_key,
+    _resolve_endpoint,
+    _resolve_model,
+)
 
 
 def write_package(base: Path) -> Path:
@@ -164,3 +173,53 @@ def test_execute_iteration_skips_completed_runs_when_requested(tmp_path: Path) -
     assert len(result["completed_runs"]) == 1
     assert len(result["skipped_runs"]) == 1
     assert result["skipped_runs"][0]["run_dir"] == str(completed_run_dir)
+
+
+def test_post_chat_completion_retries_on_urlerror(monkeypatch) -> None:
+    class FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def read(self) -> bytes:
+            return json.dumps({"choices": [{"message": {"content": "ok"}}]}).encode("utf-8")
+
+    calls = {"count": 0}
+
+    def fake_urlopen(request, timeout):
+        calls["count"] += 1
+        if calls["count"] < 3:
+            raise urllib.error.URLError("temporary eof")
+        return FakeResponse()
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    monkeypatch.setattr("toolchain.executors.dashscope_executor.time.sleep", lambda _: None)
+
+    response = _post_chat_completion({"model": "qwen-test", "messages": []}, "https://example.com", "test-key", 30)
+
+    assert response["choices"][0]["message"]["content"] == "ok"
+    assert calls["count"] == 3
+
+
+def test_resolve_kimi_code_provider_defaults(monkeypatch) -> None:
+    monkeypatch.setenv("VISION_LLM_PROVIDER", "kimi-code")
+    monkeypatch.setenv("KIMI_CODE_API_KEY", "test-kimi-key")
+    monkeypatch.delenv("KIMI_CODE_BASE_URL", raising=False)
+    monkeypatch.delenv("KIMI_CODE_MODEL", raising=False)
+
+    assert _resolve_model(None) == "kimi-for-coding"
+    assert _resolve_endpoint(None) == "https://api.kimi.com/coding/v1/chat/completions"
+    assert _resolve_api_key(None) == "test-kimi-key"
+
+
+def test_resolve_moonshot_provider_defaults(monkeypatch) -> None:
+    monkeypatch.setenv("VISION_LLM_PROVIDER", "moonshot")
+    monkeypatch.setenv("MOONSHOT_API_KEY", "test-moonshot-key")
+    monkeypatch.delenv("MOONSHOT_BASE_URL", raising=False)
+    monkeypatch.delenv("MOONSHOT_MODEL", raising=False)
+
+    assert _resolve_model(None) == "kimi-k2.6"
+    assert _resolve_endpoint(None) == "https://api.moonshot.ai/v1/chat/completions"
+    assert _resolve_api_key(None) == "test-moonshot-key"

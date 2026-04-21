@@ -168,7 +168,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", default=None, help="Optional execution model override.")
     parser.add_argument("--judge-model", default=None, help="Optional judge model override.")
     parser.add_argument("--analyzer-model", default=None, help="Optional analyzer model override.")
-    parser.add_argument("--api-key", default=None, help="Optional DashScope API key override.")
+    parser.add_argument("--api-key", default=None, help="Optional model provider API key override.")
     parser.add_argument("--endpoint", default=None, help="Optional endpoint override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional timeout override.")
     parser.add_argument("--refresh-review-template", action="store_true", help="Overwrite any existing human review score template.")

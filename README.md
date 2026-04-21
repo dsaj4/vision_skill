@@ -25,7 +25,7 @@ Included in this version:
 - Level 5 mechanism analysis
 - Level 6 cognitive review packet and release recommendation
 - one unified CLI: `python -m toolchain.run_eval_pipeline`
-- one parallel Host Agent Eval Lane with `Codex` as the first backend
+- one parallel Host Agent Eval Lane with `Codex` and `Kimi Code` backends
 - one candidate package: `swot-analysis`
 - one sample workspace with real iteration artifacts
 
@@ -84,6 +84,7 @@ Environment:
 - Python `>=3.11`
 - `pytest`
 - `DASHSCOPE_API_KEY` for real model execution and Level 5 analysis
+- optional Kimi CLI for real Kimi Code host validation
 
 Install dev dependency:
 
@@ -112,7 +113,13 @@ python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\visio
 Run the Host Agent Eval Lane against host-enabled eval cases:
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.agent_hosts.run_host_eval --host-backend codex --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+Run the Host Agent Eval Lane through Kimi Code CLI:
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
 ```
 
 Run only the supporting Level 3A gate benchmark:
@@ -168,7 +175,8 @@ This example is intentionally kept in the repository as the current reference pa
 - the host lane now writes `host-normalized-events.json`, `host-signal-report.json`, and `host-protocol-report.json` so protocol drift and host noise can be reviewed separately from raw transcripts.
 - host-side prompt inputs must stay compact. Raw `host-transcript.json` and full `SKILL.md` are not valid future host-analysis inputs.
 - `--smoke` is now the recommended online verification mode. It defaults to `1` run per configuration, limits scope to at most `2` evals when no explicit filter is provided, and skips completed runs so interrupted smoke jobs can be resumed.
-- the repository now has a parallel Host Agent Eval Lane. The first backend is `Codex`, and it currently focuses on `trigger + multi-turn protocol` rather than full tool fidelity.
+- the repository now has a parallel Host Agent Eval Lane. Current backends are `Codex` and `Kimi Code`; both focus on `trigger + multi-turn protocol` rather than full tool fidelity.
+- Kimi Code should be validated through `--host-backend kimi-code` because its coding endpoint may reject generic scripted API-lane calls outside supported coding agents.
 - The current example package is not yet a proven winner over baseline. That is an accurate project state, not a missing artifact.
 
 ## Next Recommended Work

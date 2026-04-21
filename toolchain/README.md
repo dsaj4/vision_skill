@@ -22,9 +22,12 @@ This directory contains the current engineering toolchain for `vision-skill`.
 - `eval_factory/`
   - validate and export certified eval bundles
   - sync certified bundles into package evals for mainline consumption
+- `kimi_cycle/`
+  - Codex-controlled Kimi production loop
+  - generates eval drafts, rewrites skills, and triggers the next Kimi eval round
 - `agent_hosts/`
   - real host validation
-  - current backend: `Codex`
+  - current backends: `Codex`, `Kimi Code`
   - validates skill trigger and multi-turn protocol outside the API lane
 
 Still placeholder modules:
@@ -42,9 +45,21 @@ Still placeholder modules:
 6. `analyzers/`
 7. `reviews/`
 8. `eval_factory/`
-9. `agent_hosts/`
+9. `kimi_cycle/`
+10. `agent_hosts/`
 
 ## Common Commands
+
+Set the model provider. The default is DashScope. For Kimi Code:
+
+```powershell
+$env:VISION_LLM_PROVIDER="kimi-code"
+$env:KIMI_CODE_BASE_URL="https://api.kimi.com/coding/v1"
+$env:KIMI_CODE_MODEL="kimi-for-coding"
+$env:KIMI_CODE_API_KEY="<your-kimi-code-key>"
+```
+
+Kimi Code note: the coding endpoint is intended for supported coding agents. If direct API calls are rejected, keep the API lane on DashScope or Moonshot and run Kimi Code through the host lane below.
 
 Run the default end-to-end eval pipeline:
 
@@ -67,7 +82,19 @@ Smoke mode behavior:
 Run the host lane for host-enabled eval cases:
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.agent_hosts.run_host_eval --host-backend codex --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+Run the host lane through Kimi Code CLI:
+
+```bash
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+```
+
+Run the Codex-controlled Kimi production loop:
+
+```bash
+python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-lab\vision-skill\packages\golden-circle" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\golden-circle-workspace" --apply-generated-evals --apply-skill --run-eval
 ```
 
 Run the supporting Level 3A gate benchmark:
@@ -145,6 +172,17 @@ The host lane is rule-first:
 - simple cleaning before any downstream use
 - no raw host transcript in future model prompts
 - compact packets only, with fixed budget caps
+
+The new Kimi production loop sits one layer above both lanes:
+
+```text
+Codex controller
+  -> Kimi eval generation
+  -> Kimi skill rewrite
+  -> Codex validation and apply
+  -> Kimi differential eval
+  -> optional Kimi host validation
+```
 
 ## Current Eval Factory Output
 

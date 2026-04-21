@@ -10,8 +10,15 @@ from pathlib import Path
 from typing import Any, Callable
 
 
-DEFAULT_ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+DEFAULT_PROVIDER = "dashscope"
+DEFAULT_DASHSCOPE_ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+DEFAULT_KIMI_CODE_BASE_URL = "https://api.kimi.com/coding/v1"
+DEFAULT_KIMI_CODE_MODEL = "kimi-for-coding"
+DEFAULT_MOONSHOT_BASE_URL = "https://api.moonshot.ai/v1"
+DEFAULT_MOONSHOT_MODEL = "kimi-k2.6"
 DEFAULT_TIMEOUT_SECONDS = 180
+RETRYABLE_HTTP_CODES = {408, 429, 500, 502, 503, 504}
+DEFAULT_MAX_RETRIES = 3
 
 Sender = Callable[[dict[str, Any], str, str, int], dict[str, Any]]
 
@@ -34,10 +41,38 @@ def _run_is_complete(run_dir: Path) -> bool:
     return all(path.exists() for path in required_paths)
 
 
+def _normalize_provider(value: str | None) -> str:
+    normalized = (value or "").strip().lower().replace("_", "-")
+    if normalized in {"kimi", "kimi-code", "kimi-coding"}:
+        return "kimi-code"
+    if normalized in {"moonshot", "kimi-api", "kimi-platform"}:
+        return "moonshot"
+    if normalized in {"dashscope", "qwen", "aliyun"}:
+        return "dashscope"
+    return DEFAULT_PROVIDER
+
+
+def _resolve_provider() -> str:
+    return _normalize_provider(os.getenv("VISION_LLM_PROVIDER") or os.getenv("VISION_MODEL_PROVIDER"))
+
+
+def _as_chat_completions_endpoint(base_url: str) -> str:
+    cleaned = base_url.rstrip("/")
+    if cleaned.endswith("/chat/completions"):
+        return cleaned
+    return f"{cleaned}/chat/completions"
+
+
 def _resolve_model(model: str | None) -> str:
+    if model:
+        return model
+    provider = _resolve_provider()
+    if provider == "kimi-code":
+        return os.getenv("KIMI_CODE_MODEL") or DEFAULT_KIMI_CODE_MODEL
+    if provider == "moonshot":
+        return os.getenv("MOONSHOT_MODEL") or os.getenv("KIMI_MODEL") or DEFAULT_MOONSHOT_MODEL
     return (
-        model
-        or os.getenv("DASHSCOPE_MODEL")
+        os.getenv("DASHSCOPE_MODEL")
         or os.getenv("QWEN_MODEL")
         or "qwen-plus"
     )
@@ -46,10 +81,15 @@ def _resolve_model(model: str | None) -> str:
 def _resolve_endpoint(endpoint: str | None) -> str:
     if endpoint:
         return endpoint
+    provider = _resolve_provider()
+    if provider == "kimi-code":
+        return _as_chat_completions_endpoint(os.getenv("KIMI_CODE_BASE_URL") or DEFAULT_KIMI_CODE_BASE_URL)
+    if provider == "moonshot":
+        return _as_chat_completions_endpoint(os.getenv("MOONSHOT_BASE_URL") or DEFAULT_MOONSHOT_BASE_URL)
     base_url = os.getenv("DASHSCOPE_BASE_URL", "").rstrip("/")
     if base_url:
-        return f"{base_url}/chat/completions"
-    return DEFAULT_ENDPOINT
+        return _as_chat_completions_endpoint(base_url)
+    return DEFAULT_DASHSCOPE_ENDPOINT
 
 
 def _resolve_timeout(timeout_seconds: int | None) -> int:
@@ -62,6 +102,18 @@ def _resolve_timeout(timeout_seconds: int | None) -> int:
 
 
 def _resolve_api_key(api_key: str | None) -> str:
+    provider = _resolve_provider()
+    if provider == "kimi-code":
+        resolved = api_key or os.getenv("KIMI_CODE_API_KEY")
+        if not resolved:
+            raise RuntimeError("Missing KIMI_CODE_API_KEY and no api_key override was provided.")
+        return resolved
+    if provider == "moonshot":
+        resolved = api_key or os.getenv("MOONSHOT_API_KEY")
+        if not resolved:
+            raise RuntimeError("Missing MOONSHOT_API_KEY and no api_key override was provided.")
+        return resolved
+
     resolved = api_key or os.getenv("DASHSCOPE_API_KEY")
     if not resolved:
         raise RuntimeError("Missing DASHSCOPE_API_KEY and no api_key override was provided.")
@@ -173,14 +225,27 @@ def _post_chat_completion(payload: dict[str, Any], endpoint: str, api_key: str, 
         },
         method="POST",
     )
-    try:
-        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        error_body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"DashScope request failed with {exc.code}: {error_body}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"DashScope request failed: {exc.reason}") from exc
+    last_error: Exception | None = None
+
+    for attempt in range(1, DEFAULT_MAX_RETRIES + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            error_body = exc.read().decode("utf-8", errors="replace")
+            if exc.code not in RETRYABLE_HTTP_CODES or attempt == DEFAULT_MAX_RETRIES:
+                raise RuntimeError(f"Model provider request failed with {exc.code}: {error_body}") from exc
+            last_error = RuntimeError(f"Model provider request failed with {exc.code}: {error_body}")
+        except urllib.error.URLError as exc:
+            if attempt == DEFAULT_MAX_RETRIES:
+                raise RuntimeError(f"Model provider request failed: {exc.reason}") from exc
+            last_error = RuntimeError(f"Model provider request failed: {exc.reason}")
+
+        time.sleep(min(2.0, 0.5 * attempt))
+
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("Model provider request failed without returning a response.")
 
 
 def execute_run(
@@ -256,6 +321,7 @@ def execute_run(
 
     transcript = {
         "configuration": resolved_configuration,
+        "provider": _resolve_provider(),
         "model": resolved_model,
         "endpoint": resolved_endpoint,
         "messages": messages,
@@ -267,6 +333,7 @@ def execute_run(
     return {
         "run_dir": str(run_dir),
         "configuration": resolved_configuration,
+        "provider": transcript["provider"],
         "model": resolved_model,
         "endpoint": resolved_endpoint,
         "duration_seconds": timing["total_duration_seconds"],

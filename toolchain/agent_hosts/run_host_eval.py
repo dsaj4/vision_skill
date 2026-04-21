@@ -8,6 +8,7 @@ from typing import Any, Callable, Sequence
 from toolchain.agent_hosts.codex_host import CodexHost
 from toolchain.agent_hosts.event_normalizer import normalize_host_transcript
 from toolchain.agent_hosts.host_benchmark import benchmark_markdown, build_host_benchmark
+from toolchain.agent_hosts.kimi_code_host import KimiCodeHost
 from toolchain.agent_hosts.protocol_classifier import classify_protocol_path
 from toolchain.agent_hosts.signal_extractor import extract_host_signals
 from toolchain.eval_factory.sync import resolve_package_evals
@@ -15,6 +16,7 @@ from toolchain.graders.capability_grader import grade_response_text
 
 
 AdapterFactory = Callable[[Path], Any]
+HOST_BACKENDS = {"codex", "kimi-code"}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -65,6 +67,20 @@ def _turn_script(eval_item: dict[str, Any]) -> list[str]:
 
 def _protocol_path_matches(expected: str, observed: str) -> bool:
     return expected.strip().lower() == observed.strip().lower()
+
+
+def _normalize_host_backend(value: str) -> str:
+    normalized = value.strip().lower().replace("_", "-")
+    if normalized not in HOST_BACKENDS:
+        raise ValueError(f"Unsupported host backend: {value}")
+    return normalized
+
+
+def _build_adapter_factory(host_backend: str, *, timeout_seconds: int | None = 180) -> AdapterFactory:
+    normalized = _normalize_host_backend(host_backend)
+    if normalized == "kimi-code":
+        return lambda session_root: KimiCodeHost(session_root=session_root, timeout_seconds=timeout_seconds)
+    return lambda session_root: CodexHost(session_root=session_root, timeout_seconds=timeout_seconds)
 
 
 def _build_trigger_report(
@@ -119,9 +135,11 @@ def run_host_eval(
     workspace_dir: str | Path,
     *,
     iteration_number: int,
+    host_backend: str = "codex",
     adapter_factory: AdapterFactory | None = None,
     eval_ids: list[int] | None = None,
     max_evals: int | None = None,
+    timeout_seconds: int | None = 180,
 ) -> dict[str, Any]:
     package_path = Path(package_dir)
     workspace_path = Path(workspace_dir)
@@ -136,13 +154,18 @@ def run_host_eval(
         eval_ids=eval_ids,
         max_evals=max_evals,
     )
+    resolved_host_backend = _normalize_host_backend(host_backend)
+    resolved_adapter_factory = adapter_factory or _build_adapter_factory(
+        resolved_host_backend,
+        timeout_seconds=timeout_seconds,
+    )
 
     run_records: list[dict[str, Any]] = []
     for eval_item in selected_evals:
         host_eval_dir = iteration_dir / f"host-eval-{int(eval_item['id'])}"
         host_eval_dir.mkdir(parents=True, exist_ok=True)
         session_root = host_eval_dir / "session"
-        adapter = (adapter_factory or (lambda root: CodexHost(session_root=root)))(session_root)
+        adapter = resolved_adapter_factory(session_root)
         session = adapter.prepare_session(package_path, eval_item)
 
         for user_turn in _turn_script(eval_item):
@@ -228,6 +251,7 @@ def run_host_eval(
 
     return {
         "iteration_dir": str(iteration_dir),
+        "host_backend": resolved_host_backend,
         "selected_eval_ids": [int(item["id"]) for item in selected_evals],
         "selected_eval_count": len(selected_evals),
         "host_benchmark_path": str(iteration_dir / "host-benchmark.json"),
@@ -246,8 +270,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--package-dir", required=True, help="Path to the package directory.")
     parser.add_argument("--workspace-dir", required=True, help="Path to the package workspace directory.")
     parser.add_argument("--iteration-number", type=int, required=True, help="Iteration number to use for host artifacts.")
+    parser.add_argument(
+        "--host-backend",
+        choices=sorted(HOST_BACKENDS),
+        default="codex",
+        help="Host backend to execute. Defaults to codex.",
+    )
     parser.add_argument("--max-evals", type=int, default=None, help="Optional limit for host-enabled eval cases.")
     parser.add_argument("--eval-ids", default=None, help="Optional comma-separated eval ids.")
+    parser.add_argument("--timeout-seconds", type=int, default=180, help="Per-turn host command timeout.")
     return parser
 
 
@@ -258,8 +289,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.package_dir,
         args.workspace_dir,
         iteration_number=args.iteration_number,
+        host_backend=args.host_backend,
         eval_ids=_resolve_eval_ids(args.eval_ids),
         max_evals=args.max_evals,
+        timeout_seconds=args.timeout_seconds,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
