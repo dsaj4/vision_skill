@@ -1,8 +1,0 @@
-# with_skill / run-3
-
-Prompt: 我在考虑是否转去做 AI 产品运营。我现在有内容运营和用户研究经验，但技术不深，团队里也没有成熟带教。请你用 SWOT 帮我判断这件事值不值得继续推进。
-
-Expected artifacts for this run:
-- outputs/
-- grading.json
-- timing.json

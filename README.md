@@ -1,39 +1,42 @@
 # Vision Skill
 
-`vision-skill` is the current engineering workspace for the Vision skill pipeline.
+`vision-skill` is a local-first engineering workspace for building, evaluating, and improving Vision skills.
 
-This repository is not a loose collection of demo prompts. It is a local-first project for:
+It is organized around one main idea: skills should move through a repeatable production line instead of being hand-edited prompt demos.
 
-- turning demo-origin skills into structured packages
-- running evaluation iterations with evidence on disk
-- comparing `with_skill` and `without_skill`
-- analyzing why a skill works or fails
-- preparing human review and release decisions
+```text
+package
+  -> certified evals
+  -> API differential evaluation
+  -> stability and mechanism analysis
+  -> host-agent validation
+  -> human review
+  -> release-ready artifacts
+```
 
-## Current Submission Scope
+## Current Scope
 
-The current repository is organized as a submission-ready `v0.1` engineering baseline.
+This repository is prepared as a clean engineering baseline.
 
-Included in this version:
+Included:
 
-- Level 1-2 validators
+- package contracts and current skill packages
 - certified eval ingestion through `metadata/package.json -> eval_source`
-- Level 3A gate checks and supporting benchmark pipeline
-- Level 3B differential benchmark with pairwise LLM judging
-- `level3-summary.json` as the normalized Level 3 handoff artifact
+- unified API evaluation CLI: `python -m toolchain.run_eval_pipeline`
+- Level 3 differential benchmark with `level3-summary.json`
 - Level 4 stability analysis
 - Level 5 mechanism analysis
-- Level 6 cognitive review packet and release recommendation
-- one unified CLI: `python -m toolchain.run_eval_pipeline`
-- one parallel Host Agent Eval Lane with `Codex` and `Kimi Code` backends
-- one candidate package: `swot-analysis`
-- one sample workspace with real iteration artifacts
+- Level 6 human review packet and release recommendation
+- parallel host-agent validation with `Codex` and `Kimi Code`
+- Codex-controlled Kimi production-cycle support
 
-Not yet included as a finished platform:
+Not included in version control:
 
-- batch package production at scale
-- full builder/packager implementation
-- multiple production-ready core packages
+- generated run workspaces
+- raw model transcripts
+- temporary exports
+- local cache folders
+- historical planning-note sprawl
 
 ## Repository Layout
 
@@ -46,36 +49,24 @@ vision-skill/
   packages/
   package-workspaces/
   shared/
-  reports/
   toolchain/
 ```
 
 Main directories:
 
-- `packages/`
-  - canonical skill packages
-- `eval-factory/`
-  - certified eval upstream, scenario cards, calibration reports
-- `package-workspaces/`
-  - iteration evidence, benchmarks, review outputs
-- `toolchain/`
-  - validators, executors, graders, judges, benchmarks, analyzers, reviews, eval-factory bridge
-- `shared/`
-  - reusable source index, glossaries, boundary rules, review templates
-- `docs/`
-  - plans, specs, code understanding guides, submission overview
-- `reports/`
-  - project-level reports, audits, release-facing summaries
+- `docs/`: release-facing project documentation
+- `eval-factory/`: certified eval upstream and bundle contracts
+- `packages/`: canonical skill packages
+- `package-workspaces/`: local runtime artifact root, ignored except for its README
+- `shared/`: reusable templates, indexes, and review assets
+- `toolchain/`: validators, executors, graders, judges, benchmarks, analyzers, reviews, host adapters, and Kimi cycle tools
 
-## Recommended Reading Order
+## Recommended Reading
 
-If you are reviewing the project for the first time:
-
-1. [Submission Overview](./docs/submission-ready-overview-v0.1.md)
-2. [System Overview](./docs/project-plans/2026-04-08-vision-skill-mainline-a-system-overview-v0.1.md)
-3. [Code Understanding Guide](./docs/code-guides/2026-04-08-vision-skill-code-understanding-guide-v0.1.md)
-4. [Toolchain README](./toolchain/README.md)
-5. [Eval Factory Contract](./docs/package-specs/eval-factory-contract-v0.1.md)
+1. [Project Overview](./docs/PROJECT.md)
+2. [Toolchain README](./toolchain/README.md)
+3. [Eval Factory README](./eval-factory/README.md)
+4. [Packages README](./packages/README.md)
 
 ## Quick Start
 
@@ -83,105 +74,62 @@ Environment:
 
 - Python `>=3.11`
 - `pytest`
-- `DASHSCOPE_API_KEY` for real model execution and Level 5 analysis
-- optional Kimi CLI for real Kimi Code host validation
+- a provider API key for real model execution
+- optional Kimi CLI for Kimi Code host validation
 
-Install dev dependency:
+Install dev dependencies:
 
 ```bash
 pip install -e .[dev]
 ```
 
-Run the toolchain test suite:
+Run tests:
 
 ```bash
-pytest
+python -m pytest
 ```
 
-Run the default end-to-end pipeline for the reference package:
+Run the default API evaluation pipeline:
 
 ```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 2 --runs-per-configuration 3 --judge-model "qwen-plus" --analyzer-model "qwen-plus"
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
 ```
 
-Run the lightweight smoke path for online verification:
+Run a lightweight smoke pass:
 
 ```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 3 --smoke
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --smoke
 ```
 
-Run the Host Agent Eval Lane against host-enabled eval cases:
+Run host-agent validation through Kimi Code:
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --host-backend codex --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --max-evals 4
 ```
 
-Run the Host Agent Eval Lane through Kimi Code CLI:
+Run the Codex-controlled Kimi production loop:
 
 ```bash
-python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
+python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-lab\vision-skill\packages\golden-circle" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\golden-circle-workspace" --apply-generated-evals --apply-skill --run-eval
 ```
 
-Run only the supporting Level 3A gate benchmark:
+## Current Packages
 
-```bash
-python -m toolchain.benchmarks.run_benchmark --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --skill-name "SWOT Analysis" --skill-path "E:\Project\vision-lab\vision-skill\packages\swot-analysis"
-```
+- [swot-analysis](./packages/swot-analysis)
+- [golden-circle](./packages/golden-circle)
+- [pyramid-principle](./packages/pyramid-principle)
+- [mece-analysis](./packages/mece-analysis)
+- [first-principles](./packages/first-principles)
+- [five-whys](./packages/five-whys)
 
-Run only the Level 3B differential benchmark:
+`swot-analysis` is the current reference package for the full evaluation path. Other packages are active candidates and should be promoted only after evidence-backed evaluation.
 
-```bash
-python -m toolchain.benchmarks.run_differential_benchmark --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --skill-name "SWOT Analysis" --skill-path "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --judge-model "qwen-plus"
-```
+## Release Notes
 
-Run only Level 4-6 against the normalized Level 3 summary:
-
-```bash
-python -m toolchain.run_level456 --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis"
-```
-
-Inspect the certified eval upstream:
-
-```bash
-pytest toolchain/eval_factory/tests/test_catalog.py
-```
-
-## Current Canonical Example
-
-The current submission keeps one canonical example package and workspace so reviewers can inspect the full pipeline without guessing:
-
-- package: [packages/swot-analysis](./packages/swot-analysis)
-- workspace: [package-workspaces/swot-analysis-workspace](./package-workspaces/swot-analysis-workspace)
-- certified eval bundle: [eval-factory/certified-evals/swot-analysis/swot-analysis-certified-batch-v0.1.json](./eval-factory/certified-evals/swot-analysis/swot-analysis-certified-batch-v0.1.json)
-
-This example is intentionally kept in the repository as the current reference package for:
-
-- package layout
-- eval layout
-- benchmark artifacts
-- differential benchmark artifacts
-- stability output
-- analysis output
-- human review packet flow
-
-## Notes For Reviewers
-
-- This repository is currently package-factory oriented, not product-UI oriented.
-- The toolchain is intentionally file-contract based. Most module boundaries are defined by files such as `eval_metadata.json`, `grading.json`, `benchmark.json`, and `analysis.json`.
-- The repository now treats `differential-benchmark.json` as the primary Level 3 artifact. `benchmark.json` remains as a gate/supporting artifact.
-- `level3-summary.json` is the normalized handoff from Level 3 into Level 4-6.
-- package evals are now sourced from certified bundles by default when `metadata/package.json -> eval_source` is present.
-- package evals may optionally include `host_eval` blocks for real-host validation.
-- the host lane now writes `host-normalized-events.json`, `host-signal-report.json`, and `host-protocol-report.json` so protocol drift and host noise can be reviewed separately from raw transcripts.
-- host-side prompt inputs must stay compact. Raw `host-transcript.json` and full `SKILL.md` are not valid future host-analysis inputs.
-- `--smoke` is now the recommended online verification mode. It defaults to `1` run per configuration, limits scope to at most `2` evals when no explicit filter is provided, and skips completed runs so interrupted smoke jobs can be resumed.
-- the repository now has a parallel Host Agent Eval Lane. Current backends are `Codex` and `Kimi Code`; both focus on `trigger + multi-turn protocol` rather than full tool fidelity.
-- Kimi Code should be validated through `--host-backend kimi-code` because its coding endpoint may reject generic scripted API-lane calls outside supported coding agents.
-- The current example package is not yet a proven winner over baseline. That is an accurate project state, not a missing artifact.
-
-## Next Recommended Work
-
-- improve `swot-analysis` so `with_skill` clearly beats baseline
-- use the host lane to verify that improved skills still trigger and hold protocol inside a real host
-- add 2-3 more candidate packages using the same contract
-- connect builder and packager modules to the current evaluation chain
+- `differential-benchmark.json` is the primary Level 3 value signal.
+- `benchmark.json` remains a supporting gate artifact.
+- `level3-summary.json` is the normalized handoff into Level 4-6.
+- package evals can be synced from certified bundles by default.
+- host evals are parallel release evidence focused on trigger and multi-turn protocol behavior.
+- generated workspaces under `package-workspaces/*-workspace/` are local artifacts and should not be committed.
+- this baseline does not claim every package already beats its baseline; quality promotion remains evidence-driven.

@@ -1,5 +1,7 @@
 __pycache__/
 .pytest_cache/
+.pytest_tmp/
+pytest_tmp/
 *.py[cod]
 *.pyo
 *.pyd
@@ -16,5 +18,13 @@ Thumbs.db
 .env
 .env.*
 
+exports/
+package-workspaces/*-workspace/
+
 思维模型/
 思维模型.zip
+技能优化提示词*.md
+
+# Legacy mojibake names that appeared in earlier local checkouts.
+鎬濈淮妯″瀷/
+鎬濈淮妯″瀷.zip

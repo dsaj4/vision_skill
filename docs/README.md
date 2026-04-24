@@ -1,39 +1,14 @@
-# Docs Index
+# Docs
 
-This directory contains the main written documentation for `vision-skill`.
+This directory now keeps the release-facing project documentation only.
 
-## Start Here
+Start here:
 
-- [Submission Overview](./submission-ready-overview-v0.1.md)
-- [System Overview](./project-plans/2026-04-08-vision-skill-mainline-a-system-overview-v0.1.md)
+- [Project Overview](./PROJECT.md)
 
-## Documentation Groups
+Historical planning notes, old specs, and generated reports were intentionally removed from the release-ready tree. Current contracts live with the code that implements them:
 
-- `project-plans/`
-  - planning documents and mainline design
-- `package-specs/`
-  - package contract, eval framework, rubric
-- `code-guides/`
-  - implementation walkthroughs for developers with weaker code background
-
-## Suggested Reading Paths
-
-For reviewers:
-
-1. `submission-ready-overview-v0.1.md`
-2. `project-plans/2026-04-08-vision-skill-mainline-a-system-overview-v0.1.md`
-
-For developers:
-
-1. `project-plans/2026-04-08-vision-skill-mainline-a-system-overview-v0.1.md`
-2. `package-specs/package-contract-v0.1.md`
-3. `package-specs/eval-factory-contract-v0.1.md`
-4. `package-specs/agent-host-adapter-contract-v0.1.md`
-5. `code-guides/2026-04-08-vision-skill-code-understanding-guide-v0.1.md`
-
-For evaluation and review work:
-
-1. `package-specs/deep-eval-framework-v0.1.md`
-2. `package-specs/capability-rubric-v0.1.md`
-3. `package-specs/eval-factory-contract-v0.1.md`
-4. `package-specs/agent-host-adapter-contract-v0.1.md`
+- `README.md` for repository usage
+- `toolchain/README.md` for pipeline commands and module boundaries
+- `eval-factory/README.md` for certified eval production and consumption
+- `packages/README.md` for package layout

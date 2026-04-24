@@ -1,5 +1,0 @@
-{
-  "run_dir": "E:\\Project\\vision-lab\\vision-skill\\package-workspaces\\golden-circle-workspace\\iteration-1\\eval-153-why-how\\with_skill\\run-1",
-  "configuration": "with_skill",
-  "error": "DashScope request failed: [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。"
-}

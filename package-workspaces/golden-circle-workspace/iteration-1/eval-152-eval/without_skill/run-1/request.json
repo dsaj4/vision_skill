@@ -1,9 +1,0 @@
-{
-  "model": "qwen3.5-plus",
-  "messages": [
-    {
-      "role": "user",
-      "content": "帮我用黄金圈思维想一下我的项目。"
-    }
-  ]
-}

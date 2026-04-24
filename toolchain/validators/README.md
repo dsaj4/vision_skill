@@ -1,9 +1,12 @@
 # Validators
 
-这里将放置本地快速校验脚本。
+Validators provide fast local checks before a package enters expensive model evaluation.
 
-第一批建议脚本：
+Current validators:
 
-- package structure validator
-- `SKILL.md` frontmatter validator
-- `evals/evals.json` schema validator
+- `package_validator.py`
+  - checks package structure, metadata, eval files, and required package assets
+- `protocol_validator.py`
+  - checks whether `SKILL.md` includes the required interaction protocol pieces
+
+These checks are intentionally conservative. They catch contract violations and obvious drift, but they do not prove skill quality. Quality is judged through the API evaluation lane, host validation, and human review.

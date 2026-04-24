@@ -1,9 +1,0 @@
-{
-  "observed_protocol_path": "missing-info -> premature-full-answer",
-  "path_confidence": 0.75,
-  "supporting_signals": [
-    "missing_info_detected",
-    "premature_full_answer"
-  ],
-  "blocking_signals": []
-}
