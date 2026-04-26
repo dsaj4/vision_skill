@@ -7,9 +7,11 @@ It is organized around one main idea: skills should move through a repeatable pr
 ```text
 package
   -> certified evals
-  -> API differential evaluation
-  -> stability and mechanism analysis
-  -> host-agent validation
+  -> Kimi Code execution
+  -> hard gate
+  -> quantitative supporting bundle
+  -> deep quality evaluation
+  -> Kimi host validation
   -> human review
   -> release-ready artifacts
 ```
@@ -22,12 +24,12 @@ Included:
 
 - package contracts and current skill packages
 - certified eval ingestion through `metadata/package.json -> eval_source`
-- unified API evaluation CLI: `python -m toolchain.run_eval_pipeline`
-- Level 3 differential benchmark with `level3-summary.json`
-- Level 4 stability analysis
-- Level 5 mechanism analysis
-- Level 6 human review packet and release recommendation
-- parallel host-agent validation with `Codex` and `Kimi Code`
+- unified Kimi Code evaluation CLI: `python -m toolchain.run_eval_pipeline`
+- hard gate checks with `hard-gate.json`
+- supporting quantitative bundle with legacy `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json`
+- deep quality evaluation with `deep-eval.json`, `deep-eval.md`, and `quality-failure-tags.json`
+- human review packet and release recommendation based on hard gate + deep eval + human decision
+- Kimi Code host validation
 - Codex-controlled Kimi production-cycle support
 
 Not included in version control:
@@ -64,9 +66,14 @@ Main directories:
 ## Recommended Reading
 
 1. [Project Overview](./docs/PROJECT.md)
-2. [Toolchain README](./toolchain/README.md)
-3. [Eval Factory README](./eval-factory/README.md)
-4. [Packages README](./packages/README.md)
+2. [Structure And Functions](./docs/STRUCTURE_AND_FUNCTIONS.md)
+3. [Eval Flow Before And After Comparison](./docs/EVAL_FLOW_BEFORE_AFTER_COMPARISON.md)
+4. [Eval System Refactor Plan V1](./docs/EVAL_SYSTEM_REFACTOR_PLAN_V1.md)
+5. [Darwin Rubric And Flow Adaptation V1](./docs/DARWIN_RUBRIC_AND_FLOW_ADAPTATION_V1.md)
+6. [Agent Skill Development Guide](./docs/AGENT_SKILL_DEVELOPMENT_GUIDE.md)
+7. [Toolchain README](./toolchain/README.md)
+8. [Eval Factory README](./eval-factory/README.md)
+9. [Packages README](./packages/README.md)
 
 ## Quick Start
 
@@ -74,8 +81,7 @@ Environment:
 
 - Python `>=3.11`
 - `pytest`
-- a provider API key for real model execution
-- optional Kimi CLI for Kimi Code host validation
+- Kimi CLI installed and logged in
 
 Install dev dependencies:
 
@@ -89,7 +95,7 @@ Run tests:
 python -m pytest
 ```
 
-Run the default API evaluation pipeline:
+Run the default Kimi Code evaluation pipeline:
 
 ```bash
 python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
@@ -126,10 +132,13 @@ python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-l
 
 ## Release Notes
 
-- `differential-benchmark.json` is the primary Level 3 value signal.
-- `benchmark.json` remains a supporting gate artifact.
-- `level3-summary.json` is the normalized handoff into Level 4-6.
+- `hard-gate.json` decides whether run artifacts are complete enough for quality evaluation.
+- `deep-eval.json` is now the primary quality judgment artifact.
+- `quantitative-summary.json` packages old quantitative signals as supporting evidence.
+- `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json` are retained for diagnostics and compatibility.
+- shared helper code now lives in `toolchain/common.py`; Kimi CLI runtime behavior is centralized in `toolchain/kimi_runtime.py`; Kimi workspace-file task execution is centralized in `toolchain/kimi_workspace.py`.
+- the Kimi mainline treats terminal replies as logs only: executor output comes from `outputs/assistant.md`, pairwise judgment from `outputs/judgment.json`, and deep quality judgment from `outputs/deep-eval.json`.
 - package evals can be synced from certified bundles by default.
-- host evals are parallel release evidence focused on trigger and multi-turn protocol behavior.
+- Kimi host evals are release evidence focused on trigger and multi-turn protocol behavior.
 - generated workspaces under `package-workspaces/*-workspace/` are local artifacts and should not be committed.
 - this baseline does not claim every package already beats its baseline; quality promotion remains evidence-driven.

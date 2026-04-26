@@ -7,26 +7,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from toolchain.common import extract_json_object, load_json, write_json, write_text
 from toolchain.benchmarks.level3_summary import ensure_level3_summary
-from toolchain.executors.dashscope_executor import (
-    _post_chat_completion,
-    _resolve_api_key,
-    _resolve_endpoint,
-    _resolve_model,
-    _resolve_timeout,
-)
+from toolchain.kimi_runtime import CommandRunner
+from toolchain.kimi_workspace import load_workspace_json, run_kimi_workspace_task, write_workspace_task
 
 
-Sender = Callable[[dict[str, Any], str, str, int], dict[str, Any]]
+Sender = Callable[[dict[str, Any]], dict[str, Any]]
 ALLOWED_REPAIR_LAYERS = {"source", "blueprint-spec", "template", "skill-content"}
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _truncate(text: str, limit: int = 1600) -> str:
@@ -56,7 +44,7 @@ def _load_taxonomy(taxonomy: dict[str, Any] | None = None) -> dict[str, Any]:
         return taxonomy
     taxonomy_path = Path(__file__).resolve().parents[2] / "shared" / "review-templates" / "failure-taxonomy-v0.1.json"
     if taxonomy_path.exists():
-        return _load_json(taxonomy_path)
+        return load_json(taxonomy_path)
     return {"categories": []}
 
 
@@ -100,10 +88,10 @@ def _run_signal_from_response(response_text: str) -> dict[str, Any]:
 
 
 def _load_run_record(run_dir: Path, pairwise_outcome: dict[str, Any] | None = None) -> dict[str, Any]:
-    grading = _load_json(run_dir / "grading.json")
-    transcript = _load_json(run_dir / "transcript.json")
-    request = _load_json(run_dir / "request.json")
-    timing = _load_json(run_dir / "timing.json")
+    grading = load_json(run_dir / "grading.json")
+    transcript = load_json(run_dir / "transcript.json")
+    request = load_json(run_dir / "request.json")
+    timing = load_json(run_dir / "timing.json")
     response_text = Path(grading["output_file"]).read_text(encoding="utf-8")
 
     return {
@@ -133,8 +121,8 @@ def build_analysis_packet(
 ) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
     package_path = Path(package_dir)
-    benchmark = _load_json(iteration_path / "benchmark.json")
-    stability = _load_json(iteration_path / "stability.json")
+    benchmark = load_json(iteration_path / "benchmark.json")
+    stability = load_json(iteration_path / "stability.json")
     level3_summary = ensure_level3_summary(iteration_path)
     taxonomy_data = _load_taxonomy(taxonomy)
     skill_text = (package_path / "SKILL.md").read_text(encoding="utf-8")
@@ -146,7 +134,7 @@ def build_analysis_packet(
 
     evals: list[dict[str, Any]] = []
     for eval_dir in sorted(iteration_path.glob("eval-*")):
-        eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+        eval_metadata = load_json(eval_dir / "eval_metadata.json")
         stability_match = next((item for item in stability.get("per_eval", []) if item["eval_id"] == eval_metadata["eval_id"]), {})
         eval_pairwise = [item for item in level3_summary.get("per_eval", []) if item.get("eval_id") == eval_metadata["eval_id"]]
         eval_record = {
@@ -187,13 +175,7 @@ def build_analysis_packet(
 
 
 def _extract_json_object(text: str) -> dict[str, Any]:
-    fenced = re.search(r"```json\s*(\{.*\})\s*```", text, re.DOTALL)
-    candidate = fenced.group(1) if fenced else text
-    start = candidate.find("{")
-    end = candidate.rfind("}")
-    if start == -1 or end == -1 or end <= start:
-        raise ValueError("Analyzer response did not contain a JSON object.")
-    return json.loads(candidate[start : end + 1])
+    return extract_json_object(text, error_message="Analyzer response did not contain a JSON object.")
 
 
 def _normalize_cross_eval_summary(value: Any) -> dict[str, Any]:
@@ -347,6 +329,83 @@ def _analysis_markdown(analysis: dict[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
+def _workspace_analysis_task_markdown() -> str:
+    return "\n".join(
+        [
+            "# Controlled Mechanism Analysis Task",
+            "",
+            "This is a workspace-file task. The terminal reply is only a log line.",
+            "",
+            "## Inputs",
+            "",
+            "- Read `inputs/analysis-packet.json`.",
+            "- Analyze why the skill did or did not beat the baseline.",
+            "- Use Level 3 differential evidence as the primary signal.",
+            "- Keep failure attribution inside the allowed repair layers.",
+            "",
+            "## Required Output",
+            "",
+            "Write `outputs/analysis.json` only. It must contain:",
+            "",
+            "- `per_eval`",
+            "- `cross_eval_summary`",
+            "- `repair_recommendations`",
+            "",
+            "`repair_layer` values must be one of: `source`, `blueprint-spec`, `template`, `skill-content`.",
+            "Do not put the analysis JSON in the terminal response.",
+        ]
+    )
+
+
+def _workspace_analysis_contract() -> str:
+    return "\n".join(
+        [
+            "# Output Contract",
+            "",
+            "Required file: `outputs/analysis.json`.",
+            "",
+            "The file must be a JSON object with keys:",
+            "",
+            "- `per_eval`",
+            "- `cross_eval_summary`",
+            "- `repair_recommendations`",
+            "",
+            "Terminal output is ignored except as debug log.",
+        ]
+    )
+
+
+def _run_workspace_analysis(
+    packet: dict[str, Any],
+    *,
+    task_dir: Path,
+    analyzer_model: str | None,
+    timeout_seconds: int | None,
+    command_runner: CommandRunner | None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    required_outputs = ["outputs/analysis.json"]
+    write_workspace_task(
+        task_dir,
+        task_markdown=_workspace_analysis_task_markdown(),
+        required_outputs=required_outputs,
+        contract_markdown=_workspace_analysis_contract(),
+        inputs={"inputs/analysis-packet.json": packet},
+        metadata={
+            "runner": "kimi-code",
+            "task_type": "mechanism-analysis",
+            "package_name": packet.get("metadata", {}).get("package_name", ""),
+        },
+    )
+    task_result = run_kimi_workspace_task(
+        task_dir,
+        required_outputs=required_outputs,
+        model=analyzer_model,
+        timeout_seconds=timeout_seconds,
+        command_runner=command_runner,
+    )
+    return load_workspace_json(task_result, "outputs/analysis.json"), task_result
+
+
 def analyze_iteration(
     iteration_dir: Path,
     package_dir: Path,
@@ -354,8 +413,7 @@ def analyze_iteration(
     taxonomy: dict[str, Any] | None = None,
     analyzer_model: str | None = None,
     sender: Sender | None = None,
-    api_key: str | None = None,
-    endpoint: str | None = None,
+    command_runner: CommandRunner | None = None,
     timeout_seconds: int | None = None,
 ) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
@@ -363,7 +421,7 @@ def analyze_iteration(
     taxonomy_data = _load_taxonomy(taxonomy)
     packet = build_analysis_packet(iteration_path, package_path, taxonomy=taxonomy_data)
 
-    model = analyzer_model or os.getenv("VISION_ANALYZER_MODEL") or _resolve_model(None)
+    model = analyzer_model or os.getenv("VISION_ANALYZER_MODEL") or "kimi-cli-default"
     payload = {
         "model": model,
         "messages": [
@@ -382,14 +440,29 @@ def analyze_iteration(
         ],
     }
 
-    raw_response = (sender or _post_chat_completion)(
-        payload,
-        _resolve_endpoint(endpoint),
-        _resolve_api_key(api_key),
-        _resolve_timeout(timeout_seconds),
-    )
-    message = raw_response.get("choices", [{}])[0].get("message", {}).get("content", "")
-    raw_analysis = _extract_json_object(message)
+    if sender is not None:
+        raw_response = sender(payload)
+        message = raw_response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        raw_analysis = _extract_json_object(message)
+    else:
+        raw_analysis, task_result = _run_workspace_analysis(
+            packet,
+            task_dir=iteration_path / ".kimi-analysis",
+            analyzer_model=analyzer_model,
+            timeout_seconds=timeout_seconds,
+            command_runner=command_runner,
+        )
+        raw_response = {
+            "choices": [{"message": {"role": "assistant", "content": json.dumps(raw_analysis, ensure_ascii=False)}}],
+            "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+            "kimi_workspace_task": {
+                "task_dir": task_result.get("work_dir", ""),
+                "resolved_outputs": task_result.get("resolved_outputs", {}),
+                "terminal_response_policy": "log-only",
+                "warnings": task_result.get("warnings", []),
+                "stderr": task_result.get("stderr", ""),
+            },
+        }
     analysis = _normalize_analysis(raw_analysis, taxonomy_data, model)
 
     failure_tags = {
@@ -405,9 +478,9 @@ def analyze_iteration(
         ],
     }
 
-    _write_json(iteration_path / "analysis.json", analysis)
-    (iteration_path / "analysis.md").write_text(_analysis_markdown(analysis), encoding="utf-8")
-    _write_json(iteration_path / "failure-tags.json", failure_tags)
+    write_json(iteration_path / "analysis.json", analysis)
+    write_text(iteration_path / "analysis.md", _analysis_markdown(analysis))
+    write_json(iteration_path / "failure-tags.json", failure_tags)
 
     return {
         "packet": packet,

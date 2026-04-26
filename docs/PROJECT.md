@@ -1,6 +1,6 @@
 # Vision Skill Project Overview
 
-Last updated: 2026-04-24
+Last updated: 2026-04-25
 
 ## Purpose
 
@@ -11,9 +11,11 @@ The project is not a prompt demo archive. Its current goal is to provide a repea
 ```text
 demo-origin package
   -> certified evals
-  -> API differential evaluation
-  -> stability and mechanism analysis
-  -> real host validation
+  -> Kimi Code execution
+  -> hard gate
+  -> quantitative supporting bundle
+  -> deep quality evaluation
+  -> Kimi host validation
   -> human review
   -> release-ready skill artifacts
 ```
@@ -29,12 +31,13 @@ Included:
 - local evaluation and review toolchain under `toolchain/`
 - shared templates and source indexes under `shared/`
 - minimal release-facing documentation under `docs/`
+- centralized helper/runtime modules: `toolchain/common.py`, `toolchain/kimi_runtime.py`, and `toolchain/kimi_workspace.py`
 
 Not included:
 
 - committed model transcripts or benchmark run outputs
 - historical planning document sprawl
-- generated Kimi/Codex workspace bundles
+- generated Kimi workspace bundles
 - local exports and cache folders
 
 ## Package Coverage
@@ -52,44 +55,40 @@ Current package directories:
 
 ## Main Evaluation Lane
 
-The API evaluation lane is the low-cost, repeatable screening path.
+The main evaluation lane now runs on Kimi Code/Kimi CLI.
 
 ```text
 certified bundle
   -> package eval sync
   -> prepare iteration
-  -> execute with_skill / without_skill
-  -> benchmark.json as supporting gate
-  -> differential-benchmark.json as Level 3 primary result
-  -> level3-summary.json as normalized handoff
-  -> stability.json
-  -> analysis.json
+  -> execute with_skill / without_skill through Kimi Code workspace-file tasks
+  -> hard-gate.json
+  -> quantitative-summary.json as supporting diagnostics
+  -> deep-eval.json as primary quality judgment
   -> human-review-packet.md
   -> release-recommendation.json
 ```
 
 Important rules:
 
-- `differential-benchmark.json` is the primary Level 3 value signal.
-- `benchmark.json` is retained as a supporting gate artifact.
-- Level 4-6 modules should read `level3-summary.json` first.
+- `hard-gate.json` only checks whether artifacts are complete enough to evaluate.
+- `deep-eval.json` is the primary quality judgment.
+- `quantitative-summary.json`, `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json` are supporting diagnostics.
+- Kimi terminal text is never the mainline result source. Execution reads `outputs/assistant.md`, pairwise judging reads `outputs/judgment.json`, and deep quality evaluation reads `outputs/deep-eval.json`.
 - Workspace artifacts are generated locally under `package-workspaces/*-workspace/` and are ignored by git.
 
-## Host Agent Lane
+## Kimi Host Validation
 
-The host lane checks whether a real agent can trigger and execute a skill protocol.
+Kimi host validation checks whether the real Kimi Code host can trigger and execute a skill protocol.
 
-Current backends:
+Current backend:
 
-- `codex`
 - `kimi-code`
-
-The host lane is parallel evidence. It does not replace the API lane.
 
 ```text
 host-enabled eval case
-  -> host adapter
-  -> raw transcript
+  -> KimiCodeHost
+  -> raw Kimi transcript
   -> normalized events
   -> signal report
   -> protocol report
@@ -133,6 +132,12 @@ Kimi prompts should be compact and file-oriented. Instead of asking Kimi to retu
 
 Kimi should edit or create files in the assigned workspace and keep terminal responses short.
 
+The same controlled workspace-file contract now applies to the evaluation mainline:
+
+- executor turn task: `task.md -> outputs/assistant.md`
+- pairwise judge task: `inputs/pairwise-packet.json -> outputs/judgment.json`
+- mechanism analysis task: `inputs/analysis-packet.json -> outputs/analysis.json`
+
 ## Release Hygiene
 
 The cleaned release tree follows these rules:
@@ -143,6 +148,7 @@ The cleaned release tree follows these rules:
 - keep `.env` and API keys out of git
 - ignore local exports and prompt scratch files
 - treat docs in this directory as the release-facing truth
+- avoid placeholder directories in the release tree; add a module only when it has executable code or a stable contract
 
 ## Basic Commands
 
@@ -158,7 +164,7 @@ Run tests:
 python -m pytest
 ```
 
-Run the unified API evaluation pipeline:
+Run the unified Kimi Code evaluation pipeline:
 
 ```bash
 python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
@@ -169,6 +175,8 @@ Run a smoke evaluation:
 ```bash
 python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --smoke
 ```
+
+The unified Kimi Code pipeline is the default evaluation entrypoint. Lower-level benchmark, Level 4-6, and host commands are kept for targeted debugging, compatibility, and release validation rather than everyday package screening.
 
 Run host validation:
 

@@ -6,11 +6,8 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from toolchain.benchmarks.aggregate_benchmark import generate_benchmark, generate_markdown
+from toolchain.common import write_json, write_text
 from toolchain.graders.capability_grader import grade_run
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def grade_iteration_runs(
@@ -38,8 +35,8 @@ def grade_iteration_runs(
     benchmark = generate_benchmark(iteration_dir, skill_name=skill_name, skill_path=skill_path)
     benchmark_path = iteration_dir / "benchmark.json"
     benchmark_markdown_path = iteration_dir / "benchmark.md"
-    _write_json(benchmark_path, benchmark)
-    benchmark_markdown_path.write_text(generate_markdown(benchmark), encoding="utf-8")
+    write_json(benchmark_path, benchmark)
+    write_text(benchmark_markdown_path, generate_markdown(benchmark))
 
     return {
         "iteration_dir": str(iteration_dir),

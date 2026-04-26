@@ -1,23 +1,14 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
+from toolchain.common import load_json, write_json
 from toolchain.eval_factory.catalog import export_certified_bundle
 
 
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
 def _package_metadata(package_dir: Path) -> dict[str, Any]:
-    return _load_json(package_dir / "metadata" / "package.json")
+    return load_json(package_dir / "metadata" / "package.json")
 
 
 def _resolve_bundle_path(package_dir: Path, bundle_path: str) -> Path:
@@ -49,7 +40,7 @@ def sync_package_evals(package_path: str | Path) -> dict[str, Any]:
         "output_path": str(output_path),
         "exported_eval_count": export["exported_eval_count"],
     }
-    _write_json(package_dir / "evals" / "eval-sync.json", sync_metadata)
+    write_json(package_dir / "evals" / "eval-sync.json", sync_metadata)
 
     return {
         "synced": True,
@@ -69,7 +60,7 @@ def resolve_package_evals(package_path: str | Path) -> dict[str, Any]:
         sync_result = sync_package_evals(package_dir)
         eval_path = Path(sync_result["eval_path"])
         return {
-            "data": _load_json(eval_path),
+            "data": load_json(eval_path),
             "eval_path": str(eval_path),
             "source_mode": "certified-bundle",
             "sync_result": sync_result,
@@ -77,7 +68,7 @@ def resolve_package_evals(package_path: str | Path) -> dict[str, Any]:
 
     eval_path = package_dir / "evals" / "evals.json"
     return {
-        "data": _load_json(eval_path),
+        "data": load_json(eval_path),
         "eval_path": str(eval_path),
         "source_mode": "package-local",
         "sync_result": {

@@ -6,23 +6,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence
 
+from toolchain.common import load_json, write_json, write_text
 from toolchain.benchmarks.aggregate_benchmark import generate_benchmark
 from toolchain.judges.consensus import build_pairwise_consensus
 from toolchain.judges.pairwise_judge import Sender, judge_pair
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+from toolchain.kimi_runtime import CommandRunner
 
 
 def _collect_pairs(iteration_dir: Path) -> list[dict[str, Any]]:
     pairs: list[dict[str, Any]] = []
     for eval_dir in sorted(iteration_dir.glob("eval-*")):
-        eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+        eval_metadata = load_json(eval_dir / "eval_metadata.json")
         with_skill_runs = {
             run_dir.name: run_dir
             for run_dir in sorted((eval_dir / "with_skill").glob("run-*"))
@@ -133,9 +127,8 @@ def run_differential_benchmark(
     skill_name: str = "",
     skill_path: str = "",
     sender: Sender | None = None,
-    api_key: str | None = None,
+    command_runner: CommandRunner | None = None,
     judge_model: str | None = None,
-    endpoint: str | None = None,
     timeout_seconds: int | None = None,
     allow_tiebreak: bool = True,
 ) -> dict[str, Any]:
@@ -155,9 +148,8 @@ def run_differential_benchmark(
             without_skill_run_dir=pair["without_skill_run_dir"],
             orientation="forward",
             sender=sender,
-            api_key=api_key,
+            command_runner=command_runner,
             judge_model=judge_model,
-            endpoint=endpoint,
             timeout_seconds=timeout_seconds,
         )
         reversed_judgment = judge_pair(
@@ -169,9 +161,8 @@ def run_differential_benchmark(
             without_skill_run_dir=pair["without_skill_run_dir"],
             orientation="reversed",
             sender=sender,
-            api_key=api_key,
+            command_runner=command_runner,
             judge_model=judge_model,
-            endpoint=endpoint,
             timeout_seconds=timeout_seconds,
         )
         tiebreak = None
@@ -185,9 +176,8 @@ def run_differential_benchmark(
                 without_skill_run_dir=pair["without_skill_run_dir"],
                 orientation="tiebreak",
                 sender=sender,
-                api_key=api_key,
+                command_runner=command_runner,
                 judge_model=judge_model,
-                endpoint=endpoint,
                 timeout_seconds=timeout_seconds,
             )
 
@@ -209,29 +199,29 @@ def run_differential_benchmark(
         "summary": _build_summary(consensus_pairs, supporting_benchmark),
     }
 
-    _write_json(
+    write_json(
         iteration_path / "pairwise-judgment.json",
         {
             "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
             "judgments": forward_judgments,
         },
     )
-    _write_json(
+    write_json(
         iteration_path / "pairwise-judgment-reversed.json",
         {
             "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
             "judgments": reversed_judgments,
         },
     )
-    _write_json(
+    write_json(
         iteration_path / "pairwise-consensus.json",
         {
             "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
             "pairs": consensus_pairs,
         },
     )
-    _write_json(iteration_path / "differential-benchmark.json", differential_benchmark)
-    (iteration_path / "differential-benchmark.md").write_text(_generate_markdown(differential_benchmark), encoding="utf-8")
+    write_json(iteration_path / "differential-benchmark.json", differential_benchmark)
+    write_text(iteration_path / "differential-benchmark.md", _generate_markdown(differential_benchmark))
 
     return {
         "forward_judgments": forward_judgments,
@@ -246,9 +236,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--iteration-dir", required=True, help="Path to the iteration directory.")
     parser.add_argument("--skill-name", default="", help="Optional skill name for benchmark metadata.")
     parser.add_argument("--skill-path", default="", help="Optional skill path for benchmark metadata.")
-    parser.add_argument("--api-key", default=None, help="Optional API key override for judge calls.")
     parser.add_argument("--judge-model", default=None, help="Optional judge model override.")
-    parser.add_argument("--endpoint", default=None, help="Optional endpoint override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional timeout override.")
     parser.add_argument(
         "--no-tiebreak",
@@ -265,9 +253,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.iteration_dir,
         skill_name=args.skill_name,
         skill_path=args.skill_path,
-        api_key=args.api_key,
         judge_model=args.judge_model,
-        endpoint=args.endpoint,
         timeout_seconds=args.timeout_seconds,
         allow_tiebreak=not args.no_tiebreak,
     )

@@ -23,7 +23,7 @@ def _make_transcript(*, user_turns: list[str], assistant_turns: list[str], inclu
                     "type": "item.completed",
                     "item": {
                         "type": "command_execution",
-                        "command": "Get-Content 'E:/repo/session/.codex/skills/swot-analysis/SKILL.md'",
+                        "command": "Get-Content 'E:/repo/session/.kimi/skills/swot-analysis/SKILL.md'",
                         "aggregated_output": "proxy skill text",
                     },
                 },
@@ -50,7 +50,7 @@ def _make_transcript(*, user_turns: list[str], assistant_turns: list[str], inclu
         "thread_id": "thread-1",
         "package_name": "swot-analysis",
         "package_dir": "E:/repo/packages/swot-analysis",
-        "proxy_skill_path": "E:/repo/session/.codex/skills/swot-analysis/SKILL.md",
+        "proxy_skill_path": "E:/repo/session/.kimi/skills/swot-analysis/SKILL.md",
         "canonical_skill_path": "E:/repo/packages/swot-analysis/SKILL.md",
         "turns": turns,
         "stderr": [],

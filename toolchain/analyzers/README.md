@@ -1,10 +1,14 @@
 # Analyzers
 
-这里放 Level 5 机制分析模块。
+This module contains Level 5 mechanism analysis.
 
-当前第一版：
-- 读取 benchmark、stability、run artifacts 和 `SKILL.md`
-- 生成 analyzer packet
-- 调用 DashScope 兼容接口做模型主导分析
-- 写入 `analysis.json`、`analysis.md`、`failure-tags.json`
+Current behavior:
 
+- reads `level3-summary.json`, `benchmark.json`, `stability.json`, run artifacts, and `SKILL.md`
+- builds a bounded analyzer packet
+- runs the analyzer through a controlled Kimi workspace-file task by default
+- writes `analysis.json`, `analysis.md`, and `failure-tags.json`
+
+The analyzer no longer calls direct model-provider endpoints. Use `--analyzer-model` or `KIMI_CLI_MODEL` when a Kimi model override is needed.
+
+The analyzer result is read from `.kimi-analysis/outputs/analysis.json`. Kimi terminal text is retained only as debug log and is not parsed as the source of truth.

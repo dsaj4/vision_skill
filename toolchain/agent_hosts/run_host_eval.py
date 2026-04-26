@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
-from toolchain.agent_hosts.codex_host import CodexHost
+from toolchain.common import load_json, parse_eval_ids, write_json, write_text
 from toolchain.agent_hosts.event_normalizer import normalize_host_transcript
 from toolchain.agent_hosts.host_benchmark import benchmark_markdown, build_host_benchmark
 from toolchain.agent_hosts.kimi_code_host import KimiCodeHost
@@ -16,16 +16,7 @@ from toolchain.graders.capability_grader import grade_response_text
 
 
 AdapterFactory = Callable[[Path], Any]
-HOST_BACKENDS = {"codex", "kimi-code"}
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+HOST_BACKENDS = {"kimi-code"}
 
 
 def _filter_host_evals(
@@ -78,9 +69,9 @@ def _normalize_host_backend(value: str) -> str:
 
 def _build_adapter_factory(host_backend: str, *, timeout_seconds: int | None = 180) -> AdapterFactory:
     normalized = _normalize_host_backend(host_backend)
-    if normalized == "kimi-code":
-        return lambda session_root: KimiCodeHost(session_root=session_root, timeout_seconds=timeout_seconds)
-    return lambda session_root: CodexHost(session_root=session_root, timeout_seconds=timeout_seconds)
+    if normalized != "kimi-code":
+        raise ValueError(f"Unsupported host backend: {host_backend}")
+    return lambda session_root: KimiCodeHost(session_root=session_root, timeout_seconds=timeout_seconds)
 
 
 def _build_trigger_report(
@@ -135,7 +126,7 @@ def run_host_eval(
     workspace_dir: str | Path,
     *,
     iteration_number: int,
-    host_backend: str = "codex",
+    host_backend: str = "kimi-code",
     adapter_factory: AdapterFactory | None = None,
     eval_ids: list[int] | None = None,
     max_evals: int | None = None,
@@ -147,7 +138,7 @@ def run_host_eval(
     iteration_dir = workspace_path / f"iteration-{iteration_number}"
     iteration_dir.mkdir(parents=True, exist_ok=True)
 
-    package_meta = _load_json(package_path / "metadata" / "package.json")
+    package_meta = load_json(package_path / "metadata" / "package.json")
     eval_resolution = resolve_package_evals(package_path)
     selected_evals = _filter_host_evals(
         list(eval_resolution["data"].get("evals", [])),
@@ -184,22 +175,22 @@ def run_host_eval(
         final_response = str(transcript.get("turns", [{}])[-1].get("assistant_text", "")).strip() if transcript.get("turns") else ""
 
         final_response_path = host_eval_dir / "host-final-response.md"
-        final_response_path.write_text(final_response, encoding="utf-8")
-        _write_json(host_eval_dir / "host-session.json", {**session, "close_result": close_result})
-        _write_json(host_eval_dir / "host-transcript.json", transcript)
-        _write_json(host_eval_dir / "host-normalized-events.json", normalized_events)
-        _write_json(host_eval_dir / "host-signal-report.json", signal_report)
-        _write_json(host_eval_dir / "host-protocol-report.json", protocol_report)
-        _write_json(host_eval_dir / "host-trigger-report.json", trigger_report)
-        _write_json(host_eval_dir / "host-analysis-packet.json", signal_report["analysis_packet"])
+        write_text(final_response_path, final_response)
+        write_json(host_eval_dir / "host-session.json", {**session, "close_result": close_result})
+        write_json(host_eval_dir / "host-transcript.json", transcript)
+        write_json(host_eval_dir / "host-normalized-events.json", normalized_events)
+        write_json(host_eval_dir / "host-signal-report.json", signal_report)
+        write_json(host_eval_dir / "host-protocol-report.json", protocol_report)
+        write_json(host_eval_dir / "host-trigger-report.json", trigger_report)
+        write_json(host_eval_dir / "host-analysis-packet.json", signal_report["analysis_packet"])
 
         grading = grade_response_text(
             final_response,
             _build_eval_metadata(eval_item),
             output_file=str(final_response_path),
         )
-        _write_json(host_eval_dir / "host-grading.json", grading)
-        _write_json(host_eval_dir / "host-metrics.json", grading["execution_metrics"])
+        write_json(host_eval_dir / "host-grading.json", grading)
+        write_json(host_eval_dir / "host-metrics.json", grading["execution_metrics"])
 
         expected_protocol_path = str(eval_item.get("host_eval", {}).get("expected_protocol_path", "")).strip()
         record = {
@@ -246,8 +237,8 @@ def run_host_eval(
         iteration_dir=iteration_dir,
         runs=run_records,
     )
-    _write_json(iteration_dir / "host-benchmark.json", benchmark)
-    (iteration_dir / "host-benchmark.md").write_text(benchmark_markdown(benchmark), encoding="utf-8")
+    write_json(iteration_dir / "host-benchmark.json", benchmark)
+    write_text(iteration_dir / "host-benchmark.md", benchmark_markdown(benchmark))
 
     return {
         "iteration_dir": str(iteration_dir),
@@ -259,12 +250,6 @@ def run_host_eval(
     }
 
 
-def _resolve_eval_ids(value: str | None) -> list[int] | None:
-    if not value:
-        return None
-    return [int(item.strip()) for item in value.split(",") if item.strip()]
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the host agent eval lane.")
     parser.add_argument("--package-dir", required=True, help="Path to the package directory.")
@@ -273,8 +258,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--host-backend",
         choices=sorted(HOST_BACKENDS),
-        default="codex",
-        help="Host backend to execute. Defaults to codex.",
+        default="kimi-code",
+        help="Host backend to execute. Defaults to kimi-code.",
     )
     parser.add_argument("--max-evals", type=int, default=None, help="Optional limit for host-enabled eval cases.")
     parser.add_argument("--eval-ids", default=None, help="Optional comma-separated eval ids.")
@@ -290,7 +275,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.workspace_dir,
         iteration_number=args.iteration_number,
         host_backend=args.host_backend,
-        eval_ids=_resolve_eval_ids(args.eval_ids),
+        eval_ids=parse_eval_ids(args.eval_ids),
         max_evals=args.max_evals,
         timeout_seconds=args.timeout_seconds,
     )

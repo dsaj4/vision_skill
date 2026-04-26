@@ -5,8 +5,15 @@ import json
 from pathlib import Path
 from typing import Any, Sequence
 
-from toolchain.analyzers.mechanism_analyzer import Sender, analyze_iteration
-from toolchain.benchmarks.level3_summary import ensure_level3_summary
+from toolchain.common import load_json
+from toolchain.deep_evals.run_deep_eval import Sender, run_deep_eval
+from toolchain.hard_gates.artifact_gate import run_hard_gate
+from toolchain.kimi_runtime import CommandRunner
+from toolchain.quantitative.run_quantitative_bundle import (
+    build_quantitative_summary,
+    write_quantitative_summary_artifacts,
+)
+from toolchain.quantitative.skill_structure_score import score_skill_structure
 from toolchain.benchmarks.stability import generate_stability_report, write_stability_artifacts
 from toolchain.reviews.cognitive_review import (
     build_human_review_packet,
@@ -15,31 +22,77 @@ from toolchain.reviews.cognitive_review import (
 )
 
 
+def _load_optional_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    data = load_json(path)
+    return data if isinstance(data, dict) else {}
+
+
+def _supporting_level3_summary(iteration_dir: Path) -> dict[str, Any]:
+    existing = _load_optional_json(iteration_dir / "level3-summary.json")
+    if existing:
+        return existing
+    benchmark = _load_optional_json(iteration_dir / "benchmark.json")
+    return {
+        "metadata": {
+            "iteration_dir": str(iteration_dir),
+            "skill_name": benchmark.get("metadata", {}).get("skill_name", ""),
+            "skill_path": benchmark.get("metadata", {}).get("skill_path", ""),
+        },
+        "primary_mode": "supporting-not-available",
+        "pairwise_summary": {},
+        "gate_summary": benchmark.get("run_summary", {}),
+        "per_eval": [],
+    }
+
+
+def _ensure_quantitative_summary(iteration_dir: Path, package_dir: Path) -> dict[str, Any]:
+    existing = _load_optional_json(iteration_dir / "quantitative-summary.json")
+    if existing:
+        return existing
+    level3_summary = _supporting_level3_summary(iteration_dir)
+    stability = generate_stability_report(iteration_dir)
+    write_stability_artifacts(iteration_dir, stability)
+    structural_diagnostics = score_skill_structure(package_dir)
+    summary = build_quantitative_summary(
+        iteration_dir,
+        level3_summary=level3_summary,
+        stability=stability,
+        structural_diagnostics=structural_diagnostics,
+    )
+    write_quantitative_summary_artifacts(iteration_dir, summary)
+    return summary
+
+
 def run_level456(
     iteration_dir: str | Path,
     package_dir: str | Path,
     *,
     sender: Sender | None = None,
-    api_key: str | None = None,
+    command_runner: CommandRunner | None = None,
     analyzer_model: str | None = None,
-    endpoint: str | None = None,
     timeout_seconds: int | None = None,
     refresh_review_template: bool = False,
 ) -> dict[str, Any]:
+    """Run the post-execution quality flow on an existing iteration.
+
+    This entry point is kept for compatibility with older "Level 4-6" usage,
+    but it now follows the refactored flow:
+    hard gate -> quantitative supporting bundle -> deep quality eval -> review.
+    """
+
     iteration_path = Path(iteration_dir)
     package_path = Path(package_dir)
-    level3_summary = ensure_level3_summary(iteration_path)
 
-    stability = generate_stability_report(iteration_path)
-    write_stability_artifacts(iteration_path, stability)
-
-    analysis_result = analyze_iteration(
+    hard_gate = run_hard_gate(iteration_path)
+    quantitative = _ensure_quantitative_summary(iteration_path, package_path)
+    deep_eval_result = run_deep_eval(
         iteration_path,
         package_path,
         sender=sender,
-        api_key=api_key,
-        analyzer_model=analyzer_model,
-        endpoint=endpoint,
+        command_runner=command_runner,
+        deep_eval_model=analyzer_model,
         timeout_seconds=timeout_seconds,
     )
 
@@ -51,37 +104,42 @@ def run_level456(
         review_template_written = True
 
     recommendation = generate_release_recommendation(iteration_path)
-    analysis = analysis_result["analysis"]
+    deep_eval = deep_eval_result["deep_eval"]
+    level3_summary = _supporting_level3_summary(iteration_path)
 
     return {
         "iteration_dir": str(iteration_path),
         "package_dir": str(package_path),
-        "level3_primary_mode": level3_summary.get("primary_mode", "unknown"),
-        "level3_summary_path": str(iteration_path / "level3-summary.json"),
-        "analysis_model": analysis["metadata"]["analyzer_model"],
-        "stability_flags": stability["overall"]["flags"],
+        "quality_primary_mode": deep_eval["metadata"]["quality_primary_mode"],
+        "deep_eval_model": deep_eval["metadata"]["deep_eval_model"],
+        "analysis_model": deep_eval["metadata"]["deep_eval_model"],
+        "hard_gate_passed": hard_gate["passed"],
+        "supporting_level3_mode": level3_summary.get("primary_mode", "supporting-not-available"),
+        "quantitative_role": quantitative.get("metadata", {}).get("role", "supporting-evidence"),
+        "deep_eval_decision": deep_eval.get("release_signal", {}).get("decision", "revise"),
         "representative_runs": packet["representative_runs"],
         "review_template_written": review_template_written,
         "recommendation": recommendation["recommendation"],
         "blockers": recommendation["blockers"],
         "artifacts": {
-            "level3_summary_json": str(iteration_path / "level3-summary.json"),
-            "stability_json": str(iteration_path / "stability.json"),
-            "analysis_json": str(iteration_path / "analysis.json"),
+            "hard_gate_json": str(iteration_path / "hard-gate.json"),
+            "quantitative_summary_json": str(iteration_path / "quantitative-summary.json"),
+            "deep_eval_json": str(iteration_path / "deep-eval.json"),
+            "quality_failure_tags_json": str(iteration_path / "quality-failure-tags.json"),
             "human_review_packet": str(iteration_path / "human-review-packet.md"),
             "human_review_score": str(iteration_path / "human-review-score.json"),
             "release_recommendation": str(iteration_path / "release-recommendation.json"),
+            "supporting_level3_summary": str(iteration_path / "level3-summary.json"),
+            "supporting_stability": str(iteration_path / "stability.json"),
         },
     }
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run Vision Skill Level 4-6 post-benchmark pipeline.")
-    parser.add_argument("--iteration-dir", required=True, help="Path to the prepared and benchmarked iteration directory.")
+    parser = argparse.ArgumentParser(description="Run Vision Skill post-execution quality pipeline.")
+    parser.add_argument("--iteration-dir", required=True, help="Path to the executed iteration directory.")
     parser.add_argument("--package-dir", required=True, help="Path to the package directory containing SKILL.md.")
-    parser.add_argument("--api-key", default=None, help="Optional model provider API key override for analyzer calls.")
-    parser.add_argument("--analyzer-model", default=None, help="Optional analyzer model override.")
-    parser.add_argument("--endpoint", default=None, help="Optional analyzer endpoint override.")
+    parser.add_argument("--analyzer-model", default=None, help="Optional deep eval model override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional analyzer timeout override.")
     parser.add_argument(
         "--refresh-review-template",
@@ -97,9 +155,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     result = run_level456(
         args.iteration_dir,
         args.package_dir,
-        api_key=args.api_key,
         analyzer_model=args.analyzer_model,
-        endpoint=args.endpoint,
         timeout_seconds=args.timeout_seconds,
         refresh_review_template=args.refresh_review_template,
     )

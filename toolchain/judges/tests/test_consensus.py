@@ -17,7 +17,7 @@ def make_judgment(normalized_winner: str, margin: float, orientation: str = "for
             "eval_name": "swot",
             "run_number": 1,
             "orientation": orientation,
-            "judge_model": "qwen-judge-test",
+            "judge_model": "kimi-for-coding",
         },
         "pair": {
             "candidate_a": {"configuration": "with_skill" if orientation == "forward" else "without_skill"},

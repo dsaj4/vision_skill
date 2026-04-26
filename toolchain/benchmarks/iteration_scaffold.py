@@ -1,32 +1,20 @@
 from __future__ import annotations
 
-import json
-import re
 from pathlib import Path
 from typing import Any
 
+from toolchain.common import filter_evals, load_json, slugify, write_json
 from toolchain.eval_factory.sync import resolve_package_evals
 
 
 def _slugify(text: str, max_length: int = 48) -> str:
-    text = text.lower()
-    text = re.sub(r"[^a-z0-9]+", "-", text)
-    text = re.sub(r"-{2,}", "-", text).strip("-")
-    return text[:max_length].rstrip("-") or "eval"
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return slugify(text, max_length=max_length)
 
 
 def _ensure_history(workspace_dir: Path, package_name: str, skill_name: str) -> Path:
     history_path = workspace_dir / "history.json"
     if not history_path.exists():
-        _write_json(
+        write_json(
             history_path,
             {
                 "started_at": "",
@@ -37,21 +25,6 @@ def _ensure_history(workspace_dir: Path, package_name: str, skill_name: str) -> 
             },
         )
     return history_path
-
-
-def _filter_evals(
-    evals: list[dict[str, Any]],
-    *,
-    eval_ids: list[int] | None = None,
-    max_evals: int | None = None,
-) -> list[dict[str, Any]]:
-    filtered = evals
-    if eval_ids:
-        selected = {int(item) for item in eval_ids}
-        filtered = [item for item in filtered if int(item["id"]) in selected]
-    if max_evals is not None:
-        filtered = filtered[:max(0, int(max_evals))]
-    return filtered
 
 
 def prepare_iteration(
@@ -66,7 +39,7 @@ def prepare_iteration(
     workspace_dir = Path(workspace_path)
     eval_resolution = resolve_package_evals(package_dir)
     evals_data = eval_resolution["data"]
-    package_meta = _load_json(package_dir / "metadata" / "package.json")
+    package_meta = load_json(package_dir / "metadata" / "package.json")
 
     package_name = package_meta["package_name"]
     skill_name = package_meta["skill_name"]
@@ -76,7 +49,7 @@ def prepare_iteration(
     iteration_dir = workspace_dir / f"iteration-{iteration_number}"
     iteration_dir.mkdir(parents=True, exist_ok=True)
 
-    selected_evals = _filter_evals(
+    selected_evals = filter_evals(
         list(evals_data["evals"]),
         eval_ids=eval_ids,
         max_evals=max_evals,
@@ -88,7 +61,7 @@ def prepare_iteration(
         eval_dir = iteration_dir / f"eval-{eval_item['id']}-{eval_name}"
         eval_dir.mkdir(parents=True, exist_ok=True)
 
-        _write_json(
+        write_json(
             eval_dir / "eval_metadata.json",
             {
                 "eval_id": eval_item["id"],
@@ -97,6 +70,7 @@ def prepare_iteration(
                 "expected_output": eval_item["expected_output"],
                 "files": eval_item.get("files", []),
                 "assertions": eval_item.get("expectations", []),
+                "quality_rubric": eval_item.get("quality_rubric", []),
                 "host_eval": eval_item.get("host_eval", {}),
             },
         )
@@ -123,7 +97,7 @@ def prepare_iteration(
 
         created_eval_dirs.append(str(eval_dir))
 
-    history = _load_json(history_path)
+    history = load_json(history_path)
     version_name = f"iteration-{iteration_number}"
     existing_versions = {item.get("version") for item in history.get("iterations", [])}
     if version_name not in existing_versions:
@@ -136,7 +110,7 @@ def prepare_iteration(
                 "is_current_best": False,
             }
         )
-        _write_json(history_path, history)
+        write_json(history_path, history)
 
     return {
         "created": True,

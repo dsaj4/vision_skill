@@ -248,20 +248,41 @@ def write_certified_bundle_flow(base: Path) -> tuple[Path, Path]:
     return package_dir, base / "workspace"
 
 
-def fake_execute_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
-    has_skill = "<SKILL_MD>" in payload["messages"][0]["content"] if payload["messages"] else False
-    response = (
-        "## Strengths\n- clear value\n## Weaknesses\n- small budget\n## Opportunities\n- real demand\n## Threats\n- competition\n## Strategy\n- validate the niche first"
-        if has_skill
-        else "## Strengths\n- clear value\n## Weaknesses\n- small budget\n## Opportunities\n- real demand\n## Threats\n- competition"
+def _json_line(payload: dict) -> str:
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def fake_kimi_runner(args: list[str], cwd: Path, timeout_seconds: int | None) -> dict[str, str | int]:
+    output_path = cwd / "outputs" / "assistant.md"
+    metadata_path = cwd / "outputs" / "run_metadata.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with_skill = "--skills-dir" in args
+    if with_skill:
+        response = (
+            "## Strengths\n- clear value\n## Weaknesses\n- small budget\n"
+            "## Opportunities\n- real demand\n## Threats\n- competition\n"
+            "## Strategy\n- validate the niche first"
+        )
+    else:
+        response = "## Strengths\n- clear value\n## Weaknesses\n- small budget\n## Opportunities\n- real demand\n## Threats\n- competition"
+    output_path.write_text(response, encoding="utf-8")
+    metadata_path.write_text(
+        json.dumps(
+            {
+                "configuration": "with_skill" if with_skill else "without_skill",
+                "turn_index": 1,
+                "used_skill": with_skill,
+                "notes": "fake runner wrote controlled output files",
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
     )
-    return {
-        "choices": [{"message": {"content": response}}],
-        "usage": {"prompt_tokens": 120, "completion_tokens": 150, "total_tokens": 270 if has_skill else 210},
-    }
+    stdout = _json_line({"role": "assistant", "content": "Finished writing workspace outputs."})
+    return {"returncode": 0, "stdout": stdout + "\n", "stderr": "To resume this session: kimi -r test-session\n"}
 
 
-def fake_judge_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+def fake_judge_sender(payload: dict) -> dict:
     return {
         "choices": [
             {
@@ -289,7 +310,7 @@ def fake_judge_sender(payload: dict, endpoint: str, api_key: str, timeout_second
     }
 
 
-def fake_analyzer_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+def fake_analyzer_sender(payload: dict) -> dict:
     return {
         "choices": [
             {
@@ -337,13 +358,12 @@ def test_run_eval_pipeline_runs_end_to_end_from_certified_bundle(tmp_path: Path)
         workspace_dir,
         iteration_number=1,
         runs_per_configuration=1,
-        sender=fake_execute_sender,
+        command_runner=fake_kimi_runner,
         judge_sender=fake_judge_sender,
         analyzer_sender=fake_analyzer_sender,
-        api_key="test-key",
-        model="qwen-exec-test",
-        judge_model="qwen-judge-test",
-        analyzer_model="qwen-analyzer-test",
+        model="kimi-for-coding",
+        judge_model="kimi-for-coding",
+        analyzer_model="kimi-for-coding",
     )
 
     iteration_dir = Path(result["iteration_dir"])
@@ -352,11 +372,15 @@ def test_run_eval_pipeline_runs_end_to_end_from_certified_bundle(tmp_path: Path)
     assert (iteration_dir / "benchmark.json").exists()
     assert (iteration_dir / "differential-benchmark.json").exists()
     assert (iteration_dir / "level3-summary.json").exists()
+    assert (iteration_dir / "hard-gate.json").exists()
+    assert (iteration_dir / "quantitative-summary.json").exists()
     assert (iteration_dir / "stability.json").exists()
-    assert (iteration_dir / "analysis.json").exists()
+    assert (iteration_dir / "deep-eval.json").exists()
+    assert (iteration_dir / "quality-failure-tags.json").exists()
     assert (iteration_dir / "human-review-packet.md").exists()
     assert (iteration_dir / "release-recommendation.json").exists()
     assert result["level3_primary_mode"] == "differential"
+    assert result["quality_primary_mode"] == "deep-quality"
 
 
 def test_main_prints_pipeline_summary(monkeypatch, capsys, tmp_path: Path) -> None:
@@ -397,13 +421,12 @@ def test_run_eval_pipeline_smoke_mode_limits_evals_and_runs(tmp_path: Path) -> N
         workspace_dir,
         iteration_number=1,
         smoke=True,
-        sender=fake_execute_sender,
+        command_runner=fake_kimi_runner,
         judge_sender=fake_judge_sender,
         analyzer_sender=fake_analyzer_sender,
-        api_key="test-key",
-        model="qwen-exec-test",
-        judge_model="qwen-judge-test",
-        analyzer_model="qwen-analyzer-test",
+        model="kimi-for-coding",
+        judge_model="kimi-for-coding",
+        analyzer_model="kimi-for-coding",
     )
 
     iteration_dir = Path(result["iteration_dir"])
@@ -414,7 +437,8 @@ def test_run_eval_pipeline_smoke_mode_limits_evals_and_runs(tmp_path: Path) -> N
     assert result["skip_completed"] is True
     assert result["selected_eval_count"] == 2
     assert len(eval_dirs) == 2
-    assert len(result["completed_runs"]) == 4
+    assert not result["failed_runs"], result["failed_runs"]
+    assert len(result["completed_runs"]) + len(result["skipped_runs"]) == 4
 
 
 def test_main_passes_smoke_arguments(monkeypatch, capsys, tmp_path: Path) -> None:

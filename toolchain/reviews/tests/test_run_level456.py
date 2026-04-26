@@ -99,7 +99,7 @@ def write_iteration(base: Path) -> Path:
             (run_dir / "outputs").mkdir(parents=True, exist_ok=True)
             (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
             (run_dir / "request.json").write_text(
-                json.dumps({"model": "qwen-test", "messages": [{"role": "user", "content": "Give me the SWOT result."}]}, ensure_ascii=False, indent=2),
+                json.dumps({"model": "kimi-for-coding", "messages": [{"role": "user", "content": "Give me the SWOT result."}]}, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
             (run_dir / "transcript.json").write_text(
@@ -132,7 +132,7 @@ def write_iteration(base: Path) -> Path:
     return iteration_dir
 
 
-def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+def fake_sender(payload: dict) -> dict:
     return {
         "choices": [
             {
@@ -143,16 +143,22 @@ def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int
                                 {
                                     "eval_id": 1,
                                     "winner": "tie",
-                                    "mechanism_findings": ["The skill improved structure but not value."],
-                                    "instruction_use_signals": ["The skill shaped the SWOT sections."],
+                                    "dimension_assessments": [
+                                        {
+                                            "dimension": "Live Test Performance",
+                                            "verdict": "mixed",
+                                            "evidence_refs": ["eval-1-swot/with_skill/run-1"],
+                                        }
+                                    ],
+                                    "failed_dimensions": ["Live Test Performance"],
                                     "failure_tags": ["blueprint-spec.protocol-gap"],
                                     "repair_layer": "blueprint-spec",
+                                    "comparative_judgment": "The skill improved structure but not enough user value.",
                                     "summary": "Staged protocol still creates incomplete direct-result behavior.",
                                 }
                             ],
                             "cross_eval_summary": {
-                                "overall_winner": "tie",
-                                "key_patterns": ["structure improved", "value remained flat"],
+                                "overall": "Structure improved, value remained flat.",
                                 "critical_risks": ["protocol drift persists"],
                             },
                             "repair_recommendations": [
@@ -162,6 +168,11 @@ def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int
                                     "action": "Tighten the direct-result contract in the blueprint.",
                                 }
                             ],
+                            "release_signal": {
+                                "decision": "revise",
+                                "confidence": 0.7,
+                                "reasons": ["The live test value is not strong enough."],
+                            },
                         },
                         ensure_ascii=False,
                     )
@@ -260,25 +271,28 @@ def test_run_level456_writes_artifacts_and_preserves_existing_review(tmp_path: P
         iteration_dir,
         package_dir,
         sender=fake_sender,
-        api_key="test-key",
-        analyzer_model="qwen-analyzer-test",
+        analyzer_model="kimi-for-coding",
     )
 
     review = json.loads((iteration_dir / "human-review-score.json").read_text(encoding="utf-8"))
+    assert (iteration_dir / "hard-gate.json").exists()
+    assert (iteration_dir / "quantitative-summary.json").exists()
     assert (iteration_dir / "stability.json").exists()
-    assert (iteration_dir / "analysis.json").exists()
+    assert (iteration_dir / "deep-eval.json").exists()
+    assert (iteration_dir / "quality-failure-tags.json").exists()
     assert (iteration_dir / "human-review-packet.md").exists()
     assert (iteration_dir / "release-recommendation.json").exists()
     assert review["reviewer"] == "Alice"
     assert review["decision"] == "pass"
-    assert result["analysis_model"] == "qwen-analyzer-test"
+    assert result["analysis_model"] == "kimi-for-coding"
+    assert result["quality_primary_mode"] == "deep-quality"
 
 
 def test_main_prints_json_summary(monkeypatch, capsys, tmp_path: Path) -> None:
     expected = {
         "iteration_dir": str(tmp_path / "iteration-1"),
         "package_dir": str(tmp_path / "swot-analysis"),
-        "analysis_model": "qwen-analyzer-test",
+        "analysis_model": "kimi-for-coding",
     }
 
     def fake_run_level456(iteration_dir: Path, package_dir: Path, **kwargs: object) -> dict:
@@ -295,7 +309,7 @@ def test_main_prints_json_summary(monkeypatch, capsys, tmp_path: Path) -> None:
             "--package-dir",
             expected["package_dir"],
             "--analyzer-model",
-            "qwen-analyzer-test",
+            "kimi-for-coding",
         ]
     )
 

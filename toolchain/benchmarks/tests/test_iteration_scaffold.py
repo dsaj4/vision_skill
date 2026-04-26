@@ -46,7 +46,7 @@ def write_package_with_evals(base: Path) -> Path:
                         "expectations": ["Includes all four SWOT quadrants."],
                         "host_eval": {
                             "enabled": True,
-                            "turn_script": [{"text": "Run the host lane."}],
+                            "turn_script": [{"text": "Run Kimi host validation."}],
                             "expected_trigger": True,
                             "expected_trigger_signals": ["proxy_skill_read"],
                             "expected_protocol_path": "direct-result -> no-checkpoint",

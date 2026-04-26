@@ -2,23 +2,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import shutil
 import sys
-from uuid import uuid4
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from toolchain.benchmarks.run_differential_benchmark import run_differential_benchmark
-
-
-def make_case_dir(name: str) -> Path:
-    base = Path(__file__).resolve().parent / ".tmp" / f"{name}-{uuid4().hex[:8]}"
-    if base.exists():
-        shutil.rmtree(base)
-    base.mkdir(parents=True, exist_ok=True)
-    return base
 
 
 def write_run(run_dir: Path, response: str, pass_rate: float, total_tokens: int, duration_seconds: float) -> None:
@@ -96,7 +86,7 @@ def write_iteration(base: Path) -> Path:
 def make_sender() -> callable:
     call_count = {"value": 0}
 
-    def sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+    def sender(payload: dict) -> dict:
         call_count["value"] += 1
         winner = "A" if call_count["value"] == 1 else "B"
         return {
@@ -128,17 +118,15 @@ def make_sender() -> callable:
     return sender
 
 
-def test_run_differential_benchmark_writes_parallel_level3_artifacts() -> None:
-    case_dir = make_case_dir("differential-benchmark")
-    iteration_dir = write_iteration(case_dir)
+def test_run_differential_benchmark_writes_parallel_level3_artifacts(tmp_path: Path) -> None:
+    iteration_dir = write_iteration(tmp_path / "differential-benchmark")
 
     result = run_differential_benchmark(
         iteration_dir,
         skill_name="SWOT Analysis",
         skill_path="/tmp/swot",
         sender=make_sender(),
-        api_key="test-key",
-        judge_model="qwen-judge-test",
+        judge_model="kimi-for-coding",
     )
 
     assert (iteration_dir / "pairwise-judgment.json").exists()

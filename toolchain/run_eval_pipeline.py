@@ -6,25 +6,20 @@ import os
 from pathlib import Path
 from typing import Any, Sequence
 
+from toolchain.common import load_json, parse_eval_ids
 from toolchain.benchmarks.iteration_scaffold import prepare_iteration
-from toolchain.benchmarks.level3_summary import generate_level3_summary, write_level3_summary_artifacts
-from toolchain.benchmarks.run_benchmark import grade_iteration_runs
-from toolchain.benchmarks.run_differential_benchmark import run_differential_benchmark
+from toolchain.deep_evals.run_deep_eval import run_deep_eval
 from toolchain.eval_factory.sync import sync_package_evals
-from toolchain.executors.dashscope_executor import Sender as ExecutorSender, execute_iteration
+from toolchain.executors.kimi_code_executor import execute_iteration
+from toolchain.hard_gates.artifact_gate import run_hard_gate
 from toolchain.judges.pairwise_judge import Sender as JudgeSender
-from toolchain.run_level456 import run_level456
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _resolve_eval_ids(value: str | None) -> list[int] | None:
-    if not value:
-        return None
-    items = [part.strip() for part in value.split(",")]
-    return [int(item) for item in items if item]
+from toolchain.kimi_runtime import CommandRunner
+from toolchain.quantitative.run_quantitative_bundle import run_quantitative_bundle
+from toolchain.reviews.cognitive_review import (
+    build_human_review_packet,
+    generate_release_recommendation,
+    write_human_review_template,
+)
 
 
 def _resolve_runs_per_configuration(runs_per_configuration: int | None, smoke: bool) -> int:
@@ -56,14 +51,12 @@ def run_eval_pipeline(
     *,
     iteration_number: int,
     runs_per_configuration: int | None = None,
-    sender: ExecutorSender | None = None,
+    command_runner: CommandRunner | None = None,
     judge_sender: JudgeSender | None = None,
     analyzer_sender: JudgeSender | None = None,
-    api_key: str | None = None,
     model: str | None = None,
     judge_model: str | None = None,
     analyzer_model: str | None = None,
-    endpoint: str | None = None,
     timeout_seconds: int | None = None,
     refresh_review_template: bool = False,
     stop_on_error: bool = False,
@@ -74,7 +67,7 @@ def run_eval_pipeline(
 ) -> dict[str, Any]:
     package_path = Path(package_dir)
     workspace_path = Path(workspace_dir)
-    package_meta = _load_json(package_path / "metadata" / "package.json")
+    package_meta = load_json(package_path / "metadata" / "package.json")
     skill_name = package_meta.get("skill_name", package_path.name)
     effective_runs_per_configuration = _resolve_runs_per_configuration(runs_per_configuration, smoke)
     effective_max_evals = _resolve_max_evals(max_evals, eval_ids, smoke)
@@ -96,37 +89,42 @@ def run_eval_pipeline(
     execute_result = execute_iteration(
         iteration_path,
         package_path,
-        sender=sender,
-        api_key=api_key,
+        command_runner=command_runner,
         model=model,
-        endpoint=endpoint,
         timeout_seconds=timeout_seconds,
         stop_on_error=stop_on_error,
         skip_completed=effective_skip_completed,
     )
-    benchmark_result = grade_iteration_runs(iteration_path, skill_name=skill_name, skill_path=str(package_path))
-    differential_result = run_differential_benchmark(
+
+    hard_gate = run_hard_gate(iteration_path)
+    if stop_on_error and not hard_gate["passed"]:
+        raise RuntimeError("Hard gate failed: " + ", ".join(hard_gate.get("blockers", [])))
+
+    quantitative_result = run_quantitative_bundle(
         iteration_path,
+        package_path,
         skill_name=skill_name,
-        skill_path=str(package_path),
         sender=judge_sender,
-        api_key=api_key,
+        command_runner=command_runner,
         judge_model=effective_judge_model,
-        endpoint=endpoint,
         timeout_seconds=timeout_seconds,
     )
-    level3_summary = generate_level3_summary(iteration_path)
-    level3_paths = write_level3_summary_artifacts(iteration_path, level3_summary)
-    level456_result = run_level456(
+
+    deep_eval_result = run_deep_eval(
         iteration_path,
         package_path,
         sender=analyzer_sender,
-        api_key=api_key,
-        analyzer_model=effective_analyzer_model,
-        endpoint=endpoint,
+        command_runner=command_runner,
+        deep_eval_model=effective_analyzer_model,
         timeout_seconds=timeout_seconds,
-        refresh_review_template=refresh_review_template,
     )
+    review_packet = build_human_review_packet(iteration_path, package_path)
+    review_path = iteration_path / "human-review-score.json"
+    review_template_written = False
+    if refresh_review_template or not review_path.exists():
+        write_human_review_template(iteration_path, package_name=package_path.name)
+        review_template_written = True
+    recommendation = generate_release_recommendation(iteration_path)
 
     return {
         "package_dir": str(package_path),
@@ -141,21 +139,32 @@ def run_eval_pipeline(
         "completed_runs": execute_result["completed_runs"],
         "skipped_runs": execute_result["skipped_runs"],
         "failed_runs": execute_result["failed_runs"],
-        "recommendation": level456_result["recommendation"],
-        "blockers": level456_result["blockers"],
-        "level3_primary_mode": level3_summary["primary_mode"],
+        "hard_gate_passed": hard_gate["passed"],
+        "quality_primary_mode": deep_eval_result["deep_eval"]["metadata"]["quality_primary_mode"],
+        "recommendation": recommendation["recommendation"],
+        "blockers": recommendation["blockers"],
+        "level3_primary_mode": quantitative_result["level3_summary"]["primary_mode"],
+        "review_template_written": review_template_written,
         "artifacts": {
-            "benchmark_json": benchmark_result["benchmark_path"],
-            "benchmark_markdown": benchmark_result["benchmark_markdown_path"],
+            "hard_gate_json": str(iteration_path / "hard-gate.json"),
+            "hard_gate_markdown": str(iteration_path / "hard-gate.md"),
+            "benchmark_json": quantitative_result["artifacts"]["benchmark_json"],
+            "benchmark_markdown": quantitative_result["artifacts"]["benchmark_markdown"],
             "differential_benchmark_json": str(iteration_path / "differential-benchmark.json"),
             "differential_benchmark_markdown": str(iteration_path / "differential-benchmark.md"),
-            "level3_summary_json": level3_paths["level3_summary_json"],
-            "level3_summary_markdown": level3_paths["level3_summary_markdown"],
-            "stability_json": level456_result["artifacts"]["stability_json"],
-            "analysis_json": level456_result["artifacts"]["analysis_json"],
-            "human_review_packet": level456_result["artifacts"]["human_review_packet"],
-            "release_recommendation": level456_result["artifacts"]["release_recommendation"],
+            "level3_summary_json": quantitative_result["artifacts"]["level3_summary_json"],
+            "level3_summary_markdown": quantitative_result["artifacts"]["level3_summary_markdown"],
+            "stability_json": quantitative_result["artifacts"]["stability_json"],
+            "quantitative_summary_json": quantitative_result["artifacts"]["quantitative_summary_json"],
+            "quantitative_summary_markdown": quantitative_result["artifacts"]["quantitative_summary_markdown"],
+            "deep_eval_json": deep_eval_result["artifacts"]["deep_eval_json"],
+            "deep_eval_markdown": deep_eval_result["artifacts"]["deep_eval_markdown"],
+            "quality_failure_tags_json": deep_eval_result["artifacts"]["quality_failure_tags_json"],
+            "human_review_packet": str(iteration_path / "human-review-packet.md"),
+            "human_review_score": str(iteration_path / "human-review-score.json"),
+            "release_recommendation": str(iteration_path / "release-recommendation.json"),
         },
+        "review_summary": review_packet["summary"],
     }
 
 
@@ -168,8 +177,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", default=None, help="Optional execution model override.")
     parser.add_argument("--judge-model", default=None, help="Optional judge model override.")
     parser.add_argument("--analyzer-model", default=None, help="Optional analyzer model override.")
-    parser.add_argument("--api-key", default=None, help="Optional model provider API key override.")
-    parser.add_argument("--endpoint", default=None, help="Optional endpoint override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional timeout override.")
     parser.add_argument("--refresh-review-template", action="store_true", help="Overwrite any existing human review score template.")
     parser.add_argument("--stop-on-error", action="store_true", help="Stop immediately when a run execution fails.")
@@ -188,16 +195,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.workspace_dir,
         iteration_number=args.iteration_number,
         runs_per_configuration=args.runs_per_configuration,
-        api_key=args.api_key,
         model=args.model,
         judge_model=args.judge_model,
         analyzer_model=args.analyzer_model,
-        endpoint=args.endpoint,
         timeout_seconds=args.timeout_seconds,
         refresh_review_template=args.refresh_review_template,
         stop_on_error=args.stop_on_error,
         smoke=args.smoke,
-        eval_ids=_resolve_eval_ids(args.eval_ids),
+        eval_ids=parse_eval_ids(args.eval_ids),
         max_evals=args.max_evals,
         skip_completed=args.skip_completed,
     )

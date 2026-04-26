@@ -2,38 +2,20 @@ from __future__ import annotations
 
 import json
 import os
-import re
-import subprocess
 import uuid
 from pathlib import Path
 from typing import Any
 
-from toolchain.kimi_command import resolve_kimi_command
-from toolchain.agent_hosts.codex_host import (
-    CommandRunner,
-    _extract_frontmatter,
-    _parse_jsonl,
-    _read_text,
-    _render_proxy_skill,
-)
+from toolchain.agent_hosts.host_utils import CommandRunner, extract_frontmatter, read_text, render_proxy_skill
 from toolchain.agent_hosts.event_normalizer import normalize_host_transcript
 from toolchain.agent_hosts.signal_extractor import extract_host_signals
-
-
-def _content_to_text(content: Any) -> str:
-    if isinstance(content, str):
-        return content.strip()
-    if isinstance(content, list):
-        parts: list[str] = []
-        for item in content:
-            if isinstance(item, str):
-                parts.append(item)
-            elif isinstance(item, dict):
-                parts.append(str(item.get("text") or item.get("content") or ""))
-        return "\n".join(part for part in parts if part).strip()
-    if content is None:
-        return ""
-    return str(content).strip()
+from toolchain.kimi_runtime import (
+    build_kimi_args,
+    content_to_text,
+    default_kimi_command_runner,
+    extract_resume_session_id,
+    parse_jsonl,
+)
 
 
 def _parse_tool_arguments(value: Any) -> dict[str, Any]:
@@ -70,7 +52,7 @@ def _kimi_messages_to_host_events(messages: list[dict[str, Any]]) -> list[dict[s
     for message in messages:
         role = str(message.get("role", ""))
         if role == "assistant":
-            content = _content_to_text(message.get("content"))
+            content = content_to_text(message.get("content"))
             if content:
                 events.append(
                     {
@@ -108,7 +90,7 @@ def _kimi_messages_to_host_events(messages: list[dict[str, Any]]) -> list[dict[s
                     "item": {
                         "type": "command_execution",
                         "command": command_by_tool_id.get(tool_id, ""),
-                        "aggregated_output": _content_to_text(message.get("content")),
+                        "aggregated_output": content_to_text(message.get("content")),
                         "status": "completed",
                     },
                 }
@@ -122,7 +104,7 @@ def _extract_assistant_messages(messages: list[dict[str, Any]]) -> list[str]:
     for message in messages:
         if str(message.get("role", "")) != "assistant":
             continue
-        text = _content_to_text(message.get("content"))
+        text = content_to_text(message.get("content"))
         if text:
             extracted.append(text)
     return extracted
@@ -137,52 +119,15 @@ def _build_kimi_args(
     text: str,
     model: str | None,
 ) -> list[str]:
-    args = [
-        resolve_kimi_command(),
-        "--print",
-        "--output-format=stream-json",
-        "--work-dir",
-        str(session_dir),
-        "--add-dir",
-        str(package_dir),
-        "--skills-dir",
-        str(skills_dir),
-    ]
-    if session_id:
-        args.extend(["--session", session_id])
-    resolved_model = model or os.environ.get("KIMI_CLI_MODEL")
-    if resolved_model:
-        args.extend(["--model", resolved_model])
-    args.extend(["--prompt", text])
-    return args
-
-
-def _extract_resume_session_id(lines: list[str]) -> str | None:
-    for line in reversed(lines):
-        match = re.search(r"kimi\s+-r\s+([A-Za-z0-9_.:-]+)", line)
-        if match:
-            return match.group(1)
-    return None
-
-
-def _default_kimi_command_runner(args: list[str], cwd: Path, timeout_seconds: int | None) -> dict[str, Any]:
-    env = dict(os.environ)
-    env.setdefault("PYTHONUTF8", "1")
-    env.setdefault("PYTHONIOENCODING", "utf-8")
-    completed = subprocess.run(
-        args,
-        cwd=str(cwd),
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        env=env,
-        timeout=timeout_seconds or None,
+    return build_kimi_args(
+        work_dir=session_dir,
+        prompt=text,
+        output_format="stream-json",
+        add_dir=package_dir,
+        skills_dir=skills_dir,
+        session_id=session_id,
+        model=model,
     )
-    return {
-        "returncode": int(completed.returncode),
-        "stdout": completed.stdout,
-        "stderr": completed.stderr,
-    }
 
 
 class KimiCodeHost:
@@ -195,14 +140,14 @@ class KimiCodeHost:
         model: str | None = None,
     ) -> None:
         self.session_root = Path(session_root)
-        self.command_runner = command_runner or _default_kimi_command_runner
+        self.command_runner = command_runner or default_kimi_command_runner
         self.timeout_seconds = timeout_seconds
         self.model = model
 
     def prepare_session(self, package_dir: str | Path, eval_case: dict[str, Any]) -> dict[str, Any]:
         package_path = Path(package_dir).resolve()
         package_skill_path = package_path / "SKILL.md"
-        metadata = _extract_frontmatter(_read_text(package_skill_path))
+        metadata = extract_frontmatter(read_text(package_skill_path))
 
         session_dir = self.session_root
         skills_dir = session_dir / ".kimi" / "skills"
@@ -210,7 +155,7 @@ class KimiCodeHost:
         proxy_skill_dir.mkdir(parents=True, exist_ok=True)
         proxy_skill_path = proxy_skill_dir / "SKILL.md"
         proxy_skill_path.write_text(
-            _render_proxy_skill(package_path, package_skill_path, metadata),
+            render_proxy_skill(package_path, package_skill_path, metadata),
             encoding="utf-8",
         )
 
@@ -252,12 +197,12 @@ class KimiCodeHost:
                 + str(result.get("stderr", "") or result.get("stdout", "")).strip()
             )
 
-        parsed_messages, warnings = _parse_jsonl(str(result.get("stdout", "")))
+        parsed_messages, warnings = parse_jsonl(str(result.get("stdout", "")))
         messages = [message for message in parsed_messages if isinstance(message, dict)]
         if not messages and str(result.get("stdout", "")).strip():
             messages = [{"role": "assistant", "content": str(result.get("stdout", "")).strip()}]
         stderr_lines = str(result.get("stderr", "")).splitlines()
-        resolved_session_id = _extract_resume_session_id(warnings + stderr_lines)
+        resolved_session_id = extract_resume_session_id(warnings + stderr_lines)
         if resolved_session_id:
             session_handle["kimi_session_id"] = resolved_session_id
             session_handle["thread_id"] = resolved_session_id

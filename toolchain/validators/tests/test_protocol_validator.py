@@ -17,53 +17,88 @@ description: Example description
 
 # Example Skill
 
-## 交互模式
+## 适用任务范围
 
-**分步执行**：每步分析完成后，暂停并询问用户确认（继续/修改/直接要结果）。
-**跳过机制**：若用户输入包含"直接要结果"、"跳过检查"、"不用确认"等表达，直接输出完整分析。
+**适用场景（一句话）**
+当用户需要结构化分析并形成行动方案时，使用本模型。
 
-## 工作流程
+**适用任务**
+- 分析问题
 
-### Step 0: 信息完整度判断
+**不适用任务**
+- 单纯闲聊
 
-**追问后重新检测**：用户回答追问后，重新执行 Step 0 检测，直到信息充分。
+## 模型介绍
+
+**前提假设**
+- 用户愿意调整行动
+
+**核心命题（一句话介绍）**
+用结构化流程把现象推进到行动。
+
+## 与相近模型的区别
+- 与其他模型：本模型更关注可执行方案。
+
+## 内部执行流（仅用于推理，不在对用户输出中显示阶段编号）
+
+**执行协议**
+- 默认按完整内部流程逐步输出，除最后一步外，每一步完成后等待用户确认。
+- 若用户回复“直接要结果”，立即切换快速模式：内部走完整内部流程，对外一次性给出完整可执行方案，不再逐步暂停。
+- 对用户可见输出中，不使用“Step 1/Step 2/阶段 X”等编号词，只保留自然语言标题与结论。
+
+**禁止事项**
+- 禁止要求用户按固定编号模板回复。
+- 禁止在信息不足时重复追问已提供信息。
+- 禁止只给抽象建议，必须给出动作、节奏与验证方式。
 
 ### Step 1: 第一阶段
 
-内容。
+**最小可用输入（MVI）**
+- 主题（必需）
 
-**输出后暂停**：
-> 以上是 Step 1 第一阶段。请确认：回复"继续"进入下一步，回复"不对"+ 说明要求修改，回复"直接要结果"跳过检查。
+判定规则：主题存在，即通过本步 MVI。
+
+**处理方法**
+- 收敛主题。
+
+**输出**
+- 主题
+
+**输出后暂停**
+> ────────
+> 以上是 Step 1 第一阶段。请确认：回复“继续”进入下一步，回复“不对”+说明修改要求，回复“直接要结果”跳过后续暂停。
+> ────────
 
 ### Step 2: 第二阶段
 
-内容。
+**最小可用输入（MVI）**
+- 第一阶段结果（必需）
 
-**输出后暂停**：
-> 以上是 Step 2 第二阶段。请确认：回复"继续"进入下一步，回复"不对"+ 说明要求修改，回复"直接要结果"跳过检查。
+判定规则：已有结果，即通过本步 MVI。
+
+**处理方法**
+- 分析结构。
+
+**输出**
+- 结构
+
+**输出后暂停**
+> ────────
+> 以上是 Step 2 第二阶段。请确认：回复“继续”进入下一步，回复“不对”+说明修改要求，回复“直接要结果”跳过后续暂停。
+> ────────
 
 ### Step 3: 第三阶段
 
-内容。
+**最小可用输入（MVI）**
+- 第二阶段结果（必需）
 
-**输出后暂停**：
-> 以上是 Step 3 第三阶段。请确认：回复"继续"进入下一步，回复"不对"+ 说明要求修改，回复"直接要结果"跳过检查。
+判定规则：已有结构，即通过本步 MVI。
 
-## 规则
+**处理方法**
+- 形成行动。
 
-1. 信息充分时禁止重复提问
-2. 信息不足时只补问缺失项
-3. 每步完成后必须暂停确认
-4. 用户要求修改时，根据反馈重新分析
-5. 若用户处于高压、失控、濒临崩溃状态，优先建议减压、降载和重建承载力
-
-## 使用说明
-
-**分步交互模式（默认）**：
-1. 用户输入后，AI 先执行 Step 0 信息检测
-
-**直接输出模式**：
-用户输入包含"直接要结果"时，跳过所有中间暂停。
+**输出**
+- 行动
 """
 
 
@@ -81,32 +116,37 @@ def test_validate_protocol_accepts_current_swot_package() -> None:
     assert result["summary"]["errors"] == 0
 
 
-def test_validate_protocol_rejects_missing_interaction_mode(tmp_path: Path) -> None:
+def test_validate_protocol_rejects_missing_internal_flow(tmp_path: Path) -> None:
     package_dir = tmp_path / "example-package"
-    write_skill(package_dir, VALID_SKILL.replace("## 交互模式", "## 其他说明"))
+    write_skill(package_dir, VALID_SKILL.replace("## 内部执行流（仅用于推理，不在对用户输出中显示阶段编号）", "## 其他说明"))
 
     result = validate_protocol(package_dir)
 
     assert result["valid"] is False
-    assert any(issue["code"] == "missing_protocol_section" for issue in result["issues"])
+    assert any(issue["code"] == "missing_required_section" for issue in result["issues"])
 
 
-def test_validate_protocol_rejects_missing_pause_block_in_step_2(tmp_path: Path) -> None:
+def test_validate_protocol_rejects_missing_mvi_in_step_2(tmp_path: Path) -> None:
+    package_dir = tmp_path / "example-package"
+    write_skill(package_dir, VALID_SKILL.replace("**最小可用输入（MVI）**\n- 第一阶段结果（必需）\n\n", ""))
+
+    result = validate_protocol(package_dir)
+
+    assert result["valid"] is False
+    assert any(issue["code"] == "missing_step_block" for issue in result["issues"])
+
+
+def test_validate_protocol_rejects_missing_pause_block_in_non_final_step(tmp_path: Path) -> None:
     package_dir = tmp_path / "example-package"
     write_skill(
         package_dir,
         VALID_SKILL.replace(
-            """### Step 2: 第二阶段
-
-内容。
-
-**输出后暂停**：
-> 以上是 Step 2 第二阶段。请确认：回复"继续"进入下一步，回复"不对"+ 说明要求修改，回复"直接要结果"跳过检查。
+            """**输出后暂停**
+> ────────
+> 以上是 Step 2 第二阶段。请确认：回复“继续”进入下一步，回复“不对”+说明修改要求，回复“直接要结果”跳过后续暂停。
+> ────────
 """,
-            """### Step 2: 第二阶段
-
-内容。
-""",
+            "",
         ),
     )
 
@@ -116,44 +156,11 @@ def test_validate_protocol_rejects_missing_pause_block_in_step_2(tmp_path: Path)
     assert any(issue["code"] == "missing_step_pause" for issue in result["issues"])
 
 
-def test_validate_protocol_rejects_missing_high_pressure_guardrail(tmp_path: Path) -> None:
+def test_validate_protocol_rejects_pause_block_in_final_step(tmp_path: Path) -> None:
     package_dir = tmp_path / "example-package"
-    write_skill(
-        package_dir,
-        VALID_SKILL.replace(
-            "5. 若用户处于高压、失控、濒临崩溃状态，优先建议减压、降载和重建承载力\n",
-            "",
-        ),
-    )
+    write_skill(package_dir, VALID_SKILL + "\n**输出后暂停**\n> 不应出现。\n")
 
     result = validate_protocol(package_dir)
 
     assert result["valid"] is False
-    assert any(issue["code"] == "missing_high_pressure_rule" for issue in result["issues"])
-
-
-def test_validate_protocol_rejects_missing_direct_output_mode(tmp_path: Path) -> None:
-    package_dir = tmp_path / "example-package"
-    write_skill(
-        package_dir,
-        VALID_SKILL.replace(
-            """## 使用说明
-
-**分步交互模式（默认）**：
-1. 用户输入后，AI 先执行 Step 0 信息检测
-
-**直接输出模式**：
-用户输入包含"直接要结果"时，跳过所有中间暂停。
-""",
-            """## 使用说明
-
-**分步交互模式（默认）**：
-1. 用户输入后，AI 先执行 Step 0 信息检测
-""",
-        ),
-    )
-
-    result = validate_protocol(package_dir)
-
-    assert result["valid"] is False
-    assert any(issue["code"] == "missing_usage_mode" for issue in result["issues"])
+    assert any(issue["code"] == "final_step_has_pause" for issue in result["issues"])

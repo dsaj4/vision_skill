@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import math
 import re
 from datetime import datetime, timezone
@@ -8,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from toolchain.benchmarks.level3_summary import ensure_level3_summary
+from toolchain.common import load_json, write_json, write_text
 
 
 PAUSE_MARKERS = ['回复"继续"', '回复"不对"', '回复"直接要结果"', "输出后暂停", "暂停确认"]
@@ -17,14 +17,6 @@ SWOT_GROUPS = [
     ("opportunities", "机会"),
     ("threats", "威胁"),
 ]
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _calculate_stats(values: list[float]) -> dict[str, float]:
@@ -96,7 +88,7 @@ def _fingerprint_key(fingerprint: dict[str, Any]) -> str:
 def _load_iteration_runs(iteration_dir: Path) -> dict[str, Any]:
     evals: list[dict[str, Any]] = []
     for eval_dir in sorted(iteration_dir.glob("eval-*")):
-        eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+        eval_metadata = load_json(eval_dir / "eval_metadata.json")
         eval_item = {
             "eval_id": eval_metadata["eval_id"],
             "eval_name": eval_metadata.get("eval_name", eval_dir.name),
@@ -110,9 +102,9 @@ def _load_iteration_runs(iteration_dir: Path) -> dict[str, Any]:
                 grading_path = run_dir / "grading.json"
                 if not grading_path.exists():
                     continue
-                grading = _load_json(grading_path)
+                grading = load_json(grading_path)
                 timing_path = run_dir / "timing.json"
-                timing = _load_json(timing_path) if timing_path.exists() else grading.get("timing", {})
+                timing = load_json(timing_path) if timing_path.exists() else grading.get("timing", {})
                 output_file = Path(grading["output_file"])
                 response_text = output_file.read_text(encoding="utf-8")
                 fingerprint = _fingerprint_response(response_text)
@@ -365,6 +357,6 @@ def _generate_markdown(report: dict[str, Any]) -> str:
 
 def write_stability_artifacts(iteration_dir: Path, report: dict[str, Any]) -> None:
     iteration_path = Path(iteration_dir)
-    _write_json(iteration_path / "stability.json", report)
-    _write_json(iteration_path / "variance-by-expectation.json", report["variance_by_expectation"])
-    (iteration_path / "stability.md").write_text(_generate_markdown(report), encoding="utf-8")
+    write_json(iteration_path / "stability.json", report)
+    write_json(iteration_path / "variance-by-expectation.json", report["variance_by_expectation"])
+    write_text(iteration_path / "stability.md", _generate_markdown(report))

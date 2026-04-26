@@ -23,7 +23,7 @@ def test_normalize_host_transcript_captures_skill_reads_and_noise() -> None:
         "thread_id": "thread-1",
         "package_name": "swot-analysis",
         "package_dir": "E:/repo/packages/swot-analysis",
-        "proxy_skill_path": "E:/repo/session/.codex/skills/swot-analysis/SKILL.md",
+        "proxy_skill_path": "E:/repo/session/.kimi/skills/swot-analysis/SKILL.md",
         "canonical_skill_path": "E:/repo/packages/swot-analysis/SKILL.md",
         "turns": [
             {
@@ -39,7 +39,7 @@ def test_normalize_host_transcript_captures_skill_reads_and_noise() -> None:
                         "type": "item.completed",
                         "item": {
                             "type": "command_execution",
-                            "command": "Get-Content 'E:/repo/session/.codex/skills/swot-analysis/SKILL.md'",
+                            "command": "Get-Content 'E:/repo/session/.kimi/skills/swot-analysis/SKILL.md'",
                             "aggregated_output": "proxy skill text",
                         },
                     },

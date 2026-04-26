@@ -109,7 +109,7 @@ def write_iteration(base: Path) -> Path:
             (run_dir / "request.json").write_text(
                 json.dumps(
                     {
-                        "model": "qwen-test",
+                        "model": "kimi-for-coding",
                         "messages": [{"role": "user", "content": "Give me the SWOT result."}],
                     },
                     ensure_ascii=False,
@@ -220,7 +220,7 @@ def write_level3_summary(iteration_dir: Path) -> None:
     )
 
 
-def fake_sender(payload: dict, endpoint: str, api_key: str, timeout_seconds: int) -> dict:
+def fake_sender(payload: dict) -> dict:
     return {
         "choices": [
             {
@@ -262,7 +262,7 @@ def test_level456_pipeline_runs_end_to_end_on_synthetic_iteration(tmp_path: Path
     write_level3_summary(iteration_dir)
     stability = generate_stability_report(iteration_dir)
     write_stability_artifacts(iteration_dir, stability)
-    analyze_iteration(iteration_dir, package_dir, sender=fake_sender, api_key="test-key", analyzer_model="qwen-analyzer-test")
+    analyze_iteration(iteration_dir, package_dir, sender=fake_sender, analyzer_model="kimi-for-coding")
     packet = build_human_review_packet(iteration_dir, package_dir)
     write_human_review_template(iteration_dir, package_name=package_dir.name)
     recommendation = generate_release_recommendation(iteration_dir)

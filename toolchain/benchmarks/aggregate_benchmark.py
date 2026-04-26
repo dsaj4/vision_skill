@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from toolchain.common import load_json
 
 def calculate_stats(values: list[float]) -> dict[str, float]:
     if not values:
@@ -26,15 +26,11 @@ def calculate_stats(values: list[float]) -> dict[str, float]:
     }
 
 
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
 def load_run_results(iteration_dir: Path) -> dict[str, list[dict[str, Any]]]:
     results: dict[str, list[dict[str, Any]]] = {}
 
     for eval_dir in sorted(iteration_dir.glob("eval-*")):
-        metadata = _load_json(eval_dir / "eval_metadata.json")
+        metadata = load_json(eval_dir / "eval_metadata.json")
         eval_id = metadata["eval_id"]
         eval_name = metadata.get("eval_name", eval_dir.name)
 
@@ -48,12 +44,12 @@ def load_run_results(iteration_dir: Path) -> dict[str, list[dict[str, Any]]]:
                 grading_path = run_dir / "grading.json"
                 if not grading_path.exists():
                     continue
-                grading = _load_json(grading_path)
+                grading = load_json(grading_path)
 
                 timing = grading.get("timing", {})
                 timing_path = run_dir / "timing.json"
                 if timing_path.exists():
-                    timing_data = _load_json(timing_path)
+                    timing_data = load_json(timing_path)
                 else:
                     timing_data = {}
 

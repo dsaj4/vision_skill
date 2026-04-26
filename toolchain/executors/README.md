@@ -1,8 +1,8 @@
 # Executors
 
-This module runs API-lane eval executions.
+This module runs the Kimi Code eval mainline.
 
-The executor reads `iteration-N/eval-*/with_skill|without_skill/run-*`, calls a model provider, and writes:
+The executor reads `iteration-N/eval-*/with_skill|without_skill/run-*`, runs Kimi through the local Kimi CLI, and writes the same artifact contract used by the benchmark stack:
 
 - `request.json`
 - `raw_response.json`
@@ -10,43 +10,46 @@ The executor reads `iteration-N/eval-*/with_skill|without_skill/run-*`, calls a 
 - `timing.json`
 - `outputs/final_response.md`
 
-## Provider Environment
+## Runtime
 
-The executor uses OpenAI-compatible Chat Completions. DashScope remains the default provider.
+The main executor is:
 
-DashScope:
+- `kimi_code_executor.py`
+
+Execution mode:
+
+- `with_skill`: creates a controlled workspace-file task for each scripted turn, installs a workspace-local `.kimi/skills/<package>/SKILL.md` proxy, and lets Kimi Code read the canonical package skill.
+- `without_skill`: creates the same controlled workspace-file task without installing the skill proxy.
+
+The terminal response is treated as debug log only. The source of truth is always the required workspace output file, then copied into the normal run artifact:
+
+```text
+iteration-N/.kimi-sessions/e<id>-<configuration>-run-<n>/turn-<m>/
+  task.md
+  workspace-manifest.json
+  inputs/conversation.json
+  contracts/output-contract.md
+  outputs/assistant.md
+  outputs/run_metadata.json
+```
+
+`outputs/assistant.md` is copied to `run-*/outputs/final_response.md` for grading and benchmarking.
+
+## Environment
+
+Kimi CLI must be installed and logged in.
+
+Optional model override:
 
 ```powershell
-$env:VISION_LLM_PROVIDER="dashscope"
-$env:DASHSCOPE_API_KEY="<your-dashscope-key>"
+$env:KIMI_CLI_MODEL="kimi-for-coding"
 ```
 
-Moonshot/Kimi API:
+If `KIMI_CLI_MODEL` is not set, the executor lets Kimi CLI use its own configured default model.
 
-```powershell
-$env:VISION_LLM_PROVIDER="moonshot"
-$env:MOONSHOT_BASE_URL="https://api.moonshot.ai/v1"
-$env:MOONSHOT_MODEL="kimi-k2.6"
-$env:MOONSHOT_API_KEY="<your-moonshot-key>"
-```
+## Notes
 
-Kimi Code endpoint:
-
-```powershell
-$env:VISION_LLM_PROVIDER="kimi-code"
-$env:KIMI_CODE_BASE_URL="https://api.kimi.com/coding/v1"
-$env:KIMI_CODE_MODEL="kimi-for-coding"
-$env:KIMI_CODE_API_KEY="<your-kimi-code-key>"
-```
-
-The executor appends `/chat/completions` when the configured base URL does not already include it.
-
-## Kimi Code Limitation
-
-Kimi Code is designed for coding agents such as Kimi CLI, Claude Code, Roo Code, and similar hosts. Its coding endpoint may reject generic scripted API calls even when the key is valid.
-
-Use `VISION_LLM_PROVIDER=kimi-code` only when validating endpoint resolution or when Kimi enables generic direct calls for the account. For real Kimi Code skill behavior, use the host lane:
-
-```bash
-python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 4 --max-evals 4
-```
+- Token counts from Kimi CLI are currently unavailable, so `timing.json` writes token fields as `0` with `token_source = kimi-cli-unavailable`.
+- The executor intentionally does not call direct Chat Completions endpoints.
+- The executor intentionally does not parse the final answer from Kimi terminal text.
+- Long Windows paths are avoided by storing Kimi session directories under `iteration-N/.kimi-sessions/`.

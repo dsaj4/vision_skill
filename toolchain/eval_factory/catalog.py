@@ -1,20 +1,11 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
+from toolchain.common import load_json, write_json
 
 ALLOWED_VARIANT_TYPES = {"base", "paraphrase", "info-missing", "boundary-stress"}
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _json_files(directory: Path) -> list[Path]:
@@ -51,7 +42,7 @@ def load_factory(factory_dir: str | Path) -> dict[str, Any]:
 
     bundles: list[dict[str, Any]] = []
     for bundle_path in certified_bundle_files:
-        bundle = _load_json(bundle_path)
+        bundle = load_json(bundle_path)
         metadata = bundle.get("metadata", {})
         bundles.append(
             {
@@ -80,7 +71,7 @@ def load_factory(factory_dir: str | Path) -> dict[str, Any]:
 def validate_certified_bundle(bundle_path: str | Path, *, factory_dir: str | Path | None = None) -> dict[str, Any]:
     bundle_file = Path(bundle_path)
     root = _resolve_factory_dir(bundle_file, factory_dir=factory_dir)
-    bundle = _load_json(bundle_file)
+    bundle = load_json(bundle_file)
     errors: list[str] = []
 
     metadata = bundle.get("metadata", {})
@@ -116,7 +107,7 @@ def validate_certified_bundle(bundle_path: str | Path, *, factory_dir: str | Pat
     if not calibration_path.exists():
         errors.append(f"Missing calibration report: {calibration_path}")
     else:
-        calibration_report = _load_json(calibration_path)
+        calibration_report = load_json(calibration_path)
 
     calibration_index = {
         item.get("eval_id"): item for item in calibration_report.get("per_eval", []) if isinstance(item, dict)
@@ -124,14 +115,14 @@ def validate_certified_bundle(bundle_path: str | Path, *, factory_dir: str | Pat
 
     scenario_index = {}
     for scenario_path in _json_files(root / "scenario-cards"):
-        scenario = _load_json(scenario_path)
+        scenario = load_json(scenario_path)
         scenario_id = scenario.get("scenario_id")
         if scenario_id:
             scenario_index[scenario_id] = scenario
 
     source_ids = set()
     for source_path in _json_files(root / "source-bank"):
-        source = _load_json(source_path)
+        source = load_json(source_path)
         source_id = source.get("source_id")
         if source_id:
             source_ids.add(source_id)
@@ -183,7 +174,7 @@ def validate_certified_bundle(bundle_path: str | Path, *, factory_dir: str | Pat
             errors.append(f"Eval {eval_id} missing candidate file: {candidate_path}")
             continue
 
-        candidate = _load_json(candidate_path)
+        candidate = load_json(candidate_path)
         errors.extend(
             _required_fields(
                 candidate,
@@ -261,12 +252,12 @@ def export_certified_bundle(
 
     bundle_file = Path(bundle_path)
     root = _resolve_factory_dir(bundle_file, factory_dir=factory_dir)
-    bundle = _load_json(bundle_file)
+    bundle = load_json(bundle_file)
     metadata = bundle["metadata"]
 
     exported_evals: list[dict[str, Any]] = []
     for item in sorted(bundle.get("evals", []), key=lambda current: current["eval_id"]):
-        candidate = _load_json(root / item["candidate_path"])
+        candidate = load_json(root / item["candidate_path"])
         exported_evals.append(
             {
                 "id": candidate["eval_id"],
@@ -290,7 +281,7 @@ def export_certified_bundle(
         "generated_from": str(bundle_file),
         "evals": exported_evals,
     }
-    _write_json(Path(output_path), exported)
+    write_json(Path(output_path), exported)
 
     return {
         "output_path": str(output_path),

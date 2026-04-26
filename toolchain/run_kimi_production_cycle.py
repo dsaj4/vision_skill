@@ -6,21 +6,12 @@ import re
 from pathlib import Path
 from typing import Any, Sequence
 
+from toolchain.common import load_json, parse_eval_ids, write_json, write_text
 from toolchain.agent_hosts.run_host_eval import run_host_eval
 from toolchain.agent_hosts.run_kimi_cli_differential_eval import run_kimi_cli_differential_eval
-from toolchain.kimi_cycle.context import next_cycle_name, write_json, write_text
+from toolchain.kimi_cycle.context import next_cycle_name
 from toolchain.kimi_cycle.eval_generation import apply_eval_draft, generate_eval_draft
 from toolchain.kimi_cycle.skill_rewrite import apply_skill_rewrite, generate_skill_rewrite
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _resolve_eval_ids(value: str | None) -> list[int] | None:
-    if not value:
-        return None
-    return [int(item.strip()) for item in value.split(",") if item.strip()]
 
 
 def _next_host_iteration_number(workspace_dir: Path) -> int:
@@ -89,7 +80,7 @@ def run_kimi_production_cycle(
     package_path = Path(package_dir)
     workspace_path = Path(workspace_dir)
     workspace_path.mkdir(parents=True, exist_ok=True)
-    package_meta = _load_json(package_path / "metadata" / "package.json")
+    package_meta = load_json(package_path / "metadata" / "package.json")
     resolved_cycle_name = cycle_name or next_cycle_name()
     cycle_dir = workspace_path / "cycles" / resolved_cycle_name
     cycle_dir.mkdir(parents=True, exist_ok=True)
@@ -135,7 +126,7 @@ def run_kimi_production_cycle(
             model=model,
             timeout_seconds=timeout_seconds,
         )
-        validation = _load_json(Path(rewrite_result["validation_path"]))
+        validation = load_json(Path(rewrite_result["validation_path"]))
         summary["stages"]["skill_rewrite"]["generated"] = True
         summary["stages"]["skill_rewrite"]["valid"] = bool(rewrite_result["valid"])
         summary["artifacts"]["skill_draft"] = rewrite_result["generated_skill_path"]
@@ -219,9 +210,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         apply_skill=args.apply_skill,
         run_eval=args.run_eval,
         run_host_validation=args.run_host_validation,
-        eval_ids=_resolve_eval_ids(args.eval_ids),
+        eval_ids=parse_eval_ids(args.eval_ids),
         max_evals=args.max_evals,
-        host_eval_ids=_resolve_eval_ids(args.host_eval_ids),
+        host_eval_ids=parse_eval_ids(args.host_eval_ids),
         host_max_evals=args.host_max_evals,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))

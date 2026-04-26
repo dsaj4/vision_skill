@@ -45,8 +45,9 @@ def test_trim_for_judge_preserves_head_and_tail() -> None:
     trimmed = _trim_for_judge(original, 1200)
 
     assert len(trimmed) < len(original)
-    assert trimmed.startswith("A" * 600)
-    assert trimmed.endswith("B" * 400)
+    assert len(trimmed) <= 1200
+    assert trimmed.startswith("A" * 300)
+    assert trimmed.endswith("B" * 300)
     assert "...[truncated]..." in trimmed
 
 

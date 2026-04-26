@@ -83,7 +83,7 @@ def test_resolve_kimi_command_falls_back_to_local_bin(monkeypatch, tmp_path: Pat
     kimi_exe.write_text("", encoding="utf-8")
 
     monkeypatch.delenv("KIMI_CLI_EXECUTABLE", raising=False)
-    monkeypatch.setattr("toolchain.kimi_command.shutil.which", lambda _: None)
-    monkeypatch.setattr("toolchain.kimi_command.Path.home", lambda: tmp_path)
+    monkeypatch.setattr("toolchain.kimi_runtime.shutil.which", lambda _: None)
+    monkeypatch.setattr("toolchain.kimi_runtime.Path.home", lambda: tmp_path)
 
     assert resolve_kimi_command() == str(kimi_exe)

@@ -1,17 +1,10 @@
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 from typing import Any
 
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+from toolchain.common import load_json, write_json
 
 
 def _find_output_file(outputs_dir: Path) -> Path:
@@ -211,13 +204,13 @@ def grade_response_text(
 def grade_run(run_path: str | Path) -> dict[str, Any]:
     run_dir = Path(run_path)
     eval_dir = run_dir.parent.parent
-    eval_metadata = _load_json(eval_dir / "eval_metadata.json")
+    eval_metadata = load_json(eval_dir / "eval_metadata.json")
     assertions = eval_metadata.get("assertions", [])
     output_file = _find_output_file(run_dir / "outputs")
     response_text = output_file.read_text(encoding="utf-8")
 
     timing_path = run_dir / "timing.json"
-    timing = _load_json(timing_path) if timing_path.exists() else {}
+    timing = load_json(timing_path) if timing_path.exists() else {}
     grading = grade_response_text(
         response_text,
         {
@@ -230,6 +223,6 @@ def grade_run(run_path: str | Path) -> dict[str, Any]:
         timing=timing,
     )
 
-    _write_json(run_dir / "grading.json", grading)
-    _write_json(run_dir / "metrics.json", grading["execution_metrics"])
+    write_json(run_dir / "grading.json", grading)
+    write_json(run_dir / "metrics.json", grading["execution_metrics"])
     return grading

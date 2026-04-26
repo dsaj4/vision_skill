@@ -1,6 +1,6 @@
 # Human Review Checklist
 
-Use this checklist for Level 6 cognitive review after the API lane and, when available, the host lane have produced evidence.
+Use this checklist for Level 6 cognitive review after the Kimi Code mainline and, when available, Kimi host validation have produced evidence.
 
 ## Inputs
 

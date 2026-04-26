@@ -145,7 +145,7 @@ class FakeHostAdapter:
                     "type": "item.completed",
                     "item": {
                         "type": "command_execution",
-                        "command": f"Get-Content '{self.session_root / '.codex' / 'skills' / 'swot-analysis' / 'SKILL.md'}'",
+                        "command": f"Get-Content '{self.session_root / '.kimi' / 'skills' / 'swot-analysis' / 'SKILL.md'}'",
                         "aggregated_output": "proxy skill text",
                     },
                 },
@@ -176,7 +176,7 @@ class FakeHostAdapter:
             "thread_id": session_handle["thread_id"],
             "package_name": "swot-analysis",
             "package_dir": session_handle["package_dir"],
-            "proxy_skill_path": str(self.session_root / ".codex" / "skills" / "swot-analysis" / "SKILL.md"),
+            "proxy_skill_path": str(self.session_root / ".kimi" / "skills" / "swot-analysis" / "SKILL.md"),
             "canonical_skill_path": str(Path(session_handle["package_dir"]) / "SKILL.md"),
             "turns": session_handle["turns"],
             "stderr": [],
@@ -215,7 +215,7 @@ def test_run_host_eval_generates_host_artifacts_and_summary(tmp_path: Path) -> N
     benchmark = json.loads((iteration_dir / "host-benchmark.json").read_text(encoding="utf-8"))
     signal_report = json.loads((host_eval_102 / "host-signal-report.json").read_text(encoding="utf-8"))
 
-    assert result["host_backend"] == "codex"
+    assert result["host_backend"] == "kimi-code"
     assert result["selected_eval_ids"] == [102, 103]
     assert (host_eval_102 / "host-session.json").exists()
     assert (host_eval_102 / "host-transcript.json").exists()

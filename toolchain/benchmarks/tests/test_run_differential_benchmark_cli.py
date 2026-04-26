@@ -30,7 +30,7 @@ def test_main_prints_json_summary(monkeypatch, capsys, tmp_path: Path) -> None:
         assert str(iteration_dir) == str(tmp_path / "iteration-1")
         assert kwargs["skill_name"] == "SWOT Analysis"
         assert kwargs["skill_path"] == "E:/pkg/swot-analysis"
-        assert kwargs["judge_model"] == "qwen-judge-test"
+        assert kwargs["judge_model"] == "kimi-for-coding"
         return expected
 
     monkeypatch.setattr(
@@ -47,7 +47,7 @@ def test_main_prints_json_summary(monkeypatch, capsys, tmp_path: Path) -> None:
             "--skill-path",
             "E:/pkg/swot-analysis",
             "--judge-model",
-            "qwen-judge-test",
+            "kimi-for-coding",
         ]
     )
 

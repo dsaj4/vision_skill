@@ -94,7 +94,7 @@ def write_iteration(base: Path) -> Path:
     (iteration_dir / "stability.json").write_text(json.dumps(stability, ensure_ascii=False, indent=2), encoding="utf-8")
 
     analysis = {
-        "metadata": {"analyzer_model": "qwen-analyzer-test"},
+        "metadata": {"analyzer_model": "kimi-for-coding"},
         "per_eval": [
             {
                 "eval_id": 1,

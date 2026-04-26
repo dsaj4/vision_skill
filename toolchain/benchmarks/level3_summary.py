@@ -1,17 +1,10 @@
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+from toolchain.common import load_json, write_json, write_text
 
 
 def _require_artifact(iteration_dir: Path, name: str) -> Path:
@@ -23,9 +16,9 @@ def _require_artifact(iteration_dir: Path, name: str) -> Path:
 
 def generate_level3_summary(iteration_dir: str | Path) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
-    benchmark = _load_json(_require_artifact(iteration_path, "benchmark.json"))
-    differential = _load_json(_require_artifact(iteration_path, "differential-benchmark.json"))
-    consensus = _load_json(_require_artifact(iteration_path, "pairwise-consensus.json"))
+    benchmark = load_json(_require_artifact(iteration_path, "benchmark.json"))
+    differential = load_json(_require_artifact(iteration_path, "differential-benchmark.json"))
+    consensus = load_json(_require_artifact(iteration_path, "pairwise-consensus.json"))
 
     pairwise_summary = differential.get("summary", {})
     gate_summary = benchmark.get("run_summary", {})
@@ -108,8 +101,8 @@ def write_level3_summary_artifacts(iteration_dir: str | Path, summary: dict[str,
     iteration_path = Path(iteration_dir)
     json_path = iteration_path / "level3-summary.json"
     markdown_path = iteration_path / "level3-summary.md"
-    _write_json(json_path, summary)
-    markdown_path.write_text(_generate_markdown(summary), encoding="utf-8")
+    write_json(json_path, summary)
+    write_text(markdown_path, _generate_markdown(summary))
     return {
         "level3_summary_json": str(json_path),
         "level3_summary_markdown": str(markdown_path),
@@ -120,7 +113,7 @@ def ensure_level3_summary(iteration_dir: str | Path) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
     summary_path = iteration_path / "level3-summary.json"
     if summary_path.exists():
-        return _load_json(summary_path)
+        return load_json(summary_path)
     summary = generate_level3_summary(iteration_path)
     write_level3_summary_artifacts(iteration_path, summary)
     return summary

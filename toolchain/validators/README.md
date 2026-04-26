@@ -9,4 +9,4 @@ Current validators:
 - `protocol_validator.py`
   - checks whether `SKILL.md` includes the required interaction protocol pieces
 
-These checks are intentionally conservative. They catch contract violations and obvious drift, but they do not prove skill quality. Quality is judged through the API evaluation lane, host validation, and human review.
+These checks are intentionally conservative. They catch contract violations and obvious drift, but they do not prove skill quality. Quality is judged through the Kimi Code evaluation mainline, Kimi host validation, and human review.

@@ -1,19 +1,13 @@
 from __future__ import annotations
 
 import json
-import os
-import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from toolchain.executors.dashscope_executor import (
-    _post_chat_completion,
-    _resolve_api_key,
-    _resolve_endpoint,
-    _resolve_model,
-    _resolve_timeout,
-)
+from toolchain.common import extract_json_object, load_json
+from toolchain.kimi_runtime import CommandRunner
+from toolchain.kimi_workspace import load_workspace_json, run_kimi_workspace_task, write_workspace_task
 
 
 RUBRIC_DIMENSIONS = [
@@ -27,17 +21,13 @@ RUBRIC_DIMENSIONS = [
 DEFAULT_MARGIN = 0.0
 DEFAULT_CONFIDENCE = 0.0
 
-Sender = Callable[[dict[str, Any], str, str, int], dict[str, Any]]
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+Sender = Callable[[dict[str, Any]], dict[str, Any]]
 
 
 def _read_response(run_dir: Path) -> str:
     grading_path = run_dir / "grading.json"
     if grading_path.exists():
-        grading = _load_json(grading_path)
+        grading = load_json(grading_path)
         output_file = Path(grading.get("output_file", ""))
         if output_file.exists():
             return output_file.read_text(encoding="utf-8")
@@ -48,13 +38,7 @@ def _read_response(run_dir: Path) -> str:
 
 
 def _extract_json_object(text: str) -> dict[str, Any]:
-    fenced = re.search(r"```json\s*(\{.*\})\s*```", text, re.DOTALL)
-    candidate = fenced.group(1) if fenced else text
-    start = candidate.find("{")
-    end = candidate.rfind("}")
-    if start == -1 or end == -1 or end <= start:
-        raise ValueError("Judge response did not contain a JSON object.")
-    return json.loads(candidate[start : end + 1])
+    return extract_json_object(text, error_message="Judge response did not contain a JSON object.")
 
 
 def _clamp_score(value: Any) -> float:
@@ -101,7 +85,7 @@ def _gate_check(run_dir: Path) -> dict[str, Any]:
     grading_path = run_dir / "grading.json"
     metrics = {}
     if grading_path.exists():
-        metrics = _load_json(grading_path).get("execution_metrics", {})
+        metrics = load_json(grading_path).get("execution_metrics", {})
 
     if not response_text.strip():
         reasons.append("empty_response")
@@ -117,7 +101,7 @@ def _gate_check(run_dir: Path) -> dict[str, Any]:
 
 def _load_cost(run_dir: Path) -> dict[str, float]:
     timing_path = run_dir / "timing.json"
-    timing = _load_json(timing_path) if timing_path.exists() else {}
+    timing = load_json(timing_path) if timing_path.exists() else {}
     return {
         "time_seconds": float(timing.get("total_duration_seconds", 0.0) or 0.0),
         "tokens": float(timing.get("total_tokens", 0) or 0),
@@ -172,6 +156,88 @@ def _build_messages(packet: dict[str, Any]) -> list[dict[str, str]]:
     ]
 
 
+def _workspace_judge_task_markdown() -> str:
+    return "\n".join(
+        [
+            "# Controlled Pairwise Judge Task",
+            "",
+            "This is a workspace-file task. The terminal reply is only a log line.",
+            "",
+            "## Inputs",
+            "",
+            "- Read `inputs/pairwise-packet.json`.",
+            "- Compare Candidate A and Candidate B only on user value.",
+            "- Do not assume which answer used the skill.",
+            "",
+            "## Required Output",
+            "",
+            "Write `outputs/judgment.json` only. It must contain:",
+            "",
+            "- `winner`: one of `A`, `B`, `tie`",
+            "- `margin`: number from 0 to 1",
+            "- `confidence`: number from 0 to 1",
+            "- `reasoning_summary`: short string",
+            "- `rubric_winner_by_dimension`: object whose values are only `A`, `B`, or `tie`",
+            "",
+            "Do not put the JSON judgment in the terminal response.",
+        ]
+    )
+
+
+def _workspace_judge_contract() -> str:
+    return "\n".join(
+        [
+            "# Output Contract",
+            "",
+            "Required file: `outputs/judgment.json`.",
+            "",
+            "The file must be a JSON object with keys:",
+            "",
+            "- `winner`",
+            "- `margin`",
+            "- `confidence`",
+            "- `reasoning_summary`",
+            "- `rubric_winner_by_dimension`",
+            "",
+            "Allowed winner values: `A`, `B`, `tie`.",
+            "Terminal output is ignored except as debug log.",
+        ]
+    )
+
+
+def _run_workspace_judge(
+    packet: dict[str, Any],
+    *,
+    task_dir: Path,
+    judge_model: str | None,
+    timeout_seconds: int | None,
+    command_runner: CommandRunner | None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    required_outputs = ["outputs/judgment.json"]
+    write_workspace_task(
+        task_dir,
+        task_markdown=_workspace_judge_task_markdown(),
+        required_outputs=required_outputs,
+        contract_markdown=_workspace_judge_contract(),
+        inputs={"inputs/pairwise-packet.json": packet},
+        metadata={
+            "runner": "kimi-code",
+            "task_type": "pairwise-judge",
+            "eval_id": packet.get("eval_id"),
+            "run_number": packet.get("run_number"),
+            "orientation": packet.get("orientation"),
+        },
+    )
+    task_result = run_kimi_workspace_task(
+        task_dir,
+        required_outputs=required_outputs,
+        model=judge_model,
+        timeout_seconds=timeout_seconds,
+        command_runner=command_runner,
+    )
+    return load_workspace_json(task_result, "outputs/judgment.json"), task_result
+
+
 def judge_pair(
     *,
     eval_id: int,
@@ -182,9 +248,8 @@ def judge_pair(
     without_skill_run_dir: str | Path,
     orientation: str = "forward",
     sender: Sender | None = None,
-    api_key: str | None = None,
+    command_runner: CommandRunner | None = None,
     judge_model: str | None = None,
-    endpoint: str | None = None,
     timeout_seconds: int | None = None,
 ) -> dict[str, Any]:
     with_skill_path = Path(with_skill_run_dir)
@@ -230,7 +295,8 @@ def judge_pair(
             "eval_name": eval_name,
             "run_number": run_number,
             "orientation": orientation,
-            "judge_model": judge_model or os.getenv("VISION_JUDGE_MODEL") or _resolve_model(None),
+            "judge_model": judge_model or "kimi-cli-default",
+            "judge_runner": "kimi-code",
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         },
         "pair": {
@@ -266,14 +332,29 @@ def judge_pair(
         "model": result["metadata"]["judge_model"],
         "messages": _build_messages(packet),
     }
-    raw_response = (sender or _post_chat_completion)(
-        payload,
-        _resolve_endpoint(endpoint),
-        _resolve_api_key(api_key),
-        _resolve_timeout(timeout_seconds),
-    )
-    message = raw_response.get("choices", [{}])[0].get("message", {}).get("content", "")
-    raw_judgment = _extract_json_object(message)
+    if sender is not None:
+        raw_response = sender(payload)
+        message = raw_response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        raw_judgment = _extract_json_object(message)
+    else:
+        raw_judgment, task_result = _run_workspace_judge(
+            packet,
+            task_dir=with_skill_path.parent.parent / ".kimi-judge" / f"run-{run_number}-{orientation}",
+            judge_model=judge_model,
+            timeout_seconds=timeout_seconds,
+            command_runner=command_runner,
+        )
+        raw_response = {
+            "choices": [{"message": {"role": "assistant", "content": json.dumps(raw_judgment, ensure_ascii=False)}}],
+            "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+            "kimi_workspace_task": {
+                "task_dir": task_result.get("work_dir", ""),
+                "resolved_outputs": task_result.get("resolved_outputs", {}),
+                "terminal_response_policy": "log-only",
+                "warnings": task_result.get("warnings", []),
+                "stderr": task_result.get("stderr", ""),
+            },
+        }
     winner = _normalize_side(raw_judgment.get("winner", "tie"))
     rubric = _normalize_rubric(raw_judgment.get("rubric_winner_by_dimension", {}))
 
