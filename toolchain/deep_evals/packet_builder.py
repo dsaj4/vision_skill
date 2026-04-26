@@ -51,12 +51,14 @@ def _load_run(run_dir: Path) -> dict[str, Any]:
     output_path = Path(grading.get("output_file", "")) if grading.get("output_file") else run_dir / "outputs" / "final_response.md"
     if not output_path.exists():
         output_path = run_dir / "outputs" / "final_response.md"
+    latest_output_path = run_dir / "outputs" / "latest_assistant_response.md"
 
     return {
         "configuration": run_dir.parent.name,
         "run_number": int(run_dir.name.split("-", 1)[1]) if "-" in run_dir.name else 0,
         "run_dir": str(run_dir),
         "final_response": _read_optional_text(output_path, 1800),
+        "latest_assistant_response": _read_optional_text(latest_output_path, 1200),
         "request": _load_optional_json(run_dir / "request.json"),
         "transcript_excerpt": compact_text(
             json.dumps(_load_optional_json(run_dir / "transcript.json"), ensure_ascii=False, separators=(",", ":")),
@@ -74,7 +76,10 @@ def _load_run(run_dir: Path) -> dict[str, Any]:
             for name in RUN_ARTIFACTS
             if (run_dir / name).exists()
         }
-        | {"final_response": str(output_path)},
+        | {
+            "final_response": str(output_path),
+            "latest_assistant_response": str(latest_output_path),
+        },
     }
 
 
@@ -95,6 +100,7 @@ def _load_eval(eval_dir: Path) -> dict[str, Any]:
         "expected_output": eval_metadata.get("expected_output", ""),
         "assertions": eval_metadata.get("assertions", []),
         "quality_rubric": normalize_rubric_items(eval_metadata.get("quality_rubric")),
+        "execution_eval": eval_metadata.get("execution_eval", {}),
         "host_eval": eval_metadata.get("host_eval", {}),
         "runs": runs,
     }

@@ -8,7 +8,7 @@ from typing import Any
 from toolchain.agent_hosts.host_utils import extract_frontmatter, render_proxy_skill
 from toolchain.common import load_json, write_json, write_text
 from toolchain.kimi_runtime import CommandRunner
-from toolchain.kimi_workspace import read_workspace_text, run_kimi_workspace_task, write_workspace_task
+from toolchain.kimi_workspace import load_workspace_json, read_workspace_text, run_kimi_workspace_task, write_workspace_task
 
 
 DEFAULT_TIMEOUT_SECONDS = 300
@@ -20,6 +20,7 @@ def _run_is_complete(run_dir: Path) -> bool:
         run_dir / "transcript.json",
         run_dir / "timing.json",
         run_dir / "outputs" / "final_response.md",
+        run_dir / "outputs" / "latest_assistant_response.md",
     ]
     return all(path.exists() for path in required_paths)
 
@@ -71,24 +72,88 @@ def _render_file_context(file_refs: list[str], package_dir: Path, iteration_dir:
     return "\n".join(["Use the following input files as additional context:"] + blocks), loaded_files
 
 
-def _turn_script(eval_metadata: dict[str, Any], user_prompt: str) -> list[str]:
-    script = eval_metadata.get("host_eval", {}).get("turn_script", [])
+def _normalize_turn_script_items(script: Any) -> list[dict[str, str]]:
     if not script:
-        return [user_prompt]
-    turns: list[str] = []
+        return []
+    turns: list[dict[str, str]] = []
     for item in script:
         if isinstance(item, dict):
-            turns.append(str(item.get("text", "")).strip())
+            text = str(item.get("text", "")).strip()
+            label = str(item.get("label", "")).strip()
         else:
-            turns.append(str(item).strip())
-    return [turn for turn in turns if turn]
+            text = str(item).strip()
+            label = ""
+        if text:
+            turns.append({"text": text, "label": label})
+    return turns
 
 
-def _final_response_from_transcript(transcript: dict[str, Any]) -> str:
+def _turn_script(eval_metadata: dict[str, Any], user_prompt: str) -> dict[str, Any]:
+    execution_eval = eval_metadata.get("execution_eval", {})
+    if isinstance(execution_eval, dict):
+        execution_turns = _normalize_turn_script_items(execution_eval.get("turn_script", []))
+        if execution_turns:
+            return {
+                "source": "execution_eval.turn_script",
+                "execution_eval": execution_eval,
+                "turns": execution_turns,
+            }
+
+    host_eval = eval_metadata.get("host_eval", {})
+    if isinstance(host_eval, dict):
+        host_turns = _normalize_turn_script_items(host_eval.get("turn_script", []))
+        if host_turns:
+            return {
+                "source": "host_eval.turn_script",
+                "execution_eval": execution_eval if isinstance(execution_eval, dict) else {},
+                "turns": host_turns,
+            }
+
+    return {
+        "source": "prompt",
+        "execution_eval": execution_eval if isinstance(execution_eval, dict) else {},
+        "turns": [{"text": user_prompt, "label": "prompt"}],
+    }
+
+
+def _latest_assistant_response_from_transcript(transcript: dict[str, Any]) -> str:
     turns = transcript.get("turns", [])
     if not turns:
         return ""
     return str(turns[-1].get("assistant_text", "")).strip()
+
+
+def _full_conversation_from_transcript(transcript: dict[str, Any]) -> str:
+    lines = ["# Full Conversation", ""]
+    for turn in transcript.get("turns", []):
+        turn_index = int(turn.get("turn_index", 0) or 0)
+        label = str(turn.get("label", "")).strip()
+        label_suffix = f" ({label})" if label else ""
+        lines.extend(
+            [
+                f"## Turn {turn_index} User{label_suffix}",
+                "",
+                str(turn.get("user_text", "")).strip(),
+                "",
+                f"## Turn {turn_index} Assistant",
+                "",
+                str(turn.get("assistant_text", "")).strip(),
+                "",
+            ]
+        )
+    return "\n".join(lines).strip() + "\n"
+
+
+def _write_turn_outputs(run_dir: Path, transcript: dict[str, Any]) -> None:
+    turns_dir = run_dir / "outputs" / "turns"
+    for turn in transcript.get("turns", []):
+        turn_index = int(turn.get("turn_index", 0) or 0)
+        if turn_index <= 0:
+            continue
+        write_text(
+            turns_dir / f"turn-{turn_index}-assistant.md",
+            str(turn.get("assistant_text", "")).strip() + "\n",
+        )
 
 
 def _execution_model(model: str | None) -> str:
@@ -126,16 +191,22 @@ def execute_run(
     user_prompt = str(eval_metadata.get("prompt", ""))
     if file_context:
         user_prompt = f"{user_prompt}\n\n{file_context}"
-    turns = _turn_script(eval_metadata, user_prompt)
+    script = _turn_script(eval_metadata, user_prompt)
+    turns = script["turns"]
 
     request_payload = {
         "runner": "kimi-code",
         "configuration": resolved_configuration,
         "model": resolved_model,
         "turns": turns,
+        "turn_script_source": script["source"],
+        "execution_eval": script["execution_eval"],
+        "host_eval": eval_metadata.get("host_eval", {}),
         "loaded_files": loaded_files,
         "execution_mode": "workspace-file-task",
+        "final_response_mode": "full_conversation",
         "result_source_of_truth": "outputs/final_response.md",
+        "latest_assistant_response_path": "outputs/latest_assistant_response.md",
         "skill_mode": "workspace-file-task-proxy" if resolved_configuration == "with_skill" else "workspace-file-task-baseline",
     }
 
@@ -165,10 +236,13 @@ def execute_run(
 
     duration_seconds = time.perf_counter() - start
     finished_at = datetime.now(timezone.utc)
-    assistant_text = _final_response_from_transcript(transcript)
+    latest_assistant_text = _latest_assistant_response_from_transcript(transcript)
+    full_conversation = _full_conversation_from_transcript(transcript)
 
     write_json(run_dir / "raw_response.json", raw_response)
-    write_text(run_dir / "outputs" / "final_response.md", assistant_text)
+    write_text(run_dir / "outputs" / "final_response.md", full_conversation)
+    write_text(run_dir / "outputs" / "latest_assistant_response.md", latest_assistant_text + "\n")
+    _write_turn_outputs(run_dir, transcript)
 
     timing = {
         "started_at": started_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -186,8 +260,10 @@ def execute_run(
         "configuration": resolved_configuration,
         "provider": "kimi-code",
         "model": resolved_model,
-        "messages": [{"role": "user", "content": turn} for turn in turns],
-        "assistant_response": assistant_text,
+        "messages": transcript.get("messages", []),
+        "turn_count": len(transcript.get("turns", [])),
+        "assistant_response": full_conversation,
+        "latest_assistant_response": latest_assistant_text,
         "loaded_files": loaded_files,
         "host_transcript": transcript,
     }
@@ -201,6 +277,7 @@ def execute_run(
         "duration_seconds": timing["total_duration_seconds"],
         "total_tokens": timing["total_tokens"],
         "output_file": str(run_dir / "outputs" / "final_response.md"),
+        "latest_output_file": str(run_dir / "outputs" / "latest_assistant_response.md"),
     }
 
 
@@ -363,7 +440,7 @@ def _workspace_turn_contract() -> str:
 
 
 def _run_workspace_file_turns(
-    turns: list[str],
+    turns: list[dict[str, str]],
     *,
     session_dir: Path,
     package_dir: Path,
@@ -379,7 +456,9 @@ def _run_workspace_file_turns(
     task_results: list[dict[str, Any]] = []
     stderr_log: list[str] = []
 
-    for turn_index, text in enumerate(turns, start=1):
+    for turn_index, turn in enumerate(turns, start=1):
+        text = str(turn.get("text", "")).strip()
+        label = str(turn.get("label", "")).strip()
         conversation.append({"role": "user", "content": text})
         turn_dir = session_dir / f"turn-{turn_index}"
         required_outputs = ["outputs/assistant.md", "outputs/run_metadata.json"]
@@ -392,7 +471,9 @@ def _run_workspace_file_turns(
                 "inputs/conversation.json": {
                     "configuration": configuration,
                     "turn_index": turn_index,
+                    "turn_label": label,
                     "messages": conversation,
+                    "turn_script": turns,
                 },
             },
             metadata={
@@ -412,6 +493,9 @@ def _run_workspace_file_turns(
             skills_dir=Path(proxy_info["skills_dir"]) if proxy_info else None,
         )
         assistant_text = read_workspace_text(task_result, "outputs/assistant.md").strip()
+        run_metadata = load_workspace_json(task_result, "outputs/run_metadata.json")
+        if not isinstance(run_metadata, dict):
+            run_metadata = {}
         conversation.append({"role": "assistant", "content": assistant_text})
         if task_result.get("stderr"):
             stderr_log.append(str(task_result["stderr"]))
@@ -419,8 +503,10 @@ def _run_workspace_file_turns(
         transcript_turns.append(
             {
                 "turn_index": turn_index,
+                "label": label,
                 "user_text": text,
                 "assistant_text": assistant_text,
+                "run_metadata": run_metadata,
                 "events": task_result.get("messages", []),
                 "command_events": [],
                 "warnings": task_result.get("warnings", []),
@@ -434,6 +520,7 @@ def _run_workspace_file_turns(
                 "turn_index": turn_index,
                 "task_dir": str(turn_dir),
                 "resolved_outputs": task_result.get("resolved_outputs", {}),
+                "run_metadata": run_metadata,
                 "assistant_text_log": task_result.get("assistant_text", ""),
                 "warnings": task_result.get("warnings", []),
                 "stderr": task_result.get("stderr", ""),
@@ -452,6 +539,7 @@ def _run_workspace_file_turns(
         "canonical_skill_path": proxy_info.get("canonical_skill_path", ""),
         "skills_dir": proxy_info.get("skills_dir", ""),
         "turns": transcript_turns,
+        "messages": conversation,
         "task_results": task_results,
         "stderr": stderr_log,
     }

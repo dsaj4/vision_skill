@@ -64,6 +64,13 @@ def write_certified_bundle_flow(base: Path) -> tuple[Path, Path]:
                 "judge_rubric": ["Thinking Support"],
                 "must_preserve": ["Respect direct-result mode."],
                 "must_not_do": ["Avoid empty advice."],
+                "execution_eval": {
+                    "enabled": True,
+                    "turn_script": [
+                        {"label": "staged", "text": "Analyze this product idea with a direct SWOT recommendation."},
+                        {"label": "continue", "text": "Continue with the recommendation."},
+                    ],
+                },
                 "expectations": [
                     {
                         "id": "all-quadrants",
@@ -379,6 +386,12 @@ def test_run_eval_pipeline_runs_end_to_end_from_certified_bundle(tmp_path: Path)
     assert (iteration_dir / "quality-failure-tags.json").exists()
     assert (iteration_dir / "human-review-packet.md").exists()
     assert (iteration_dir / "release-recommendation.json").exists()
+    multi_turn_transcripts = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in iteration_dir.glob("eval-*/*/run-1/transcript.json")
+    ]
+    assert any(item.get("turn_count") == 2 for item in multi_turn_transcripts)
+    assert list(iteration_dir.glob("eval-*/*/run-1/outputs/latest_assistant_response.md"))
     assert result["level3_primary_mode"] == "differential"
     assert result["quality_primary_mode"] == "deep-quality"
 

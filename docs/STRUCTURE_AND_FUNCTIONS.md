@@ -232,7 +232,7 @@ python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\visio
 ```text
 1. resolve package evals
 2. prepare iteration
-3. execute with_skill and without_skill
+3. execute with_skill and without_skill, including scripted multi-turn when `execution_eval.turn_script` is present
 4. run hard gate
 5. run quantitative supporting bundle
 6. run deep quality eval
@@ -249,12 +249,17 @@ python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\visio
 - 读取 package 的 `metadata/package.json`。
 - 如果 `eval_source.mode = certified-bundle`，先读取上游 bundle。
 - 把 certified bundle 导出成 package 风格的 `evals/evals.json`。
-- 保留 `host_eval` 等扩展字段。
+- 保留 `execution_eval`、`host_eval` 等扩展字段。
 
 主要产物：
 
 - `packages/<package>/evals/evals.json`
 - `packages/<package>/evals/eval-sync.json`
+
+Eval script fields:
+
+- `execution_eval.turn_script` is the main evaluation-lane multi-turn script. It drives `execute_iteration`.
+- `host_eval.turn_script` is reserved for real host validation. The executor keeps a temporary fallback to it for legacy evals only.
 
 ### 9.2 Iteration 准备
 
@@ -290,7 +295,16 @@ iteration-1/
 - 对 `without_skill` 不安装 skill proxy，作为 baseline。
 - 每个用户 turn 都创建受控工作区文件任务。
 - 要求 Kimi 写 `outputs/assistant.md` 和 `outputs/run_metadata.json`。
-- 把最终回答复制成标准产物 `run-*/outputs/final_response.md`。
+- 把完整多轮对话写成标准产物 `run-*/outputs/final_response.md`。
+- 把最后一轮 assistant 回答单独写入 `run-*/outputs/latest_assistant_response.md`。
+
+Current multi-turn contract:
+
+- Turn source precedence: `execution_eval.turn_script` -> legacy `host_eval.turn_script` fallback -> single `prompt`.
+- Each scripted turn is executed as a controlled Kimi workspace-file task with full conversation history.
+- `outputs/final_response.md` contains the full user/assistant conversation transcript for the run.
+- `outputs/latest_assistant_response.md` contains only the last assistant answer.
+- `outputs/turns/turn-N-assistant.md` stores each assistant turn separately for debugging.
 
 单次 run 产物：
 
@@ -302,6 +316,9 @@ run-1/
   timing.json
   outputs/
     final_response.md
+    latest_assistant_response.md
+    turns/
+      turn-1-assistant.md
 ```
 
 内部 Kimi 任务产物：
@@ -638,7 +655,8 @@ Validators 是低成本质量门禁。
 | `request.json` | executor | 本次 run 的输入、配置、turn script。 |
 | `raw_response.json` | executor | Kimi 调用日志、workspace task 元数据。 |
 | `transcript.json` | executor | 标准化后的对话记录。 |
-| `outputs/final_response.md` | executor | run 的最终回答，后续评分读取它。 |
+| `outputs/final_response.md` | executor | run 的完整多轮对话，后续评分默认读取它。 |
+| `outputs/latest_assistant_response.md` | executor | 最后一轮 assistant 回答，供 deep eval 和调试区分最终单答。 |
 | `timing.json` | executor | 执行耗时和 token 占位字段。 |
 | `grading.json` | grader | 单次回答的 expectation 检查结果。 |
 | `benchmark.json` | gate benchmark | 支持性 pass rate 和执行指标。 |

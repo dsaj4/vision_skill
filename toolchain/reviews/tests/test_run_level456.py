@@ -98,6 +98,7 @@ def write_iteration(base: Path) -> Path:
             run_dir = eval_dir / configuration / f"run-{index}"
             (run_dir / "outputs").mkdir(parents=True, exist_ok=True)
             (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
+            (run_dir / "outputs" / "latest_assistant_response.md").write_text(response, encoding="utf-8")
             (run_dir / "request.json").write_text(
                 json.dumps({"model": "kimi-for-coding", "messages": [{"role": "user", "content": "Give me the SWOT result."}]}, ensure_ascii=False, indent=2),
                 encoding="utf-8",

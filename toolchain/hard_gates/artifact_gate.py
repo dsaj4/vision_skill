@@ -13,6 +13,7 @@ REQUIRED_RUN_ARTIFACTS = [
     "transcript.json",
     "timing.json",
     "outputs/final_response.md",
+    "outputs/latest_assistant_response.md",
 ]
 
 REQUIRED_CONFIGURATIONS = ["with_skill", "without_skill"]
@@ -50,6 +51,11 @@ def _check_run(run_dir: Path, eval_metadata: dict[str, Any]) -> dict[str, Any]:
     output_text = output_path.read_text(encoding="utf-8") if output_path.exists() else ""
     if output_path.exists() and not output_text.strip():
         blockers.append("empty_final_response")
+
+    latest_output_path = run_dir / "outputs" / "latest_assistant_response.md"
+    latest_output_text = latest_output_path.read_text(encoding="utf-8") if latest_output_path.exists() else ""
+    if latest_output_path.exists() and not latest_output_text.strip():
+        blockers.append("empty_latest_assistant_response")
 
     timing_path = run_dir / "timing.json"
     timing = load_json(timing_path) if timing_path.exists() else {}

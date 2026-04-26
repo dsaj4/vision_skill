@@ -18,6 +18,7 @@ def write_run(run_dir: Path, response: str = "answer") -> None:
     (run_dir / "transcript.json").write_text("{}", encoding="utf-8")
     (run_dir / "timing.json").write_text(json.dumps({"total_duration_seconds": 1}), encoding="utf-8")
     (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
+    (run_dir / "outputs" / "latest_assistant_response.md").write_text(response, encoding="utf-8")
 
 
 def test_run_hard_gate_writes_passed_report(tmp_path: Path) -> None:

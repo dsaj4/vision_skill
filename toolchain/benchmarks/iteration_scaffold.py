@@ -7,7 +7,7 @@ from toolchain.common import filter_evals, load_json, slugify, write_json
 from toolchain.eval_factory.sync import resolve_package_evals
 
 
-def _slugify(text: str, max_length: int = 48) -> str:
+def _slugify(text: str, max_length: int = 40) -> str:
     return slugify(text, max_length=max_length)
 
 
@@ -71,6 +71,7 @@ def prepare_iteration(
                 "files": eval_item.get("files", []),
                 "assertions": eval_item.get("expectations", []),
                 "quality_rubric": eval_item.get("quality_rubric", []),
+                "execution_eval": eval_item.get("execution_eval", {}),
                 "host_eval": eval_item.get("host_eval", {}),
             },
         )

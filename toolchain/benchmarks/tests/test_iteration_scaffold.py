@@ -44,6 +44,13 @@ def write_package_with_evals(base: Path) -> Path:
                         "expected_output": "Structured SWOT output.",
                         "files": [],
                         "expectations": ["Includes all four SWOT quadrants."],
+                        "execution_eval": {
+                            "enabled": True,
+                            "turn_script": [
+                                {"label": "staged", "text": "Start with the first step."},
+                                {"label": "continue", "text": "Continue."},
+                            ],
+                        },
                         "host_eval": {
                             "enabled": True,
                             "turn_script": [{"text": "Run Kimi host validation."}],
@@ -85,6 +92,8 @@ def test_prepare_iteration_creates_eval_directories_and_metadata(tmp_path: Path)
     assert (eval_dir / "with_skill" / "run-1" / "outputs").exists()
     assert (eval_dir / "without_skill" / "run-1" / "outputs").exists()
     metadata = json.loads((eval_dir / "eval_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["execution_eval"]["enabled"] is True
+    assert metadata["execution_eval"]["turn_script"][1]["label"] == "continue"
     assert metadata["host_eval"]["enabled"] is True
 
 

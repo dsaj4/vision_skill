@@ -265,6 +265,7 @@ def export_certified_bundle(
                 "expected_output": candidate.get("expected_output", ""),
                 "files": candidate.get("files", []),
                 "expectations": candidate.get("expectations", []),
+                "execution_eval": candidate.get("execution_eval", {}),
                 "host_eval": candidate.get("host_eval", {}),
                 "certified_metadata": {
                     "scenario_id": candidate["scenario_id"],

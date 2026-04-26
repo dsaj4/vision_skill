@@ -180,7 +180,7 @@ run artifacts
 | --- | --- | --- |
 | `sync` | 同步 package evals | 保持不变。 |
 | `prepare` | 创建 iteration 目录 | 保持不变。 |
-| `execute` | 生成 with_skill / without_skill 回答 | 保持不变，继续用 Kimi workspace-file task。 |
+| `execute` | 生成 with_skill / without_skill 回答 | 支持 `execution_eval.turn_script` 驱动的 scripted multi-turn，继续用 Kimi workspace-file task。 |
 | `grade` | 规则型评分，进入 benchmark | 降级为 quantitative bundle 内部步骤。 |
 | `benchmark` | 聚合 pass rate、time、tokens | 降级为 supporting artifact。 |
 | `differential` | Level 3 主价值判断 | 降级为 supporting artifact。 |
@@ -198,10 +198,11 @@ run artifacts
 | --- | --- |
 | `evals/evals.json` | package 当前消费的 eval。 |
 | `eval_metadata.json` | 单个 eval 的运行元信息。 |
-| `request.json` | run 请求和配置。 |
+| `request.json` | run 请求、配置、`execution_eval` 和 turn script。 |
 | `raw_response.json` | Kimi 调用日志和 workspace task 元数据。 |
-| `transcript.json` | 标准化对话记录。 |
-| `outputs/final_response.md` | run 最终回答。 |
+| `transcript.json` | 标准化多轮对话记录。 |
+| `outputs/final_response.md` | run 完整多轮对话。 |
+| `outputs/latest_assistant_response.md` | 最后一轮 assistant 回答。 |
 | `timing.json` | 执行耗时和 token 占位。 |
 | `human-review-score.json` | 人工审核填写文件。 |
 
@@ -259,7 +260,7 @@ final_response.md
 ### 6.2 改造后数据流
 
 ```text
-final_response.md + request.json + transcript.json + raw_response.json + timing.json + SKILL.md + rubric
+final_response.md + latest_assistant_response.md + request.json + transcript.json + raw_response.json + timing.json + SKILL.md + rubric
   -> deep eval packet
   -> deep-eval.json
   -> review packet

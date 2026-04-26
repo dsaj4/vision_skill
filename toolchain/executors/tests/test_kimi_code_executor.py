@@ -35,23 +35,21 @@ def write_package(base: Path) -> Path:
     return package_dir
 
 
-def write_iteration(base: Path) -> Path:
+def write_iteration(base: Path, *, eval_metadata_extra: dict | None = None) -> Path:
     iteration_dir = base / "iteration-1"
     eval_dir = iteration_dir / "eval-1-swot"
     eval_dir.mkdir(parents=True, exist_ok=True)
+    metadata = {
+        "eval_id": 1,
+        "eval_name": "swot",
+        "prompt": "Give me a direct SWOT result.",
+        "expected_output": "Complete SWOT result",
+        "files": [],
+        "assertions": [],
+    }
+    metadata.update(eval_metadata_extra or {})
     (eval_dir / "eval_metadata.json").write_text(
-        json.dumps(
-            {
-                "eval_id": 1,
-                "eval_name": "swot",
-                "prompt": "Give me a direct SWOT result.",
-                "expected_output": "Complete SWOT result",
-                "files": [],
-                "assertions": [],
-            },
-            ensure_ascii=False,
-            indent=2,
-        ),
+        json.dumps(metadata, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     for configuration in ("with_skill", "without_skill"):
@@ -67,16 +65,28 @@ def _json_line(payload: dict) -> str:
 def fake_kimi_runner(args: list[str], cwd: Path, timeout_seconds: int | None) -> dict[str, str | int]:
     output_path = cwd / "outputs" / "assistant.md"
     metadata_path = cwd / "outputs" / "run_metadata.json"
+    conversation = json.loads((cwd / "inputs" / "conversation.json").read_text(encoding="utf-8"))
+    turn_index = int(conversation["turn_index"])
+    last_user = conversation["messages"][-1]["content"]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with_skill = "--skills-dir" in args
     if with_skill:
-        response = (
-            "## Strengths\n- user insight\n"
-            "## Weaknesses\n- limited budget\n"
-            "## Opportunities\n- market timing\n"
-            "## Threats\n- competition\n"
-            "## Strategy\n- validate demand first"
-        )
+        if turn_index == 1 and "继续" not in last_user:
+            response = (
+                "我先给第一步判断。回复\"继续\"我会展开策略。\n\n"
+                "## Strengths\n- user insight\n"
+                "## Weaknesses\n- limited budget\n"
+            )
+        elif "不对" in last_user:
+            response = "已按你的修改意见重做：先聚焦低风险试水，再看是否扩大投入。"
+        elif "直接" in last_user:
+            response = "直接结论：先做小规模验证，不建议立刻扩大投入。"
+        else:
+            response = (
+                "## Opportunities\n- market timing\n"
+                "## Threats\n- competition\n"
+                "## Strategy\n- validate demand first"
+            )
         skill_dir = Path(args[args.index("--skills-dir") + 1])
         proxy_skill_path = skill_dir / "swot-analysis" / "SKILL.md"
         stdout = "\n".join(
@@ -107,7 +117,7 @@ def fake_kimi_runner(args: list[str], cwd: Path, timeout_seconds: int | None) ->
             ]
         )
     else:
-        response = "A baseline answer without full SWOT structure."
+        response = f"Baseline turn {turn_index}: {last_user}"
         stdout = _json_line({"role": "assistant", "content": "Finished writing workspace outputs."})
 
     output_path.write_text(response, encoding="utf-8")
@@ -115,8 +125,9 @@ def fake_kimi_runner(args: list[str], cwd: Path, timeout_seconds: int | None) ->
         json.dumps(
             {
                 "configuration": "with_skill" if with_skill else "without_skill",
-                "turn_index": 1,
+                "turn_index": turn_index,
                 "used_skill": with_skill,
+                "last_user": last_user,
                 "notes": "fake runner wrote controlled output files",
             },
             ensure_ascii=False,
@@ -149,18 +160,102 @@ def test_execute_run_writes_artifacts_and_uses_kimi_code_host(tmp_path: Path) ->
     )
 
     final_response = (run_dir / "outputs" / "final_response.md").read_text(encoding="utf-8")
+    latest_response = (run_dir / "outputs" / "latest_assistant_response.md").read_text(encoding="utf-8")
     request_payload = json.loads((run_dir / "request.json").read_text(encoding="utf-8"))
     transcript = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))
     timing = json.loads((run_dir / "timing.json").read_text(encoding="utf-8"))
 
+    assert "## Turn 1 User" in final_response
     assert "## Strengths" in final_response
+    assert "## Strengths" in latest_response
     assert request_payload["runner"] == "kimi-code"
     assert request_payload["execution_mode"] == "workspace-file-task"
+    assert request_payload["turn_script_source"] == "prompt"
+    assert request_payload["final_response_mode"] == "full_conversation"
     assert request_payload["skill_mode"] == "workspace-file-task-proxy"
     assert transcript["provider"] == "kimi-code"
+    assert transcript["turn_count"] == 1
+    assert transcript["messages"][0]["role"] == "user"
+    assert transcript["messages"][1]["role"] == "assistant"
     assert transcript["host_transcript"]["execution_mode"] == "workspace-file-task"
+    assert transcript["latest_assistant_response"] == latest_response.strip()
     assert timing["token_source"] == "kimi-cli-unavailable"
     assert result["configuration"] == "with_skill"
+    assert result["latest_output_file"].endswith("latest_assistant_response.md")
+    assert (run_dir / "outputs" / "turns" / "turn-1-assistant.md").exists()
+
+
+def test_execute_run_uses_execution_eval_turn_script_and_writes_full_conversation(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir = write_iteration(
+        tmp_path / "workspace",
+        eval_metadata_extra={
+            "execution_eval": {
+                "enabled": True,
+                "turn_script": [
+                    {"label": "staged", "text": "先用 SWOT 帮我拆第一步。"},
+                    {"label": "continue", "text": "继续"},
+                    {"label": "direct-result", "text": "现在直接给结论。"},
+                ],
+            }
+        },
+    )
+    run_dir = iteration_dir / "eval-1-swot" / "with_skill" / "run-1"
+
+    execute_run(
+        run_dir,
+        package_dir,
+        configuration="with_skill",
+        command_runner=fake_kimi_runner,
+        model="kimi-for-coding",
+    )
+
+    final_response = (run_dir / "outputs" / "final_response.md").read_text(encoding="utf-8")
+    latest_response = (run_dir / "outputs" / "latest_assistant_response.md").read_text(encoding="utf-8")
+    request_payload = json.loads((run_dir / "request.json").read_text(encoding="utf-8"))
+    transcript = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))
+
+    assert request_payload["turn_script_source"] == "execution_eval.turn_script"
+    assert request_payload["execution_eval"]["enabled"] is True
+    assert "## Turn 1 User (staged)" in final_response
+    assert "## Turn 2 User (continue)" in final_response
+    assert "## Turn 3 User (direct-result)" in final_response
+    assert "直接结论" in latest_response
+    assert transcript["turn_count"] == 3
+    assert len(transcript["messages"]) == 6
+    assert transcript["host_transcript"]["turns"][1]["run_metadata"]["turn_index"] == 2
+    assert (run_dir / "outputs" / "turns" / "turn-3-assistant.md").exists()
+
+
+def test_execute_run_falls_back_to_host_eval_turn_script_for_legacy_cases(tmp_path: Path) -> None:
+    package_dir = write_package(tmp_path / "packages")
+    iteration_dir = write_iteration(
+        tmp_path / "workspace",
+        eval_metadata_extra={
+            "host_eval": {
+                "enabled": True,
+                "turn_script": [
+                    {"label": "info-missing", "text": "我想转 AI 方向，但信息很乱。"},
+                    {"label": "info-supply", "text": "目标是 6 个月内完成转型。"},
+                ],
+            }
+        },
+    )
+    run_dir = iteration_dir / "eval-1-swot" / "with_skill" / "run-1"
+
+    execute_run(
+        run_dir,
+        package_dir,
+        configuration="with_skill",
+        command_runner=fake_kimi_runner,
+        model="kimi-for-coding",
+    )
+
+    request_payload = json.loads((run_dir / "request.json").read_text(encoding="utf-8"))
+    transcript = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))
+
+    assert request_payload["turn_script_source"] == "host_eval.turn_script"
+    assert transcript["turn_count"] == 2
 
 
 def test_execute_iteration_runs_both_configurations(tmp_path: Path) -> None:
@@ -187,6 +282,7 @@ def test_execute_iteration_skips_completed_runs_when_requested(tmp_path: Path) -
     (completed_run_dir / "transcript.json").write_text(json.dumps({"assistant_response": "done"}), encoding="utf-8")
     (completed_run_dir / "timing.json").write_text(json.dumps({"total_tokens": 0, "total_duration_seconds": 1.0}), encoding="utf-8")
     (completed_run_dir / "outputs" / "final_response.md").write_text("done", encoding="utf-8")
+    (completed_run_dir / "outputs" / "latest_assistant_response.md").write_text("done", encoding="utf-8")
 
     result = execute_iteration(
         iteration_dir,

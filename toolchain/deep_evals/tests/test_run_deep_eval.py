@@ -40,6 +40,10 @@ def write_package(base: Path) -> Path:
 def write_run(run_dir: Path, response: str) -> None:
     (run_dir / "outputs").mkdir(parents=True, exist_ok=True)
     (run_dir / "outputs" / "final_response.md").write_text(response, encoding="utf-8")
+    (run_dir / "outputs" / "latest_assistant_response.md").write_text(
+        response.splitlines()[-1] if response.splitlines() else response,
+        encoding="utf-8",
+    )
     (run_dir / "request.json").write_text(json.dumps({"turns": ["Help me decide."]}), encoding="utf-8")
     (run_dir / "transcript.json").write_text(
         json.dumps({"assistant_response": response}, ensure_ascii=False),
@@ -71,6 +75,13 @@ def write_iteration(base: Path) -> Path:
                 "eval_name": "sample",
                 "prompt": "Help me decide.",
                 "expected_output": "A useful decision answer.",
+                "execution_eval": {
+                    "enabled": True,
+                    "turn_script": [
+                        {"label": "staged", "text": "Help me decide."},
+                        {"label": "continue", "text": "Continue."},
+                    ],
+                },
                 "quality_rubric": [
                     {
                         "dimension": "Case Directness",
@@ -139,9 +150,12 @@ def test_build_deep_eval_packet_reads_raw_run_artifacts(tmp_path: Path) -> None:
     assert packet["rubric"]["schema_version"] == "darwin-conservative-v1"
     assert [item["dimension"] for item in packet["rubric"]["global"]] == ["Overall Structure", "Live Test Performance"]
     assert packet["rubric"]["package_specific"][0]["dimension"] == "Sample Fit"
+    assert packet["evals"][0]["execution_eval"]["enabled"] is True
     assert packet["evals"][0]["quality_rubric"][0]["dimension"] == "Case Directness"
     assert packet["evals"][0]["runs"][0]["final_response"]
+    assert packet["evals"][0]["runs"][0]["latest_assistant_response"]
     assert packet["evals"][0]["runs"][0]["evidence_paths"]["raw_response"].endswith("raw_response.json")
+    assert packet["evals"][0]["runs"][0]["evidence_paths"]["latest_assistant_response"].endswith("latest_assistant_response.md")
 
 
 def test_run_deep_eval_writes_quality_artifacts(tmp_path: Path) -> None:

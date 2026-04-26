@@ -166,7 +166,7 @@ The default eval path is now:
 certified bundle
   -> package eval sync
   -> prepare iteration
-  -> execute with Kimi Code workspace-file tasks
+  -> execute with Kimi Code workspace-file tasks, including scripted multi-turn when `execution_eval.turn_script` exists
   -> hard-gate.json
   -> quantitative-summary.json (supporting bundle, including old benchmark/differential/stability artifacts)
   -> deep-eval.json through workspace-file tasks
@@ -178,10 +178,19 @@ Review and recommendation should read `deep-eval.json` first. `level3-summary.js
 
 Mainline Kimi calls no longer consume large terminal replies as results:
 
-- executor result source: `outputs/assistant.md`
+- executor per-turn source: `outputs/assistant.md`
+- executor run source: `outputs/final_response.md` as the full conversation transcript
+- executor latest answer source: `outputs/latest_assistant_response.md`
 - pairwise judge result source: `outputs/judgment.json`
 - deep quality evaluator result source: `outputs/deep-eval.json`
 - terminal output is retained only as debug log in raw artifacts
+
+Execution eval scripts:
+
+- `execution_eval.turn_script` is the mainline multi-turn script source for `execute_iteration`.
+- `host_eval.turn_script` is for real host validation. The executor keeps a temporary fallback to it for legacy evals only.
+- `final_response.md` intentionally contains the full conversation, so quantitative and pairwise checks evaluate the scripted user experience.
+- `latest_assistant_response.md` is available when a downstream step needs only the final assistant answer.
 
 Kimi host validation can also run directly on host-enabled evals:
 
