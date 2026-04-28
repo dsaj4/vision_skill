@@ -9,6 +9,7 @@ from toolchain.common import load_json
 from toolchain.deep_evals.run_deep_eval import Sender, run_deep_eval
 from toolchain.hard_gates.artifact_gate import run_hard_gate
 from toolchain.kimi_runtime import CommandRunner
+from toolchain.package_snapshot import snapshot_package_state
 from toolchain.quantitative.run_quantitative_bundle import (
     build_quantitative_summary,
     write_quantitative_summary_artifacts,
@@ -18,7 +19,7 @@ from toolchain.benchmarks.stability import generate_stability_report, write_stab
 from toolchain.reviews.cognitive_review import (
     build_human_review_packet,
     generate_release_recommendation,
-    write_human_review_template,
+    write_human_review_authorization_template,
 )
 
 
@@ -84,6 +85,7 @@ def run_level456(
 
     iteration_path = Path(iteration_dir)
     package_path = Path(package_dir)
+    package_snapshot = snapshot_package_state(package_path, iteration_path)
 
     hard_gate = run_hard_gate(iteration_path)
     quantitative = _ensure_quantitative_summary(iteration_path, package_path)
@@ -96,11 +98,19 @@ def run_level456(
         timeout_seconds=timeout_seconds,
     )
 
-    packet = build_human_review_packet(iteration_path, package_path)
-    review_path = iteration_path / "human-review-score.json"
+    packet = build_human_review_packet(
+        iteration_path,
+        package_path,
+        sender=sender,
+        command_runner=command_runner,
+        review_model=analyzer_model,
+        timeout_seconds=timeout_seconds,
+    )
+    review_path = iteration_path / "human-review-authorization.json"
+    legacy_review_path = iteration_path / "human-review-score.json"
     review_template_written = False
-    if refresh_review_template or not review_path.exists():
-        write_human_review_template(iteration_path, package_name=package_path.name)
+    if refresh_review_template or (not review_path.exists() and not legacy_review_path.exists()):
+        write_human_review_authorization_template(iteration_path, package_name=package_path.name)
         review_template_written = True
 
     recommendation = generate_release_recommendation(iteration_path)
@@ -119,6 +129,7 @@ def run_level456(
         "deep_eval_decision": deep_eval.get("release_signal", {}).get("decision", "revise"),
         "representative_runs": packet["representative_runs"],
         "review_template_written": review_template_written,
+        "review_authorization_template_written": review_template_written,
         "recommendation": recommendation["recommendation"],
         "blockers": recommendation["blockers"],
         "artifacts": {
@@ -126,11 +137,21 @@ def run_level456(
             "quantitative_summary_json": str(iteration_path / "quantitative-summary.json"),
             "deep_eval_json": str(iteration_path / "deep-eval.json"),
             "quality_failure_tags_json": str(iteration_path / "quality-failure-tags.json"),
+            "agent_review_report_json": str(iteration_path / "agent-review-report.json"),
             "human_review_packet": str(iteration_path / "human-review-packet.md"),
-            "human_review_score": str(iteration_path / "human-review-score.json"),
+            "human_review_authorization": str(iteration_path / "human-review-authorization.json"),
             "release_recommendation": str(iteration_path / "release-recommendation.json"),
             "supporting_level3_summary": str(iteration_path / "level3-summary.json"),
             "supporting_stability": str(iteration_path / "stability.json"),
+            "iteration_package_snapshot_dir": package_snapshot["iteration_snapshot_dir"],
+            "iteration_package_manifest": package_snapshot["iteration_manifest"],
+            "latest_package_dir": package_snapshot["latest_package_dir"],
+            "latest_package_manifest": package_snapshot["latest_package_manifest"],
+            "latest_skill_markdown": package_snapshot["latest_skill_markdown"],
+            "upload_ready_root": package_snapshot["upload_ready_root"],
+            "upload_ready_index": package_snapshot["upload_ready_index"],
+            "upload_ready_package_dir": package_snapshot["upload_ready_package_dir"],
+            "upload_ready_skill_markdown": package_snapshot["upload_ready_skill_markdown"],
         },
     }
 
@@ -144,7 +165,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--refresh-review-template",
         action="store_true",
-        help="Overwrite any existing human-review-score.json template before generating the release recommendation.",
+        help="Overwrite any existing human-review-authorization.json template before generating the release recommendation.",
     )
     return parser
 

@@ -24,7 +24,7 @@ This directory contains the current engineering toolchain for `vision-skill`.
 - `analyzers/`
   - legacy mechanism analysis compatibility path
 - `reviews/`
-  - human review packet and release recommendation
+  - agent review report, human authorization, and release recommendation
 - `eval_factory/`
   - validate and export certified eval bundles
   - sync certified bundles into package evals for mainline consumption
@@ -70,7 +70,20 @@ If `KIMI_CLI_MODEL` is not set, the toolchain lets the logged-in Kimi CLI use it
 Run the default Kimi Code eval pipeline:
 
 ```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 2 --runs-per-configuration 3 --model "kimi-for-coding" --judge-model "kimi-for-coding" --analyzer-model "kimi-for-coding"
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 2 --model "kimi-for-coding" --judge-model "kimi-for-coding" --analyzer-model "kimi-for-coding"
+```
+
+Default behavior is optimized for fast iteration:
+
+- `1` run per configuration
+- single-pass pairwise judging
+- full hard gate, quantitative summary, deep eval, review packet, and release recommendation still generated
+- package snapshot artifacts also generated so the latest `SKILL.md` is easy to open from the workspace
+
+Run the slower stability-oriented profile only when needed:
+
+```bash
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 2 --thorough --model "kimi-for-coding" --judge-model "kimi-for-coding" --analyzer-model "kimi-for-coding"
 ```
 
 Run the lightweight smoke path:
@@ -115,6 +128,8 @@ Run the new differential benchmark path:
 python -m toolchain.benchmarks.run_differential_benchmark --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --skill-name "SWOT Analysis" --skill-path "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --judge-model "kimi-for-coding"
 ```
 
+The differential benchmark defaults to single-pass judging. Add `--balanced-judging` when you explicitly need the slower forward + reversed check.
+
 Run the supporting quantitative bundle:
 
 ```bash
@@ -146,7 +161,7 @@ pytest toolchain/eval_factory/tests/test_catalog.py
 The quantitative bundle writes these artifacts in the iteration directory:
 
 - `pairwise-judgment.json`
-- `pairwise-judgment-reversed.json`
+- `pairwise-judgment-reversed.json` (empty in the default single-pass profile)
 - `pairwise-consensus.json`
 - `benchmark.json`
 - `differential-benchmark.json`
@@ -166,15 +181,37 @@ The default eval path is now:
 certified bundle
   -> package eval sync
   -> prepare iteration
+  -> package snapshot (iteration package/ + workspace latest-package/ + latest-skill.md)
   -> execute with Kimi Code workspace-file tasks, including scripted multi-turn when `execution_eval.turn_script` exists
   -> hard-gate.json
   -> quantitative-summary.json (supporting bundle, including old benchmark/differential/stability artifacts)
   -> deep-eval.json through workspace-file tasks
-  -> human review packet
+  -> agent-review-report.json
+  -> human-review-packet.md
+  -> human-review-authorization.json
   -> release recommendation
 ```
 
-Review and recommendation should read `deep-eval.json` first. `level3-summary.json`, `benchmark.json`, `differential-benchmark.json`, and `stability.json` remain supporting diagnostics.
+Review and recommendation should read `deep-eval.json` first. `human-review-packet.md` is now rendered as an LLM-readable report from `agent-review-report.json`, and `human-review-authorization.json` is the canonical human approval artifact. `level3-summary.json`, `benchmark.json`, `differential-benchmark.json`, and `stability.json` remain supporting diagnostics.
+
+Package snapshot artifacts:
+
+- `iteration-N/package/`
+  - immutable snapshot of the package state used by that iteration
+- `package-workspaces/<package>-workspace/latest-package/`
+  - stable latest package snapshot path
+- `package-workspaces/<package>-workspace/latest-skill.md`
+  - stable direct copy of the latest `SKILL.md`
+- `package-workspaces/upload-ready-skills/<package>/SKILL.md`
+  - pure upload-ready skill folder, containing only the current `SKILL.md` for each package
+- `package-workspaces/upload-ready-skills/index.json`
+  - index of all currently exported pure-skill upload folders
+
+Runtime profile:
+
+- default: fast iteration, `1` run per configuration, single-pass pairwise judge
+- `--thorough`: slower stability profile, `3` runs per configuration, balanced pairwise judge
+- `--balanced-judging`: only switch pairwise judge to forward + reversed while keeping the selected run count
 
 Mainline Kimi calls no longer consume large terminal replies as results:
 

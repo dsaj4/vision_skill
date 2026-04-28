@@ -134,6 +134,17 @@ def write_iteration(base: Path) -> Path:
 
 
 def fake_sender(payload: dict) -> dict:
+    system_prompt = payload.get("messages", [{}])[0].get("content", "")
+    if "人工审阅报告撰写助手" in system_prompt:
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": "# Human Review Packet\n\n## 最终审阅结论摘要\n\n- 结构改善明显，但仍需进一步确认。\n"
+                    }
+                }
+            ]
+        }
     return {
         "choices": [
             {
@@ -281,12 +292,21 @@ def test_run_level456_writes_artifacts_and_preserves_existing_review(tmp_path: P
     assert (iteration_dir / "stability.json").exists()
     assert (iteration_dir / "deep-eval.json").exists()
     assert (iteration_dir / "quality-failure-tags.json").exists()
+    assert (iteration_dir / "agent-review-report.json").exists()
     assert (iteration_dir / "human-review-packet.md").exists()
     assert (iteration_dir / "release-recommendation.json").exists()
+    assert (iteration_dir / "package" / "SKILL.md").exists()
+    assert (iteration_dir.parent / "latest-package" / "SKILL.md").exists()
+    assert (iteration_dir.parent / "latest-skill.md").exists()
+    assert (iteration_dir.parent.parent / "upload-ready-skills" / "swot-analysis" / "SKILL.md").exists()
+    assert (iteration_dir.parent.parent / "upload-ready-skills" / "index.json").exists()
     assert review["reviewer"] == "Alice"
     assert review["decision"] == "pass"
     assert result["analysis_model"] == "kimi-for-coding"
     assert result["quality_primary_mode"] == "deep-quality"
+    assert result["artifacts"]["latest_skill_markdown"] == str(iteration_dir.parent / "latest-skill.md")
+    assert result["artifacts"]["upload_ready_skill_markdown"] == str(iteration_dir.parent.parent / "upload-ready-skills" / "swot-analysis" / "SKILL.md")
+    assert result["artifacts"]["agent_review_report_json"] == str(iteration_dir / "agent-review-report.json")
 
 
 def test_main_prints_json_summary(monkeypatch, capsys, tmp_path: Path) -> None:

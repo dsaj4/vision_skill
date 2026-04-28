@@ -318,6 +318,17 @@ def fake_judge_sender(payload: dict) -> dict:
 
 
 def fake_analyzer_sender(payload: dict) -> dict:
+    system_prompt = payload.get("messages", [{}])[0].get("content", "")
+    if "人工审阅报告撰写助手" in system_prompt:
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": "# Human Review Packet\n\n## 最终审阅结论摘要\n\n- with_skill 有优势，但仍需人工授权确认。\n"
+                    }
+                }
+            ]
+        }
     return {
         "choices": [
             {
@@ -384,8 +395,15 @@ def test_run_eval_pipeline_runs_end_to_end_from_certified_bundle(tmp_path: Path)
     assert (iteration_dir / "stability.json").exists()
     assert (iteration_dir / "deep-eval.json").exists()
     assert (iteration_dir / "quality-failure-tags.json").exists()
+    assert (iteration_dir / "agent-review-report.json").exists()
     assert (iteration_dir / "human-review-packet.md").exists()
+    assert (iteration_dir / "human-review-authorization.json").exists()
     assert (iteration_dir / "release-recommendation.json").exists()
+    assert (iteration_dir / "package" / "SKILL.md").exists()
+    assert (workspace_dir / "latest-package" / "SKILL.md").exists()
+    assert (workspace_dir / "latest-skill.md").exists()
+    assert (tmp_path / "upload-ready-skills" / "sample-package" / "SKILL.md").exists()
+    assert (tmp_path / "upload-ready-skills" / "index.json").exists()
     multi_turn_transcripts = [
         json.loads(path.read_text(encoding="utf-8"))
         for path in iteration_dir.glob("eval-*/*/run-1/transcript.json")
@@ -394,6 +412,11 @@ def test_run_eval_pipeline_runs_end_to_end_from_certified_bundle(tmp_path: Path)
     assert list(iteration_dir.glob("eval-*/*/run-1/outputs/latest_assistant_response.md"))
     assert result["level3_primary_mode"] == "differential"
     assert result["quality_primary_mode"] == "deep-quality"
+    assert result["artifacts"]["latest_skill_markdown"] == str(workspace_dir / "latest-skill.md")
+    assert result["artifacts"]["iteration_package_snapshot_dir"] == str(iteration_dir / "package")
+    assert result["artifacts"]["upload_ready_skill_markdown"] == str(tmp_path / "upload-ready-skills" / "sample-package" / "SKILL.md")
+    assert result["artifacts"]["agent_review_report_json"] == str(iteration_dir / "agent-review-report.json")
+    assert result["artifacts"]["human_review_authorization"] == str(iteration_dir / "human-review-authorization.json")
 
 
 def test_main_prints_pipeline_summary(monkeypatch, capsys, tmp_path: Path) -> None:
@@ -452,6 +475,41 @@ def test_run_eval_pipeline_smoke_mode_limits_evals_and_runs(tmp_path: Path) -> N
     assert len(eval_dirs) == 2
     assert not result["failed_runs"], result["failed_runs"]
     assert len(result["completed_runs"]) + len(result["skipped_runs"]) == 4
+
+
+def test_run_eval_pipeline_defaults_to_quick_profile(tmp_path: Path) -> None:
+    package_dir, workspace_dir = write_certified_bundle_flow(tmp_path)
+
+    result = run_eval_pipeline(
+        package_dir,
+        workspace_dir,
+        iteration_number=1,
+        command_runner=fake_kimi_runner,
+        judge_sender=fake_judge_sender,
+        analyzer_sender=fake_analyzer_sender,
+    )
+
+    assert result["runs_per_configuration"] == 1
+    assert result["judge_strategy"] == "single"
+    assert result["thorough_mode"] is False
+
+
+def test_run_eval_pipeline_thorough_profile_restores_slow_defaults(tmp_path: Path) -> None:
+    package_dir, workspace_dir = write_certified_bundle_flow(tmp_path)
+
+    result = run_eval_pipeline(
+        package_dir,
+        workspace_dir,
+        iteration_number=1,
+        thorough=True,
+        command_runner=fake_kimi_runner,
+        judge_sender=fake_judge_sender,
+        analyzer_sender=fake_analyzer_sender,
+    )
+
+    assert result["runs_per_configuration"] == 3
+    assert result["judge_strategy"] == "balanced"
+    assert result["thorough_mode"] is True
 
 
 def test_main_passes_smoke_arguments(monkeypatch, capsys, tmp_path: Path) -> None:

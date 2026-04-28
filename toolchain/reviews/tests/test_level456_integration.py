@@ -222,6 +222,17 @@ def write_level3_summary(iteration_dir: Path) -> None:
 
 
 def fake_sender(payload: dict) -> dict:
+    system_prompt = payload.get("messages", [{}])[0].get("content", "")
+    if "人工审阅报告撰写助手" in system_prompt:
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": "# Human Review Packet\n\n## 最终审阅结论摘要\n\n- 当前版本仍需人工确认。\n"
+                    }
+                }
+            ]
+        }
     return {
         "choices": [
             {
@@ -264,7 +275,7 @@ def test_level456_pipeline_runs_end_to_end_on_synthetic_iteration(tmp_path: Path
     stability = generate_stability_report(iteration_dir)
     write_stability_artifacts(iteration_dir, stability)
     analyze_iteration(iteration_dir, package_dir, sender=fake_sender, analyzer_model="kimi-for-coding")
-    packet = build_human_review_packet(iteration_dir, package_dir)
+    packet = build_human_review_packet(iteration_dir, package_dir, sender=fake_sender)
     write_human_review_template(iteration_dir, package_name=package_dir.name)
     recommendation = generate_release_recommendation(iteration_dir)
 

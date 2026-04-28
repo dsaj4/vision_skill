@@ -16,7 +16,8 @@ demo-origin package
   -> quantitative supporting bundle
   -> deep quality evaluation
   -> Kimi host validation
-  -> human review
+  -> agent review report
+  -> human authorization
   -> release-ready skill artifacts
 ```
 
@@ -61,11 +62,12 @@ The main evaluation lane now runs on Kimi Code/Kimi CLI.
 certified bundle
   -> package eval sync
   -> prepare iteration
-  -> execute with_skill / without_skill through Kimi Code workspace-file tasks
+  -> execute scripted single-turn or multi-turn with_skill / without_skill through Kimi Code workspace-file tasks
   -> hard-gate.json
   -> quantitative-summary.json as supporting diagnostics
   -> deep-eval.json as primary quality judgment
   -> human-review-packet.md
+  -> human-review-authorization.json
   -> release-recommendation.json
 ```
 
@@ -74,7 +76,10 @@ Important rules:
 - `hard-gate.json` only checks whether artifacts are complete enough to evaluate.
 - `deep-eval.json` is the primary quality judgment.
 - `quantitative-summary.json`, `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json` are supporting diagnostics.
-- Kimi terminal text is never the mainline result source. Execution reads `outputs/assistant.md`, pairwise judging reads `outputs/judgment.json`, and deep quality evaluation reads `outputs/deep-eval.json`.
+- `human-review-packet.md` is now an LLM-readable reviewer report generated from `agent-review-report.json`.
+- `human-review-authorization.json` is the canonical human approval artifact. Without explicit authorization, do not claim release-ready.
+- Kimi terminal text is never the mainline result source. Each execution turn reads `outputs/assistant.md`; the run-level final response is `outputs/final_response.md`; the last assistant answer is `outputs/latest_assistant_response.md`; pairwise judging reads `outputs/judgment.json`; deep quality evaluation reads `outputs/deep-eval.json`.
+- `execution_eval.turn_script` is the mainline scripted multi-turn source. `host_eval.turn_script` is reserved for real host validation, with only legacy fallback support in the executor.
 - Workspace artifacts are generated locally under `package-workspaces/*-workspace/` and are ignored by git.
 
 ## Kimi Host Validation
@@ -136,7 +141,7 @@ The same controlled workspace-file contract now applies to the evaluation mainli
 
 - executor turn task: `task.md -> outputs/assistant.md`
 - pairwise judge task: `inputs/pairwise-packet.json -> outputs/judgment.json`
-- mechanism analysis task: `inputs/analysis-packet.json -> outputs/analysis.json`
+- deep quality eval task: `inputs/deep-eval-packet.json -> outputs/deep-eval.json`
 
 ## Release Hygiene
 
@@ -167,7 +172,7 @@ python -m pytest
 Run the unified Kimi Code evaluation pipeline:
 
 ```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1
 ```
 
 Run a smoke evaluation:
@@ -177,6 +182,8 @@ python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\visio
 ```
 
 The unified Kimi Code pipeline is the default evaluation entrypoint. Lower-level benchmark, Level 4-6, and host commands are kept for targeted debugging, compatibility, and release validation rather than everyday package screening.
+
+By default the pipeline uses the fast iteration profile: `1` run per configuration and single-pass pairwise judging. Use `--thorough` only when you need slower stability evidence: it restores `3` runs per configuration and balanced pairwise judging.
 
 Run host validation:
 

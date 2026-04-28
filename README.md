@@ -12,7 +12,8 @@ package
   -> quantitative supporting bundle
   -> deep quality evaluation
   -> Kimi host validation
-  -> human review
+  -> agent review report
+  -> human authorization
   -> release-ready artifacts
 ```
 
@@ -28,7 +29,8 @@ Included:
 - hard gate checks with `hard-gate.json`
 - supporting quantitative bundle with legacy `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json`
 - deep quality evaluation with `deep-eval.json`, `deep-eval.md`, and `quality-failure-tags.json`
-- human review packet and release recommendation based on hard gate + deep eval + human decision
+- LLM-readable human review packet, conversation-based human authorization, and release recommendation based on hard gate + deep eval + human decision
+- scripted single-turn and multi-turn execution through `execution_eval.turn_script`
 - Kimi Code host validation
 - Codex-controlled Kimi production-cycle support
 
@@ -98,7 +100,7 @@ python -m pytest
 Run the default Kimi Code evaluation pipeline:
 
 ```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1
 ```
 
 Run a lightweight smoke pass:
@@ -135,9 +137,11 @@ python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-l
 - `hard-gate.json` decides whether run artifacts are complete enough for quality evaluation.
 - `deep-eval.json` is now the primary quality judgment artifact.
 - `quantitative-summary.json` packages old quantitative signals as supporting evidence.
+- the default pipeline is optimized for iteration speed: `1` run per configuration and single-pass pairwise judging. Use `--thorough` for the slower stability profile with `3` runs and balanced judging.
 - `benchmark.json`, `differential-benchmark.json`, `level3-summary.json`, and `stability.json` are retained for diagnostics and compatibility.
 - shared helper code now lives in `toolchain/common.py`; Kimi CLI runtime behavior is centralized in `toolchain/kimi_runtime.py`; Kimi workspace-file task execution is centralized in `toolchain/kimi_workspace.py`.
-- the Kimi mainline treats terminal replies as logs only: executor output comes from `outputs/assistant.md`, pairwise judgment from `outputs/judgment.json`, and deep quality judgment from `outputs/deep-eval.json`.
+- the Kimi mainline treats terminal replies as logs only: each execution turn writes `outputs/assistant.md`, the run-level final response is `outputs/final_response.md`, the last assistant answer is `outputs/latest_assistant_response.md`, pairwise judgment comes from `outputs/judgment.json`, and deep quality judgment comes from `outputs/deep-eval.json`.
+- `execution_eval.turn_script` drives mainline scripted multi-turn execution; `host_eval.turn_script` is reserved for real host validation.
 - package evals can be synced from certified bundles by default.
 - Kimi host evals are release evidence focused on trigger and multi-turn protocol behavior.
 - generated workspaces under `package-workspaces/*-workspace/` are local artifacts and should not be committed.

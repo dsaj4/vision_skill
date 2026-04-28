@@ -1,38 +1,42 @@
-# Vision Skill 结构与功能说明
+﻿# Vision Skill 结构与功能说明
 
-Last updated: 2026-04-25
+Last updated: 2026-04-26
 
-本文用于帮助开发者和协作 agent 快速理解 `vision-skill` 当前的项目结构、功能模块和整体工作流。
+本文用于帮助开发者和协作 agent 快速理解 `vision-skill` 的当前代码结构、主要功能点和新评测流程。
 
 一句话概括：
 
 ```text
-vision-skill 不是 skill demo 仓库，而是一条本地优先的 skill 生产线。
-它把 skill 从 package、评测集、Kimi Code 执行、差分评测、机制分析、真实宿主验证，一直推进到人工审核和待发布产物。
+vision-skill 是一条本地优先的 skill 生产线：
+package -> certified eval -> Kimi Code 执行 -> hard gate -> quantitative supporting bundle -> deep quality eval -> agent review report -> human authorization -> release recommendation
 ```
 
-## 1. 总体目标
+## 1. 当前主线
 
-项目当前要解决的问题是：
-
-- 让 Vision skill 不再靠手工改 prompt 和主观感觉判断质量。
-- 让每个 skill 都有标准 package、标准 eval、标准执行产物和可复查报告。
-- 用 Kimi Code 跑真实执行和差分评测，但由 Codex 负责总控、验收和迭代决策。
-- 用文件化产物记录每一轮失败、修复和下一轮方向。
-
-当前主线是：
+默认主链已经从“Level 1-6 逐层加权”收束为：
 
 ```text
-demo-origin package
-  -> certified evals
-  -> Kimi Code workspace-file execution
-  -> hard gate
-  -> quantitative supporting bundle
-  -> deep quality eval
-  -> Kimi host validation
-  -> human review
-  -> release recommendation
+certified eval sync
+  -> prepare iteration
+  -> package snapshot
+  -> Kimi Code execution with_skill / without_skill
+  -> hard-gate.json
+  -> quantitative-summary.json
+  -> deep-eval.json / deep-eval.md
+  -> quality-failure-tags.json
+  -> human-review-packet.md
+  -> human-review-authorization.json
+  -> release-recommendation.json
 ```
+
+核心判断原则：
+
+- `hard-gate.json` 只判断 artifacts 是否完整、是否能进入质量评测。
+- `quantitative-summary.json` 是定量支持包，不是主质量结论。
+- `deep-eval.json` 是机器侧主质量判断。
+- `human-review-packet.md` 是给人类 reviewer 阅读的 LLM 可读报告。
+- `human-review-authorization.json` 是当前主链的人工授权来源；没有明确授权，不得声称 release-ready。
+- `benchmark.json`、`differential-benchmark.json`、`level3-summary.json`、`stability.json` 保留为兼容和诊断产物。
 
 ## 2. 仓库结构
 
@@ -50,51 +54,17 @@ vision-skill/
 
 | 路径 | 作用 |
 | --- | --- |
-| `README.md` | 仓库入口，说明当前范围、快速命令和 release notes。 |
-| `docs/` | 面向开发者和协作 agent 的项目文档。 |
+| `README.md` | 仓库入口、推荐命令和 release notes。 |
+| `docs/` | 面向开发者和协作 agent 的稳定文档。 |
 | `eval-factory/` | certified eval 的上游生产和登记区。 |
-| `packages/` | 正式 skill package 目录，每个 package 都有 `SKILL.md`、metadata 和 evals。 |
-| `package-workspaces/` | 本地运行产物目录，只提交 README，不提交真实运行结果。 |
-| `shared/` | 共享索引、审核模板、失败 taxonomy 等公共材料。 |
-| `toolchain/` | 评测、执行、分析、审核和 Kimi 生产线代码。 |
-| `pyproject.toml` | Python 包配置和测试配置。 |
+| `packages/` | 正式 skill package。 |
+| `package-workspaces/` | 本地运行产物根目录，只提交 README。 |
+| `shared/` | 共享索引、模板、taxonomy 和 review 资产。 |
+| `toolchain/` | 执行、评测、深度评估、review、host adapter 和 Kimi worker 工具链。 |
 
-## 3. 当前核心对象
+## 3. Package 结构
 
-| 对象 | 位置 | 含义 |
-| --- | --- | --- |
-| Skill package | `packages/<package>/` | 一个可评测、可迭代、可发布的 skill 单元。 |
-| Skill 主体 | `packages/<package>/SKILL.md` | skill 的正式行为契约。 |
-| Package metadata | `packages/<package>/metadata/package.json` | package 身份、状态、版本、eval 来源声明。 |
-| Source map | `packages/<package>/metadata/source-map.json` | skill 与 demo/source 的来源关系。 |
-| Package evals | `packages/<package>/evals/evals.json` | package 当前消费的评测集，可以由 certified bundle 同步生成。 |
-| Certified bundle | `eval-factory/certified-evals/.../*.json` | 经过校准的评测包，是 package eval 的上游可信来源。 |
-| Iteration | `package-workspaces/<package>-workspace/iteration-N/` | 一轮评测和分析的证据容器。 |
-| Run artifact | `iteration-N/eval-*/with_skill|without_skill/run-*` | 单次执行结果、请求、响应、计时和评分。 |
-| Hard gate | `iteration-N/hard-gate.json` | 判断 run artifacts 是否完整、是否可进入质量评测。 |
-| Quantitative summary | `iteration-N/quantitative-summary.json` | 汇总旧定量指标，作为 supporting evidence。 |
-| Deep eval | `iteration-N/deep-eval.json` | 当前主质量判断产物，直接消费原始回答和 run artifacts。 |
-| Level 3 summary | `iteration-N/level3-summary.json` | 兼容旧差分主线的 supporting artifact。 |
-| Review packet | `iteration-N/human-review-packet.md` | 给人工审核看的证据包。 |
-
-## 4. 当前 packages
-
-当前仓库内的正式候选包：
-
-| Package | 状态说明 |
-| --- | --- |
-| `swot-analysis` | 当前 reference package，完整主链优先围绕它验证。 |
-| `golden-circle` | 思维模型候选包，已进入标准 package 结构。 |
-| `pyramid-principle` | 思维模型候选包，已进入标准 package 结构。 |
-| `mece-analysis` | 思维模型候选包，已进入标准 package 结构。 |
-| `first-principles` | 思维模型候选包，已进入标准 package 结构。 |
-| `five-whys` | 思维模型候选包，已进入标准 package 结构。 |
-
-注意：进入 `packages/` 不等于已经达到发布质量。发布质量必须由评测、稳定性、机制分析、真实宿主验证和人工审核共同证明。
-
-## 5. Package 内部结构
-
-标准 package 结构：
+标准 package：
 
 ```text
 packages/<package>/
@@ -108,36 +78,101 @@ packages/<package>/
   references/
 ```
 
-| 文件或目录 | 作用 |
+| 文件 | 作用 |
 | --- | --- |
-| `SKILL.md` | 轻量核心行为契约，描述触发、Step 0 路由、分支、输出骨架和反模式。 |
-| `evals/evals.json` | 当前评测用例。主链默认读取这里。 |
-| `evals/eval-sync.json` | 记录 certified bundle 同步来源和稳定元数据。 |
-| `metadata/package.json` | package 名称、skill 名称、版本、状态、eval source。 |
+| `SKILL.md` | 轻量行为契约，描述触发、Step 0 路由、分支、输出骨架和反模式。 |
+| `evals/evals.json` | package 当前消费的评测用例，可由 certified bundle 同步生成。 |
+| `evals/eval-sync.json` | certified bundle 同步元数据。 |
+| `metadata/package.json` | package 名称、版本、状态、eval source。 |
 | `metadata/source-map.json` | demo/source 来源登记。 |
-| `references/` | 长背景、长示例、说明材料。主体 `SKILL.md` 应尽量短。 |
+| `references/` | 长背景、长示例和方法说明；避免塞进 `SKILL.md` 主体。 |
 
-## 6. Eval Factory 功能
+当前 package：
 
-`eval-factory/` 用于把原始材料加工成可认证、可复用的评测集。
+- `swot-analysis`
+- `golden-circle`
+- `pyramid-principle`
+- `mece-analysis`
+- `first-principles`
+- `five-whys`
+
+进入 `packages/` 不等于已经 release-ready。发布质量必须由评测证据和人工 review 共同证明。
+
+## 4. Iteration 结构
+
+一次评测会生成：
 
 ```text
-source-bank
-  -> scenario-cards
-  -> eval-candidates
-  -> calibration-reports
-  -> certified-evals
+package-workspaces/<package>-workspace/
+  latest-package/
+    SKILL.md
+    metadata/
+    evals/
+    manifest.json
+  latest-skill.md
+package-workspaces/
+  upload-ready-skills/
+    <package>/
+      SKILL.md
+    index.json
+  <package>-workspace/
+  iteration-N/
+    package/
+      SKILL.md
+      metadata/
+      evals/
+      manifest.json
+    eval-*/
+      eval_metadata.json
+      with_skill/
+        run-1/
+      without_skill/
+        run-1/
+    hard-gate.json
+    quantitative-summary.json
+    deep-eval.json
+    deep-eval.md
+    quality-failure-tags.json
+    agent-review-report.json
+    human-review-packet.md
+    human-review-authorization.json
+    release-recommendation.json
 ```
 
-| 阶段 | 作用 |
-| --- | --- |
-| `source-bank/` | 存放 demo prompt、历史失败、边界样本等原始材料。 |
-| `scenario-cards/` | 把原始材料抽象成可复用场景。 |
-| `eval-candidates/` | 生成具体评测 prompt 和 expectation。 |
-| `calibration-reports/` | 记录候选 eval 是否有区分度、judge 是否稳定。 |
-| `certified-evals/` | 通过阈值的正式评测 bundle。 |
+单个 run 的关键 artifacts：
 
-当前 package 通过 `metadata/package.json` 里的 `eval_source` 声明消费 certified bundle：
+```text
+run-*/
+  request.json
+  raw_response.json
+  transcript.json
+  timing.json
+  grading.json
+  outputs/
+    final_response.md
+    latest_assistant_response.md
+    turns/
+      turn-1-assistant.md
+      turn-2-assistant.md
+```
+
+含义：
+
+- `iteration-N/package/`: 本轮评测真实使用的 package 快照，方便回看当轮 `SKILL.md`、metadata 和 evals。
+- `latest-package/`: workspace 下的稳定入口，始终指向最近一次主链运行打包出的 package 快照。
+- `latest-skill.md`: workspace 下最方便打开的最新 `SKILL.md` 副本。
+- `upload-ready-skills/<package>/SKILL.md`: repo 级“纯 skill 上传版”目录，每个 package 只保留一个 `SKILL.md`。
+- `upload-ready-skills/index.json`: 当前已导出的纯 skill 列表，便于快速查看有哪些模型可上传。
+- `request.json`: 本次 run 的请求、配置、skill 使用方式、`execution_eval` 和 turn script。
+- `raw_response.json`: Kimi workspace task 调用摘要、warnings、stderr、metadata。
+- `transcript.json`: 标准化多轮对话和每轮 task 记录。
+- `outputs/final_response.md`: 完整 user/assistant 对话拼接，默认作为完整体验证据。
+- `outputs/latest_assistant_response.md`: 最后一轮 assistant 回答，供 deep eval 判断最终输出质量。
+- `grading.json`: 规则型 expectation 检查结果，属于 supporting diagnostics。
+
+## 5. Eval Source
+
+Package 默认可从 certified bundle 同步 eval：
 
 ```json
 {
@@ -150,49 +185,113 @@ source-bank
 }
 ```
 
-主链读取 package eval 时，如果声明了 `certified-bundle`，会先同步 bundle，再读取派生出的 `evals/evals.json`。
+实现入口：
 
-## 7. Toolchain 功能总览
+- `toolchain.eval_factory.sync.resolve_package_evals`
 
-`toolchain/` 是项目的执行核心。
+行为：
 
-| 模块 | Level | 主要功能 |
-| --- | --- | --- |
-| `validators/` | Level 1-2 | 检查 package 结构、metadata、evals 和 skill 协议。 |
-| `eval_factory/` | 上游准备 | 校验 certified bundle，并同步到 package evals。 |
-| `benchmarks/iteration_scaffold.py` | 准备阶段 | 根据 evals 创建 `iteration-N/eval-*` 运行目录。 |
-| `executors/` | Level 3 执行 | 用 Kimi Code 跑 `with_skill / without_skill`。 |
-| `graders/` | Level 3A | 对单次回答做规则型 gate grading。 |
-| `judges/` | Level 3B | 对 `with_skill` 和 `without_skill` 做盲测差分判分。 |
-| `benchmarks/` | Level 3-4 | 聚合 gate benchmark、differential benchmark、stability。 |
-| `analyzers/` | Level 5 | 分析为什么 skill 赢或输，输出 failure tags 和 repair layer。 |
-| `reviews/` | Level 6 | 生成人人审 packet、score template 和 release recommendation。 |
-| `agent_hosts/` | Host lane | 用真实 Kimi Code host 验证 trigger 和多轮协议。 |
-| `kimi_cycle/` | 生产循环 | 让 Kimi 作为受控 worker 生成 eval draft 和 skill rewrite。 |
-| `common.py` | 公共工具 | JSON、文本、slug、eval id、文本压缩等工具。 |
-| `kimi_runtime.py` | Kimi CLI 基础层 | 解析 Kimi 命令、环境变量、JSONL、session id。 |
-| `kimi_workspace.py` | Kimi 文件任务层 | 创建受控 workspace task，并强制读取输出文件作为结果。 |
-| `run_eval_pipeline.py` | 主入口 | 串起 eval 同步、执行、benchmark、Level 4-6。 |
-| `run_kimi_production_cycle.py` | 生产入口 | 串起 Kimi 生成 eval、重写 skill、应用、重跑评测。 |
-| `run_level456.py` | 分段入口 | 单独跑 stability、analysis、review。 |
+- 如果 package 声明 `certified-bundle`，主链先同步再读取。
+- `evals/evals.json` 保留为可审阅的派生物。
+- package 未声明 `eval_source` 时，读取本地 `evals/evals.json`。
 
-## 8. Kimi Code 受控工作区文件任务
+## 6. 主链执行
 
-当前主链不再要求 Kimi 在终端里返回大段 JSON 或完整回答。
+默认入口：
 
-统一原则：
-
-```text
-Codex 准备 task workspace
-  -> Kimi 读取 task.md、inputs、contracts
-  -> Kimi 写 outputs/
-  -> Codex 读取 outputs 并校验
-  -> 终端输出只作为 debug log
+```bash
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\<package>" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\<package>-workspace" --iteration-number <N>
 ```
 
-核心实现是 `toolchain/kimi_workspace.py`。
+默认入口是快速迭代 profile：
 
-标准任务目录：
+- `1` run per configuration。
+- Pairwise judge 默认只跑 single-pass。
+- 继续生成 `benchmark.json`、`differential-benchmark.json`、`level3-summary.json`、`stability.json`，但它们是 supporting diagnostics。
+
+需要稳定性证据时再运行：
+
+```bash
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\<package>" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\<package>-workspace" --iteration-number <N> --thorough
+```
+
+`--thorough` 会恢复慢速 profile：`3` runs per configuration + balanced pairwise judging。
+
+快速 smoke：
+
+```bash
+python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\<package>" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\<package>-workspace" --iteration-number <N> --smoke
+```
+
+执行器位置：
+
+- `toolchain.executors.kimi_code_executor`
+
+执行规则：
+
+- `with_skill` 会把 `SKILL.md` 纳入受控任务上下文。
+- `without_skill` 不提供 skill 正文，用于 baseline。
+- Kimi 终端输出只作为日志。
+- 正式结果必须来自 Kimi 写入的工作区文件。
+
+## 7. Scripted Multi-Turn
+
+主链现在支持单轮和固定脚本多轮。
+
+Eval case 可选字段：
+
+```json
+{
+  "execution_eval": {
+    "enabled": true,
+    "turn_script": [
+      {"label": "initial", "text": "我想梳理一个新产品定位。"},
+      {"label": "info-supply", "text": "目标用户是中小企业老板，预算有限。"},
+      {"label": "continue", "text": "继续。"}
+    ]
+  }
+}
+```
+
+优先级：
+
+```text
+execution_eval.turn_script
+  -> legacy host_eval.turn_script fallback
+  -> prompt
+```
+
+区别：
+
+- `execution_eval.turn_script`: 主链执行脚本，用于 scripted API/Kimi lane。
+- `host_eval.turn_script`: 真实宿主验证脚本，用于 host lane。
+
+注意：
+
+- 多轮执行不是等待真实用户输入，而是按 eval case 固定脚本推进。
+- `outputs/final_response.md` 写完整对话。
+- `outputs/latest_assistant_response.md` 写最后一轮 assistant 回答。
+
+## 8. Kimi Workspace-File Task
+
+当前主链不再要求 Kimi 在终端里返回大段 JSON 或完整文本。
+
+统一模式：
+
+```text
+Codex prepares task workspace
+  -> Kimi reads task.md / inputs / contracts
+  -> Kimi writes outputs/
+  -> Codex reads required output files
+  -> terminal reply is debug log only
+```
+
+通用实现：
+
+- `toolchain.kimi_runtime`: Kimi CLI 命令、环境变量、JSONL、session id、assistant text 解析。
+- `toolchain.kimi_workspace`: 创建受控工作区任务，并强制读取 required output files。
+
+典型工作区：
 
 ```text
 task-workspace/
@@ -204,324 +303,116 @@ task-workspace/
   outputs/
 ```
 
-当前主链的三个关键输出源：
+不同阶段的 required outputs：
 
-| 阶段 | Kimi 必须写入 | Codex 读取用途 |
+| 阶段 | Kimi 写入 | Codex 读取用途 |
 | --- | --- | --- |
-| 执行器 | `outputs/assistant.md` | 复制为 `run-*/outputs/final_response.md`，进入 grader 和 benchmark。 |
-| Pairwise judge | `outputs/judgment.json` | 生成 pairwise judgment 和 differential benchmark。 |
-| Mechanism analyzer | `outputs/analysis.json` | 生成 `analysis.json`、`analysis.md` 和 failure tags。 |
+| Executor turn | `outputs/assistant.md`, `outputs/run_metadata.json` | 形成 run responses 和 transcript。 |
+| Pairwise judge | `outputs/judgment.json` | 生成 supporting differential diagnostics。 |
+| Deep eval | `outputs/deep-eval.json` | 生成主质量判断。 |
+| Kimi production worker | `outputs/eval-draft.json`, `outputs/SKILL.generated.md`, `outputs/run-report.json` | 供 Codex 校验、应用和重跑。 |
 
-这个设计的好处：
+## 9. Hard Gate
 
-- 结果可复查，不依赖终端最后一句话。
-- JSON 不容易被 markdown 包裹或污染。
-- 大上下文可以拆成多个文件给 Kimi 读取。
-- Codex 可以用 required output files 做硬校验。
+模块：
 
-## 9. 主评测链路
+- `toolchain.hard_gates`
 
-默认命令：
+产物：
 
-```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\<package>" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\<package>-workspace" --iteration-number <N> --runs-per-configuration 3
-```
+- `hard-gate.json`
 
-完整流程：
+职责：
 
-```text
-1. resolve package evals
-2. prepare iteration
-3. execute with_skill and without_skill, including scripted multi-turn when `execution_eval.turn_script` is present
-4. run hard gate
-5. run quantitative supporting bundle
-6. run deep quality eval
-7. generate human review packet
-8. generate release recommendation
-```
+- 检查 run artifacts 是否存在。
+- 检查 final/latest response 是否可读。
+- 检查是否有足够证据进入 deep eval。
+- 不判断 skill 内容好坏。
 
-### 9.1 Eval 解析与同步
+## 10. Quantitative Supporting Bundle
 
-入口：`toolchain.eval_factory.sync.resolve_package_evals`
+模块：
 
-功能：
+- `toolchain.quantitative`
+- `toolchain.graders`
+- `toolchain.judges`
+- `toolchain.benchmarks`
 
-- 读取 package 的 `metadata/package.json`。
-- 如果 `eval_source.mode = certified-bundle`，先读取上游 bundle。
-- 把 certified bundle 导出成 package 风格的 `evals/evals.json`。
-- 保留 `execution_eval`、`host_eval` 等扩展字段。
+产物：
 
-主要产物：
-
-- `packages/<package>/evals/evals.json`
-- `packages/<package>/evals/eval-sync.json`
-
-Eval script fields:
-
-- `execution_eval.turn_script` is the main evaluation-lane multi-turn script. It drives `execute_iteration`.
-- `host_eval.turn_script` is reserved for real host validation. The executor keeps a temporary fallback to it for legacy evals only.
-
-### 9.2 Iteration 准备
-
-入口：`toolchain.benchmarks.iteration_scaffold.prepare_iteration`
-
-功能：
-
-- 为每个 eval 创建运行目录。
-- 为每个 eval 创建 `with_skill` 和 `without_skill` 两个配置。
-- 按 `runs_per_configuration` 创建 `run-1..run-N`。
-- 写入 `eval_metadata.json`，供后续执行器读取。
-
-典型目录：
-
-```text
-iteration-1/
-  eval-101-scenario/
-    eval_metadata.json
-    with_skill/
-      run-1/
-    without_skill/
-      run-1/
-```
-
-### 9.3 Kimi Code 执行
-
-入口：`toolchain.executors.kimi_code_executor.execute_iteration`
-
-功能：
-
-- 读取每个 run 的 eval metadata。
-- 对 `with_skill` 创建 skill proxy，让 Kimi 读取 package 内的 canonical `SKILL.md`。
-- 对 `without_skill` 不安装 skill proxy，作为 baseline。
-- 每个用户 turn 都创建受控工作区文件任务。
-- 要求 Kimi 写 `outputs/assistant.md` 和 `outputs/run_metadata.json`。
-- 把完整多轮对话写成标准产物 `run-*/outputs/final_response.md`。
-- 把最后一轮 assistant 回答单独写入 `run-*/outputs/latest_assistant_response.md`。
-
-Current multi-turn contract:
-
-- Turn source precedence: `execution_eval.turn_script` -> legacy `host_eval.turn_script` fallback -> single `prompt`.
-- Each scripted turn is executed as a controlled Kimi workspace-file task with full conversation history.
-- `outputs/final_response.md` contains the full user/assistant conversation transcript for the run.
-- `outputs/latest_assistant_response.md` contains only the last assistant answer.
-- `outputs/turns/turn-N-assistant.md` stores each assistant turn separately for debugging.
-
-单次 run 产物：
-
-```text
-run-1/
-  request.json
-  raw_response.json
-  transcript.json
-  timing.json
-  outputs/
-    final_response.md
-    latest_assistant_response.md
-    turns/
-      turn-1-assistant.md
-```
-
-内部 Kimi 任务产物：
-
-```text
-iteration-1/.kimi-sessions/e101-with_skill-run-1/turn-1/
-  task.md
-  workspace-manifest.json
-  inputs/conversation.json
-  contracts/output-contract.md
-  outputs/assistant.md
-  outputs/run_metadata.json
-```
-
-### 9.4 Gate Grading
-
-入口：`toolchain.graders.capability_grader.grade_response_text`
-
-功能：
-
-- 对单个回答执行规则型 expectation 检查。
-- 检查 contains、contains_all、not_contains、结构信号等基础条件。
-- 生成每个 run 的 `grading.json`。
-
-定位：
-
-- 它不是最终价值判断。
-- 它负责发现空回答、格式明显不合规、基础 expectation 未命中等问题。
-
-### 9.5 Supporting Benchmark
-
-入口：`toolchain.benchmarks.run_benchmark`
-
-功能：
-
-- 聚合所有 `grading.json`。
-- 输出 pass rate、tokens、time、errors 等支持性指标。
-
-主要产物：
-
+- `quantitative-summary.json`
 - `benchmark.json`
-- `benchmark.md`
-
-定位：
-
-- `benchmark.json` 是 gate/supporting artifact。
-- 它不再是 Level 3 的主价值判断。
-
-### 9.6 Differential Benchmark
-
-入口：`toolchain.benchmarks.run_differential_benchmark`
-
-功能：
-
-- 收集同一 eval、同一 run number 下的 `with_skill` 和 `without_skill`。
-- 用 pairwise judge 做盲测比较。
-- 分 forward 和 reversed 两个方向，必要时做 tiebreak。
-- 通过 consensus 生成最终 pairwise 结果。
-
-Pairwise judge：
-
-- 位于 `toolchain.judges.pairwise_judge`。
-- 默认通过 Kimi workspace-file task 执行。
-- Kimi 必须写 `outputs/judgment.json`。
-
-主要产物：
-
-- `pairwise-judgment.json`
-- `pairwise-judgment-reversed.json`
-- `pairwise-consensus.json`
 - `differential-benchmark.json`
-- `differential-benchmark.md`
-
-定位：
-
-- `differential-benchmark.json` 是 Level 3 主价值信号。
-- 核心指标包括 win rate、tie rate、avg margin、judge disagreement、cost-adjusted value。
-
-### 9.7 Level 3 Summary
-
-入口：`toolchain.benchmarks.level3_summary.ensure_level3_summary`
-
-功能：
-
-- 把 differential benchmark 和 supporting benchmark 归一化。
-- 为 Level 4-6 提供唯一主读取入口。
-
-主要产物：
-
 - `level3-summary.json`
-
-固定含义：
-
-- `primary_mode = differential`
-- `primary_artifact_path` 指向 differential benchmark
-- `gate_summary` 保留旧 gate 指标
-- `pairwise_summary` 保留差分核心指标
-- `per_eval` 保留每个 eval 的 pairwise 结果和 run 路径
-
-## 10. Level 4-6 深度评测
-
-> Current implementation note: the default pipeline has been refactored. Old Level 4-6 artifacts are now compatibility/supporting diagnostics. The quality mainline is `hard-gate.json -> quantitative-summary.json -> deep-eval.json -> human-review-packet.md -> release-recommendation.json`.
-
-New primary artifacts:
-- `hard-gate.json`: checks whether run artifacts are complete enough to evaluate.
-- `quantitative-summary.json`: packages old benchmark, differential, Level 3, and stability signals as supporting evidence.
-- `deep-eval.json`: primary quality judgment based on raw model answers and run artifacts.
-- `quality-failure-tags.json`: quality-layer failure tags and repair layers.
-
-Level 4-6 不重新执行模型，而是消费已有 artifacts。
-
-```text
-level3-summary + benchmark + run artifacts
-  -> stability
-  -> mechanism analysis
-  -> human review packet
-  -> release recommendation
-```
-
-### 10.1 Level 4 Stability
-
-入口：`toolchain.benchmarks.stability.generate_stability_report`
-
-回答的问题：
-
-```text
-这个 skill 稳不稳定？
-```
-
-功能：
-
-- 比较多次 run 的波动。
-- 统计 pass rate、time、tokens 的均值和方差。
-- 统计 expectation 级别的通过波动。
-- 检查结构漂移信号。
-- 结合 differential 指标判断 weak stability value、instability risk 等风险。
-
-主要产物：
-
 - `stability.json`
-- `stability.md`
-- `variance-by-expectation.json`
-
-### 10.2 Level 5 Mechanism Analysis
-
-入口：`toolchain.analyzers.mechanism_analyzer.analyze_iteration`
-
-回答的问题：
-
-```text
-它为什么好，或者为什么坏？
-```
-
-功能：
-
-- 读取 `level3-summary.json`、`benchmark.json`、`stability.json`、run artifacts 和 `SKILL.md`。
-- 构造 bounded analysis packet。
-- 通过 Kimi workspace-file task 要求写 `outputs/analysis.json`。
-- 把失败归因到 `source`、`blueprint-spec`、`template`、`skill-content`。
-
-主要产物：
-
-- `analysis.json`
-- `analysis.md`
-- `failure-tags.json`
 
 定位：
 
-- 它不是给 release 自动拍板。
-- 它负责解释失败模式，指导下一轮 skill 优化。
+- 它们是 supporting diagnostics。
+- 它们用于发现成本、稳定性、格式命中、pairwise 风险。
+- 它们不再是 release 主判断。
 
-### 10.3 Level 6 Cognitive Review
+## 11. Deep Quality Eval
 
-入口：`toolchain.reviews.cognitive_review`
+模块：
 
-回答的问题：
+- `toolchain.deep_evals`
 
-```text
-这个 skill 是否真的符合 VisionTree，是否值得放行？
-```
+产物：
 
-功能：
+- `deep-eval.json`
+- `deep-eval.md`
+- `quality-failure-tags.json`
 
-- 汇总 benchmark、stability、analysis。
-- 选择代表性 run。
-- 生成给人工 reviewer 的 review packet。
-- 生成可填写的 score template。
-- 基于当前证据生成 release recommendation。
+输入：
 
-主要产物：
+- `outputs/final_response.md`
+- `outputs/latest_assistant_response.md`
+- `request.json`
+- `transcript.json`
+- `raw_response.json`
+- `timing.json`
+- `SKILL.md`
+- 精简后的 eval/package packet
+
+职责：
+
+- 直接评价回答内容质量。
+- 按保守 rubric 给出质量判断。
+- 输出失败标签、修复层、代表性证据。
+- 给 human review 提供可读判断。
+
+Deep eval 不应直接消费完整 raw transcript 或超长 skill 文档；需要使用压缩 packet 和高价值 evidence snippets。
+
+## 12. Human Review And Recommendation
+
+模块：
+
+- `toolchain.reviews`
+
+产物：
 
 - `human-review-packet.md`
-- `human-review-score.json`
+- `agent-review-report.json`
+- `human-review-authorization.json`
 - `release-recommendation.json`
 
-注意：
+职责：
 
-- Level 6 不自动放行。
-- 最终 `pass / revise / hold` 应由人工审核决定。
+- 汇总 hard gate、deep eval、quantitative supporting evidence。
+- 先生成结构化 `agent-review-report.json`，再由大模型渲染出可读的 `human-review-packet.md`。
+- 通过对话确认把人工授权落盘到 `human-review-authorization.json`。
+- 生成系统建议，但不替代人工结论。
 
-## 11. Kimi Host Validation
+最终 decision 只能由人工授权给出：
 
-Host lane 用来验证真实宿主里的 skill 行为，不替代主评测链。
+- `approve`
+- `revise`
+- `hold`
+
+## 13. Host Lane
+
+Host lane 用于验证真实 Kimi Code 宿主是否能触发并执行 skill 协议，不替代主链。
 
 入口：
 
@@ -529,40 +420,20 @@ Host lane 用来验证真实宿主里的 skill 行为，不替代主评测链。
 python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\<package>" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\<package>-workspace" --iteration-number <N> --max-evals 4
 ```
 
-回答的问题：
-
-```text
-真实 Kimi Code 宿主会不会触发 skill？
-触发后多轮协议是否真的执行？
-宿主噪音、读取顺序、协议漂移是否会影响结果？
-```
-
 流程：
 
 ```text
-host-enabled eval case
+host_eval.enabled case
   -> KimiCodeHost
   -> host-transcript
   -> normalized events
   -> signal report
   -> protocol report
   -> trigger report
-  -> host grading
   -> host benchmark
 ```
 
-主要模块：
-
-| 模块 | 作用 |
-| --- | --- |
-| `kimi_code_host.py` | 创建 Kimi skill proxy，调用真实 Kimi CLI host。 |
-| `event_normalizer.py` | 把 raw transcript 变成统一事件。 |
-| `signal_extractor.py` | 提取 trigger、routing、protocol、结构和 host interference 信号。 |
-| `protocol_classifier.py` | 用状态机判断 observed protocol path。 |
-| `host_benchmark.py` | 聚合 host 指标。 |
-| `run_host_eval.py` | Host lane CLI 入口。 |
-
-Host lane 产物：
+主要产物：
 
 - `host-session.json`
 - `host-transcript.json`
@@ -574,22 +445,13 @@ Host lane 产物：
 - `host-grading.json`
 - `host-benchmark.json`
 
-第一版重点指标：
+使用时机：
 
-- `trigger_success_rate`
-- `false_trigger_rate`
-- `skill_read_before_first_answer_rate`
-- `canonical_skill_read_rate`
-- `protocol_path_match_rate`
-- `direct_result_compliance_rate`
-- `followup_precision`
-- `checkpoint_obedience_rate`
-- `premature_full_answer_rate`
-- `branch_recovery_rate`
+- 主链 deep eval 已有正向证据。
+- 需要验证真实宿主触发、读取顺序、多轮协议。
+- release 前补真实环境证据。
 
-## 12. Kimi Production Cycle
-
-生产循环用于让 Kimi Code 作为 worker 帮忙生成 eval draft 和 skill rewrite，但 Codex 仍然是总控。
+## 14. Kimi Production Cycle
 
 入口：
 
@@ -600,219 +462,72 @@ python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-l
 流程：
 
 ```text
-Codex 收集 package packet、recent context、当前 SKILL、examples
-  -> Codex 写入受控 workspace task
-  -> Kimi 读取文件并写 outputs
-  -> Codex 校验输出格式和 package contract
-  -> Codex 决定是否 apply
-  -> Codex 触发下一轮 eval
+Codex builds compact package packet
+  -> Kimi reads workspace files
+  -> Kimi writes generated evals / skill rewrite
+  -> Codex validates output contract
+  -> Codex applies accepted files
+  -> Codex runs eval pipeline
+  -> Codex decides next iteration
 ```
 
-主要模块：
+模块：
 
 | 模块 | 作用 |
 | --- | --- |
-| `kimi_cycle/context.py` | 构造压缩后的 package packet、recent context、skill 摘要。 |
-| `kimi_cycle/workspace_tasks.py` | 定义 Kimi worker 的任务目录和输出契约。 |
-| `kimi_cycle/eval_generation.py` | 让 Kimi 生成新的 eval draft。 |
+| `kimi_cycle/context.py` | 构造压缩 package packet、recent context、skill 摘要。 |
+| `kimi_cycle/workspace_tasks.py` | 定义 Kimi worker 任务目录和输出契约。 |
+| `kimi_cycle/eval_generation.py` | 让 Kimi 生成 eval draft。 |
 | `kimi_cycle/skill_rewrite.py` | 让 Kimi 生成 skill rewrite draft。 |
-| `kimi_cycle/kimi_cli.py` | Kimi CLI 调用兼容层，workspace task 复用共享 runtime。 |
+| `kimi_cycle/kimi_cli.py` | Kimi CLI 兼容层，复用共享 runtime。 |
 | `run_kimi_production_cycle.py` | 生产循环 CLI。 |
 
-Kimi worker 输出示例：
+## 15. Toolchain 模块地图
 
-- `outputs/eval-draft.json`
-- `outputs/SKILL.generated.md`
-- `outputs/run-report.json`
-
-关键约束：
-
-- Kimi 不负责最终拍板。
-- Kimi 不需要在终端返回完整大文件。
-- Codex 必须读取输出文件、验证、应用、评测，再决定下一轮。
-
-## 13. Validator 功能
-
-Validators 是低成本质量门禁。
-
-| Validator | 检查内容 |
+| 模块 | 当前定位 |
 | --- | --- |
-| `package_validator.py` | package 是否有必需文件、frontmatter、metadata 字段、evals 字段。 |
-| `protocol_validator.py` | `SKILL.md` 是否包含当前要求的协议结构、Step、输出和规则块。 |
+| `eval_factory/` | certified eval sync 和 bundle 校验。 |
+| `benchmarks/iteration_scaffold.py` | 创建 iteration/run 目录。 |
+| `executors/` | Kimi Code 单轮/多轮执行。 |
+| `hard_gates/` | artifacts 完整性和可评测性门禁。 |
+| `quantitative/` | 定量支持包收口。 |
+| `graders/` | 规则型 expectation 检查，supporting diagnostics。 |
+| `judges/` | pairwise judge，supporting diagnostics。 |
+| `benchmarks/` | legacy benchmark、differential、level3 summary、stability。 |
+| `deep_evals/` | 当前主质量评测。 |
+| `reviews/` | 人审 packet、score template、release recommendation。 |
+| `agent_hosts/` | Kimi host validation。 |
+| `kimi_cycle/` | Kimi worker 生产循环。 |
+| `common.py` | JSON、文本、slug、eval id 等公共工具。 |
+| `kimi_runtime.py` | Kimi CLI runtime 解析。 |
+| `kimi_workspace.py` | 受控 workspace-file task。 |
+| `run_eval_pipeline.py` | 默认主链入口。 |
+| `run_level456.py` | 兼容/调试入口，不是日常推荐入口。 |
 
-定位：
+## 16. 新 Agent 阅读路径
 
-- Validator 只能证明“结构没有明显坏掉”。
-- Validator 不能证明 skill 真的更有用。
-- skill 质量主要看 differential benchmark、analysis、host validation 和 human review。
+另一个 Codex agent 接手时，建议按这个顺序：
 
-## 14. 主要产物速查
+1. 读 `README.md`，确认推荐命令。
+2. 读 `docs/AGENT_SKILL_DEVELOPMENT_GUIDE.md`，复制执行提示词。
+3. 读本文，理解模块边界。
+4. 读 `toolchain/README.md`，确认 CLI 参数。
+5. 读目标 package 的 `SKILL.md`、`metadata/package.json`、`evals/evals.json`。
+6. 如果是优化任务，读最新 iteration 的 `deep-eval.json`、`quality-failure-tags.json`、`quantitative-summary.json`。
 
-| 产物 | 生成阶段 | 用途 |
-| --- | --- | --- |
-| `evals/evals.json` | eval sync | package 当前消费的评测集。 |
-| `eval_metadata.json` | prepare iteration | 单个 eval 的运行元信息。 |
-| `request.json` | executor | 本次 run 的输入、配置、turn script。 |
-| `raw_response.json` | executor | Kimi 调用日志、workspace task 元数据。 |
-| `transcript.json` | executor | 标准化后的对话记录。 |
-| `outputs/final_response.md` | executor | run 的完整多轮对话，后续评分默认读取它。 |
-| `outputs/latest_assistant_response.md` | executor | 最后一轮 assistant 回答，供 deep eval 和调试区分最终单答。 |
-| `timing.json` | executor | 执行耗时和 token 占位字段。 |
-| `grading.json` | grader | 单次回答的 expectation 检查结果。 |
-| `benchmark.json` | gate benchmark | 支持性 pass rate 和执行指标。 |
-| `differential-benchmark.json` | differential benchmark | Level 3 主价值判断。 |
-| `level3-summary.json` | Level 3 summary | Level 4-6 的统一入口。 |
-| `stability.json` | Level 4 | 稳定性结论。 |
-| `analysis.json` | Level 5 | 机制分析和修复建议。 |
-| `failure-tags.json` | Level 5 | 失败标签统计。 |
-| `human-review-packet.md` | Level 6 | 给人工审核的证据包。 |
-| `human-review-score.json` | Level 6 | 人工审核填写模板。 |
-| `release-recommendation.json` | Level 6 | 系统生成的放行建议。 |
-| `host-benchmark.json` | Host lane | 真实宿主 trigger 和协议指标。 |
+不要从旧 `analysis.json` 或 `level3-summary.json` 开始做质量判断。它们只适合兼容、定位或对照。
 
-## 15. 常用命令
+## 17. 完成标准
 
-安装开发依赖：
+一次合格的开发/优化任务至少应说明：
 
-```bash
-pip install -e .[dev]
-```
+- 修改了哪些文件。
+- 运行了哪些验证命令。
+- 生成或检查了哪些 artifacts。
+- `hard-gate.json` 是否通过。
+- `deep-eval.json` 暴露了什么质量结论。
+- `quality-failure-tags.json` 中的主失败模式是否变化。
+- `quantitative-summary.json` 是否出现明显退化。
+- 是否需要 host lane 或 human review。
 
-运行全量测试：
-
-```bash
-python -m pytest
-```
-
-跑主评测链：
-
-```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --runs-per-configuration 3
-```
-
-跑轻量 smoke：
-
-```bash
-python -m toolchain.run_eval_pipeline --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --smoke
-```
-
-单独跑 Level 4-6：
-
-```bash
-python -m toolchain.run_level456 --iteration-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace\iteration-1" --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis"
-```
-
-跑 host validation：
-
-```bash
-python -m toolchain.agent_hosts.run_host_eval --host-backend kimi-code --package-dir "E:\Project\vision-lab\vision-skill\packages\swot-analysis" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\swot-analysis-workspace" --iteration-number 1 --max-evals 4
-```
-
-跑 Kimi 生产循环：
-
-```bash
-python -m toolchain.run_kimi_production_cycle --package-dir "E:\Project\vision-lab\vision-skill\packages\golden-circle" --workspace-dir "E:\Project\vision-lab\vision-skill\package-workspaces\golden-circle-workspace" --apply-generated-evals --apply-skill --run-eval
-```
-
-## 16. 开发者应该如何使用这套工程
-
-### 16.1 新建或迁移 skill
-
-推荐顺序：
-
-```text
-demo/source
-  -> package skeleton
-  -> SKILL.md lightweight behavior contract
-  -> metadata/source-map
-  -> evals
-  -> validator
-  -> smoke eval
-  -> full eval
-```
-
-先保证 package 进入标准结构，再做质量优化。
-
-### 16.2 优化已有 skill
-
-推荐顺序：
-
-```text
-read latest level3-summary / differential-benchmark / analysis
-  -> identify one primary failure mode
-  -> write or update optimization brief
-  -> edit one high-impact part of SKILL.md
-  -> run validator
-  -> rerun same eval set
-  -> compare with previous iteration
-```
-
-优先修改：
-
-- Step 0 路由
-- direct-result 分支
-- missing-info 分支
-- staged 分支
-- checkpoint 规则
-- 输出骨架
-- 少量高质量 examples
-
-避免同一轮混改：
-
-- trigger description
-- 主体协议
-- eval 扩容
-- host lane 扩容
-- 长参考材料
-
-### 16.3 判断是否可以推进
-
-可推进的证据：
-
-- package validator 通过。
-- `differential-benchmark.json` 不再显示明显负向。
-- `level3-summary.json` 有清晰 Level 3 主信号。
-- `stability.json` 没有关键不稳定风险。
-- `analysis.json` 的主失败模式已变化或减轻。
-- host validation 显示真实宿主能触发并执行协议。
-- human review 给出 `pass` 或明确可修复的 `revise`。
-
-不能推进的情况：
-
-- 只有格式通过，没有差分收益。
-- `with_skill` 比 baseline 更啰嗦但用户价值更低。
-- staged interaction 变成仪式化暂停。
-- Kimi 终端说成功，但 required output files 缺失或不合规。
-- 没有人审，却宣称 release quality。
-
-## 17. 当前边界
-
-当前已经具备：
-
-- 标准 package 结构。
-- certified eval sync。
-- Kimi Code workspace-file 主执行链。
-- gate benchmark 和 differential benchmark。
-- Level 4 稳定性分析。
-- Level 5 机制分析。
-- Level 6 人审 packet 和 release recommendation。
-- Kimi Code host validation。
-- Codex 控制的 Kimi production cycle。
-
-当前仍需持续建设：
-
-- 更多 package 的 certified eval 覆盖。
-- 更多真实 host eval case。
-- 更稳定的 skill 优化循环样板。
-- 更细的 release gate 策略。
-- 更清晰的人工审核流程和历史结果沉淀。
-
-## 18. 一句话工作模型
-
-```text
-Codex 是总控。
-Kimi Code 是执行者、judge、analyzer 或 worker。
-所有关键结果必须落到受控文件。
-所有质量判断必须回到 eval artifacts。
-所有发布结论必须经过人工审核。
-```
+不要只凭“回答看起来更好”宣布完成。
