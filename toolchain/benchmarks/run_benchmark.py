@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from toolchain.benchmarks.aggregate_benchmark import generate_benchmark, generate_markdown
-from toolchain.common import write_json, write_text
+from toolchain.common import is_active_run_dir, write_json, write_text
 from toolchain.graders.capability_grader import grade_run
 
 
@@ -23,6 +23,8 @@ def grade_iteration_runs(
             if not configuration_dir.is_dir() or configuration_dir.name == "__pycache__":
                 continue
             for run_dir in sorted(configuration_dir.glob("run-*")):
+                if not is_active_run_dir(run_dir, iteration_dir):
+                    continue
                 outputs_dir = run_dir / "outputs"
                 if not outputs_dir.exists():
                     continue

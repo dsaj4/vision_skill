@@ -3,10 +3,13 @@ from __future__ import annotations
 import pytest
 
 from toolchain.common import (
+    active_run_limit,
     compact_text,
     extract_json_object,
+    is_active_run_dir,
     load_json,
     parse_eval_ids,
+    run_number_from_dir,
     slugify,
     write_json,
     write_text,
@@ -52,3 +55,21 @@ def test_compact_text_enforces_hard_character_budget() -> None:
     assert len(compacted) <= 80
     assert "[truncated]" in compacted
     assert compacted.endswith("B" * 20)
+
+
+def test_iteration_config_limits_active_run_dirs(tmp_path) -> None:
+    iteration_dir = tmp_path / "iteration-1"
+    run_1 = iteration_dir / "eval-1-sample" / "with_skill" / "run-1"
+    run_2 = iteration_dir / "eval-1-sample" / "with_skill" / "run-2"
+    run_1.mkdir(parents=True)
+    run_2.mkdir(parents=True)
+
+    assert run_number_from_dir(run_2) == 2
+    assert active_run_limit(iteration_dir) is None
+    assert is_active_run_dir(run_2, iteration_dir) is True
+
+    write_json(iteration_dir / "iteration_config.json", {"runs_per_configuration": 1})
+
+    assert active_run_limit(iteration_dir) == 1
+    assert is_active_run_dir(run_1, iteration_dir) is True
+    assert is_active_run_dir(run_2, iteration_dir) is False

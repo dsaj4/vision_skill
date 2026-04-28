@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from toolchain.common import load_json
+from toolchain.common import is_active_run_dir, load_json
 
 def calculate_stats(values: list[float]) -> dict[str, float]:
     if not values:
@@ -41,6 +41,8 @@ def load_run_results(iteration_dir: Path) -> dict[str, list[dict[str, Any]]]:
             results.setdefault(configuration, [])
 
             for run_dir in sorted(configuration_dir.glob("run-*")):
+                if not is_active_run_dir(run_dir, iteration_dir):
+                    continue
                 grading_path = run_dir / "grading.json"
                 if not grading_path.exists():
                     continue

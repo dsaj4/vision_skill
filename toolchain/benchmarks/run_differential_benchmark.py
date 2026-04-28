@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence
 
-from toolchain.common import load_json, write_json, write_text
+from toolchain.common import is_active_run_dir, load_json, write_json, write_text
 from toolchain.benchmarks.aggregate_benchmark import generate_benchmark
 from toolchain.judges.consensus import build_pairwise_consensus
 from toolchain.judges.pairwise_judge import Sender, judge_pair
@@ -20,12 +20,12 @@ def _collect_pairs(iteration_dir: Path) -> list[dict[str, Any]]:
         with_skill_runs = {
             run_dir.name: run_dir
             for run_dir in sorted((eval_dir / "with_skill").glob("run-*"))
-            if (run_dir / "grading.json").exists()
+            if is_active_run_dir(run_dir, iteration_dir) and (run_dir / "grading.json").exists()
         }
         without_skill_runs = {
             run_dir.name: run_dir
             for run_dir in sorted((eval_dir / "without_skill").glob("run-*"))
-            if (run_dir / "grading.json").exists()
+            if is_active_run_dir(run_dir, iteration_dir) and (run_dir / "grading.json").exists()
         }
 
         for run_name in sorted(set(with_skill_runs.keys()) & set(without_skill_runs.keys())):
@@ -61,6 +61,43 @@ def _cost_adjusted_value(avg_margin: float, with_skill: dict[str, Any], without_
     token_penalty = max(with_tokens - without_tokens, 0.0) / max(without_tokens, 1.0) * 0.15
     time_penalty = max(with_time - without_time, 0.0) / max(without_time, 1.0) * 0.10
     return round(avg_margin - token_penalty - time_penalty, 4)
+
+
+def _build_single_pass_consensus(forward: dict[str, Any]) -> dict[str, Any]:
+    candidate_a = forward.get("pair", {}).get("candidate_a", {})
+    candidate_b = forward.get("pair", {}).get("candidate_b", {})
+    with_skill_run_dir = candidate_a.get("run_dir", "") if candidate_a.get("configuration") == "with_skill" else candidate_b.get("run_dir", "")
+    without_skill_run_dir = candidate_a.get("run_dir", "") if candidate_a.get("configuration") == "without_skill" else candidate_b.get("run_dir", "")
+    comparable = bool(forward.get("gate_check", {}).get("comparable", False))
+    forward_winner = forward["judgment"]["normalized_winner"]
+
+    return {
+        "metadata": {
+            "eval_id": forward["metadata"]["eval_id"],
+            "eval_name": forward["metadata"]["eval_name"],
+            "run_number": forward["metadata"]["run_number"],
+            "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "judge_strategy": "single",
+        },
+        "eval_id": forward["metadata"]["eval_id"],
+        "eval_name": forward["metadata"]["eval_name"],
+        "run_number": forward["metadata"]["run_number"],
+        "forward_winner": forward_winner,
+        "reversed_winner": "",
+        "final_winner": forward_winner if comparable else "not_comparable",
+        "judge_disagreement": False,
+        "tiebreak_used": False,
+        "avg_margin": float(forward["judgment"].get("margin", 0.0) or 0.0) if comparable else 0.0,
+        "cost": forward.get("cost", {}),
+        "with_skill_run_dir": str(with_skill_run_dir),
+        "without_skill_run_dir": str(without_skill_run_dir),
+        "evidence": {
+            "forward_orientation": forward["metadata"]["orientation"],
+            "reversed_orientation": "",
+            "tiebreak_orientation": "",
+            "judge_strategy": "single",
+        },
+    }
 
 
 def _build_summary(consensus_pairs: list[dict[str, Any]], supporting_benchmark: dict[str, Any]) -> dict[str, Any]:
@@ -102,6 +139,7 @@ def _generate_markdown(artifact: dict[str, Any]) -> str:
         "",
         "## Summary",
         "",
+        f"- Judge strategy: {artifact['metadata'].get('judge_strategy', 'unknown')}",
         f"- Pair count: {summary['pair_count']}",
         f"- Comparable pairs: {summary['comparable_pair_count']}",
         f"- Win rate: {summary['win_rate']:.4f}",
@@ -131,8 +169,11 @@ def run_differential_benchmark(
     judge_model: str | None = None,
     timeout_seconds: int | None = None,
     allow_tiebreak: bool = True,
+    judge_strategy: str = "single",
 ) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
+    if judge_strategy not in {"single", "balanced"}:
+        raise ValueError("judge_strategy must be either 'single' or 'balanced'.")
     pairs = _collect_pairs(iteration_path)
     forward_judgments: list[dict[str, Any]] = []
     reversed_judgments: list[dict[str, Any]] = []
@@ -152,38 +193,41 @@ def run_differential_benchmark(
             judge_model=judge_model,
             timeout_seconds=timeout_seconds,
         )
-        reversed_judgment = judge_pair(
-            eval_id=pair["eval_id"],
-            eval_name=pair["eval_name"],
-            prompt=pair["prompt"],
-            run_number=pair["run_number"],
-            with_skill_run_dir=pair["with_skill_run_dir"],
-            without_skill_run_dir=pair["without_skill_run_dir"],
-            orientation="reversed",
-            sender=sender,
-            command_runner=command_runner,
-            judge_model=judge_model,
-            timeout_seconds=timeout_seconds,
-        )
-        tiebreak = None
-        if allow_tiebreak and forward["judgment"]["normalized_winner"] != reversed_judgment["judgment"]["normalized_winner"]:
-            tiebreak = judge_pair(
+        if judge_strategy == "single":
+            consensus = _build_single_pass_consensus(forward)
+        else:
+            reversed_judgment = judge_pair(
                 eval_id=pair["eval_id"],
                 eval_name=pair["eval_name"],
                 prompt=pair["prompt"],
                 run_number=pair["run_number"],
                 with_skill_run_dir=pair["with_skill_run_dir"],
                 without_skill_run_dir=pair["without_skill_run_dir"],
-                orientation="tiebreak",
+                orientation="reversed",
                 sender=sender,
                 command_runner=command_runner,
                 judge_model=judge_model,
                 timeout_seconds=timeout_seconds,
             )
+            tiebreak = None
+            if allow_tiebreak and forward["judgment"]["normalized_winner"] != reversed_judgment["judgment"]["normalized_winner"]:
+                tiebreak = judge_pair(
+                    eval_id=pair["eval_id"],
+                    eval_name=pair["eval_name"],
+                    prompt=pair["prompt"],
+                    run_number=pair["run_number"],
+                    with_skill_run_dir=pair["with_skill_run_dir"],
+                    without_skill_run_dir=pair["without_skill_run_dir"],
+                    orientation="tiebreak",
+                    sender=sender,
+                    command_runner=command_runner,
+                    judge_model=judge_model,
+                    timeout_seconds=timeout_seconds,
+                )
+            consensus = build_pairwise_consensus(forward, reversed_judgment, tiebreak=tiebreak)
+            reversed_judgments.append(reversed_judgment)
 
-        consensus = build_pairwise_consensus(forward, reversed_judgment, tiebreak=tiebreak)
         forward_judgments.append(forward)
-        reversed_judgments.append(reversed_judgment)
         consensus_pairs.append(consensus)
 
     supporting_benchmark = generate_benchmark(iteration_path, skill_name=skill_name, skill_path=skill_path)
@@ -192,6 +236,8 @@ def run_differential_benchmark(
             "skill_name": skill_name or supporting_benchmark.get("metadata", {}).get("skill_name", "<skill-name>"),
             "skill_path": skill_path or supporting_benchmark.get("metadata", {}).get("skill_path", "<skill-path>"),
             "judge_model": judge_model or "",
+            "judge_strategy": judge_strategy,
+            "allow_tiebreak": allow_tiebreak if judge_strategy == "balanced" else False,
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "eval_ids": sorted({pair["metadata"]["eval_id"] for pair in consensus_pairs}),
         },
@@ -202,21 +248,30 @@ def run_differential_benchmark(
     write_json(
         iteration_path / "pairwise-judgment.json",
         {
-            "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
+            "metadata": {
+                "generated_at": differential_benchmark["metadata"]["generated_at"],
+                "judge_strategy": judge_strategy,
+            },
             "judgments": forward_judgments,
         },
     )
     write_json(
         iteration_path / "pairwise-judgment-reversed.json",
         {
-            "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
+            "metadata": {
+                "generated_at": differential_benchmark["metadata"]["generated_at"],
+                "judge_strategy": judge_strategy,
+            },
             "judgments": reversed_judgments,
         },
     )
     write_json(
         iteration_path / "pairwise-consensus.json",
         {
-            "metadata": {"generated_at": differential_benchmark["metadata"]["generated_at"]},
+            "metadata": {
+                "generated_at": differential_benchmark["metadata"]["generated_at"],
+                "judge_strategy": judge_strategy,
+            },
             "pairs": consensus_pairs,
         },
     )
@@ -241,7 +296,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--no-tiebreak",
         action="store_true",
-        help="Disable the third tiebreak pass when forward and reversed judgments disagree.",
+        help="Disable the third tiebreak pass when balanced judging is enabled and forward/reversed judgments disagree.",
+    )
+    parser.add_argument(
+        "--balanced-judging",
+        action="store_true",
+        help="Use the slower forward + reversed judging strategy. The default is single-pass judging.",
     )
     return parser
 
@@ -256,6 +316,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         judge_model=args.judge_model,
         timeout_seconds=args.timeout_seconds,
         allow_tiebreak=not args.no_tiebreak,
+        judge_strategy="balanced" if args.balanced_judging else "single",
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0

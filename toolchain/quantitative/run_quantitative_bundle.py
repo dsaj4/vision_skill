@@ -73,6 +73,7 @@ def build_quantitative_summary(
         },
         "gate_summary": level3_summary.get("gate_summary", {}),
         "pairwise_summary": level3_summary.get("pairwise_summary", {}),
+        "judge_strategy": level3_summary.get("metadata", {}).get("judge_strategy", "unknown"),
         "stability_summary": stability.get("overall", {}),
         "structural_diagnostics": structural_diagnostics,
         "weighted_structure_score": structural_diagnostics.get("weighted_structure_score", {}),
@@ -93,6 +94,7 @@ def _markdown(summary: dict[str, Any]) -> str:
         "",
         "## Pairwise",
         "",
+        f"- Judge strategy: {summary.get('judge_strategy', 'unknown')}",
         f"- Win rate: {float(pairwise.get('win_rate', 0.0) or 0.0):.4f}",
         f"- Tie rate: {float(pairwise.get('tie_rate', 0.0) or 0.0):.4f}",
         f"- Avg margin: {float(pairwise.get('avg_margin', 0.0) or 0.0):.4f}",
@@ -141,6 +143,7 @@ def run_quantitative_bundle(
     command_runner: CommandRunner | None = None,
     judge_model: str | None = None,
     timeout_seconds: int | None = None,
+    balanced_judging: bool = False,
 ) -> dict[str, Any]:
     iteration_path = Path(iteration_dir)
     package_path = Path(package_dir)
@@ -159,6 +162,7 @@ def run_quantitative_bundle(
         command_runner=command_runner,
         judge_model=judge_model,
         timeout_seconds=timeout_seconds,
+        judge_strategy="balanced" if balanced_judging else "single",
     )
     level3_summary = generate_level3_summary(iteration_path)
     level3_paths = write_level3_summary_artifacts(iteration_path, level3_summary)
@@ -203,6 +207,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skill-name", default=None, help="Optional skill name override.")
     parser.add_argument("--judge-model", default=None, help="Optional judge model override.")
     parser.add_argument("--timeout-seconds", type=int, default=None, help="Optional timeout override.")
+    parser.add_argument("--balanced-judging", action="store_true", help="Use slower forward + reversed pairwise judging. Default is single-pass.")
     return parser
 
 
@@ -215,6 +220,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         skill_name=args.skill_name,
         judge_model=args.judge_model,
         timeout_seconds=args.timeout_seconds,
+        balanced_judging=args.balanced_judging,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0

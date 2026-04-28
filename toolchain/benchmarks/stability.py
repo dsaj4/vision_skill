@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from toolchain.benchmarks.level3_summary import ensure_level3_summary
-from toolchain.common import load_json, write_json, write_text
+from toolchain.common import is_active_run_dir, load_json, write_json, write_text
 
 
 PAUSE_MARKERS = ['回复"继续"', '回复"不对"', '回复"直接要结果"', "输出后暂停", "暂停确认"]
@@ -99,6 +99,8 @@ def _load_iteration_runs(iteration_dir: Path) -> dict[str, Any]:
                 continue
             runs: list[dict[str, Any]] = []
             for run_dir in sorted(configuration_dir.glob("run-*")):
+                if not is_active_run_dir(run_dir, iteration_dir):
+                    continue
                 grading_path = run_dir / "grading.json"
                 if not grading_path.exists():
                     continue

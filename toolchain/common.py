@@ -51,6 +51,44 @@ def filter_evals(
     return filtered
 
 
+def run_number_from_dir(run_dir: str | Path) -> int:
+    name = Path(run_dir).name
+    try:
+        return int(name.split("-", 1)[1])
+    except (IndexError, ValueError):
+        return 0
+
+
+def load_iteration_config(iteration_dir: str | Path) -> dict[str, Any]:
+    path = Path(iteration_dir) / "iteration_config.json"
+    if not path.exists():
+        return {}
+    data = load_json(path)
+    return data if isinstance(data, dict) else {}
+
+
+def active_run_limit(iteration_dir: str | Path) -> int | None:
+    config = load_iteration_config(iteration_dir)
+    raw_limit = config.get("runs_per_configuration")
+    if raw_limit is None:
+        return None
+    try:
+        limit = int(raw_limit)
+    except (TypeError, ValueError):
+        return None
+    return limit if limit > 0 else None
+
+
+def is_active_run_dir(run_dir: str | Path, iteration_dir: str | Path | None = None) -> bool:
+    run_path = Path(run_dir)
+    resolved_iteration_dir = Path(iteration_dir) if iteration_dir is not None else run_path.parent.parent.parent
+    limit = active_run_limit(resolved_iteration_dir)
+    if limit is None:
+        return True
+    run_number = run_number_from_dir(run_path)
+    return 0 < run_number <= limit
+
+
 def slugify(text: str, max_length: int = 48, *, allow_unicode: bool = False) -> str:
     pattern = r"[^a-z0-9\u4e00-\u9fff]+" if allow_unicode else r"[^a-z0-9]+"
     cleaned = text.strip().lower()

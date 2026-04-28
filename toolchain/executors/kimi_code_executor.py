@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from toolchain.agent_hosts.host_utils import extract_frontmatter, render_proxy_skill
-from toolchain.common import load_json, write_json, write_text
+from toolchain.common import is_active_run_dir, load_json, write_json, write_text
 from toolchain.kimi_runtime import CommandRunner
 from toolchain.kimi_workspace import load_workspace_json, read_workspace_text, run_kimi_workspace_task, write_workspace_task
 
@@ -298,6 +298,7 @@ def execute_iteration(
     completed_runs: list[dict[str, Any]] = []
     failed_runs: list[dict[str, str]] = []
     skipped_runs: list[dict[str, str]] = []
+    inactive_runs: list[dict[str, str]] = []
 
     for eval_dir in sorted(iteration_dir.glob("eval-*")):
         for configuration in configurations:
@@ -305,6 +306,15 @@ def execute_iteration(
             if not configuration_dir.exists():
                 continue
             for run_dir in sorted(configuration_dir.glob("run-*")):
+                if not is_active_run_dir(run_dir, iteration_dir):
+                    inactive_runs.append(
+                        {
+                            "run_dir": str(run_dir),
+                            "configuration": configuration,
+                            "reason": "inactive_run_for_current_iteration_config",
+                        }
+                    )
+                    continue
                 if skip_completed and _run_is_complete(run_dir):
                     skipped_runs.append(
                         {
@@ -339,6 +349,7 @@ def execute_iteration(
         "package_dir": str(package_dir),
         "completed_runs": completed_runs,
         "skipped_runs": skipped_runs,
+        "inactive_runs": inactive_runs,
         "failed_runs": failed_runs,
         "total_runs": len(completed_runs) + len(skipped_runs) + len(failed_runs),
         "successful_runs": len(completed_runs) + len(skipped_runs),

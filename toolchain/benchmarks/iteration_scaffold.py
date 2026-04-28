@@ -56,6 +56,19 @@ def prepare_iteration(
     )
 
     created_eval_dirs: list[str] = []
+    selected_eval_ids = [int(item["id"]) for item in selected_evals]
+    write_json(
+        iteration_dir / "iteration_config.json",
+        {
+            "schema_version": 1,
+            "iteration_number": iteration_number,
+            "runs_per_configuration": int(runs_per_configuration),
+            "selected_eval_ids": selected_eval_ids,
+            "selected_eval_count": len(selected_evals),
+            "eval_source_mode": eval_resolution["source_mode"],
+        },
+    )
+
     for eval_item in selected_evals:
         eval_name = _slugify(eval_item["prompt"])
         eval_dir = iteration_dir / f"eval-{eval_item['id']}-{eval_name}"
@@ -119,6 +132,6 @@ def prepare_iteration(
         "eval_directories": created_eval_dirs,
         "runs_per_configuration": runs_per_configuration,
         "eval_source_mode": eval_resolution["source_mode"],
-        "selected_eval_ids": [int(item["id"]) for item in selected_evals],
+        "selected_eval_ids": selected_eval_ids,
         "selected_eval_count": len(selected_evals),
     }

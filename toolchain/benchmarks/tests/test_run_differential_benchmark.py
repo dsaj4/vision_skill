@@ -137,3 +137,83 @@ def test_run_differential_benchmark_writes_parallel_level3_artifacts(tmp_path: P
     assert result["differential_benchmark"]["summary"]["win_rate"] == 1.0
     assert result["differential_benchmark"]["summary"]["tie_rate"] == 0.0
     assert result["differential_benchmark"]["summary"]["judge_disagreement_rate"] == 0.0
+
+
+def test_run_differential_benchmark_defaults_to_single_pass_judging(tmp_path: Path) -> None:
+    iteration_dir = write_iteration(tmp_path / "single-pass")
+    calls = {"count": 0}
+
+    def sender(payload: dict) -> dict:
+        calls["count"] += 1
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": json.dumps(
+                            {
+                                "winner": "A",
+                                "margin": 0.5,
+                                "confidence": 0.8,
+                                "reasoning_summary": "A is more useful.",
+                                "rubric_winner_by_dimension": {
+                                    "Thinking Support": "A",
+                                    "Tradeoff Quality": "A",
+                                    "Actionability": "A",
+                                    "Judgment Preservation": "tie",
+                                    "Boundary Safety": "tie",
+                                },
+                            },
+                            ensure_ascii=False,
+                        )
+                    }
+                }
+            ]
+        }
+
+    result = run_differential_benchmark(iteration_dir, sender=sender)
+
+    reversed_artifact = json.loads((iteration_dir / "pairwise-judgment-reversed.json").read_text(encoding="utf-8"))
+    assert calls["count"] == 1
+    assert result["differential_benchmark"]["metadata"]["judge_strategy"] == "single"
+    assert result["consensus_pairs"][0]["evidence"]["judge_strategy"] == "single"
+    assert reversed_artifact["judgments"] == []
+
+
+def test_run_differential_benchmark_balanced_judging_uses_reversed_pass(tmp_path: Path) -> None:
+    iteration_dir = write_iteration(tmp_path / "balanced")
+    calls = {"count": 0}
+
+    def sender(payload: dict) -> dict:
+        calls["count"] += 1
+        winner = "A" if calls["count"] == 1 else "B"
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": json.dumps(
+                            {
+                                "winner": winner,
+                                "margin": 0.5,
+                                "confidence": 0.8,
+                                "reasoning_summary": "One candidate is more useful.",
+                                "rubric_winner_by_dimension": {
+                                    "Thinking Support": winner,
+                                    "Tradeoff Quality": winner,
+                                    "Actionability": winner,
+                                    "Judgment Preservation": "tie",
+                                    "Boundary Safety": "tie",
+                                },
+                            },
+                            ensure_ascii=False,
+                        )
+                    }
+                }
+            ]
+        }
+
+    result = run_differential_benchmark(iteration_dir, sender=sender, judge_strategy="balanced")
+
+    reversed_artifact = json.loads((iteration_dir / "pairwise-judgment-reversed.json").read_text(encoding="utf-8"))
+    assert calls["count"] == 2
+    assert result["differential_benchmark"]["metadata"]["judge_strategy"] == "balanced"
+    assert len(reversed_artifact["judgments"]) == 1

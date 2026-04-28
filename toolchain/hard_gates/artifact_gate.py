@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from toolchain.common import load_json, write_json, write_text
+from toolchain.common import is_active_run_dir, load_json, run_number_from_dir, write_json, write_text
 
 
 REQUIRED_RUN_ARTIFACTS = [
@@ -30,10 +30,7 @@ def _load_eval_metadata(eval_dir: Path) -> dict[str, Any]:
 
 
 def _run_number(run_dir: Path) -> int:
-    try:
-        return int(run_dir.name.split("-", 1)[1])
-    except (IndexError, ValueError):
-        return 0
+    return run_number_from_dir(run_dir)
 
 
 def _check_run(run_dir: Path, eval_metadata: dict[str, Any]) -> dict[str, Any]:
@@ -83,7 +80,7 @@ def _check_eval(eval_dir: Path, eval_metadata: dict[str, Any]) -> dict[str, Any]
             blockers.append(f"missing_configuration:{configuration}")
             run_counts[configuration] = 0
             continue
-        runs = [path for path in config_dir.glob("run-*") if path.is_dir()]
+        runs = [path for path in config_dir.glob("run-*") if path.is_dir() and is_active_run_dir(path, eval_dir.parent)]
         run_counts[configuration] = len(runs)
         if not runs:
             blockers.append(f"no_runs:{configuration}")
@@ -121,7 +118,7 @@ def run_hard_gate(iteration_dir: str | Path) -> dict[str, Any]:
             if not configuration_dir.is_dir() or configuration_dir.name.startswith("."):
                 continue
             for run_dir in sorted(configuration_dir.glob("run-*")):
-                if run_dir.is_dir():
+                if run_dir.is_dir() and is_active_run_dir(run_dir, iteration_path):
                     per_run.append(_check_run(run_dir, eval_metadata))
 
     blocker_counts: dict[str, int] = {}

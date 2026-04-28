@@ -94,3 +94,38 @@ def test_grade_iteration_runs_writes_grading_and_benchmark_artifacts(tmp_path: P
     assert (iteration_dir / "benchmark.json").exists()
     assert (iteration_dir / "benchmark.md").exists()
     assert result["benchmark"]["run_summary"]["delta"]["pass_rate"].startswith("+")
+
+
+def test_grade_iteration_runs_ignores_inactive_run_dirs_from_iteration_config(tmp_path: Path) -> None:
+    iteration_dir = tmp_path / "iteration-1"
+    eval_dir = iteration_dir / "eval-1-swot-direct-result"
+    eval_dir.mkdir(parents=True, exist_ok=True)
+    (iteration_dir / "iteration_config.json").write_text(
+        json.dumps({"runs_per_configuration": 1}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (eval_dir / "eval_metadata.json").write_text(
+        json.dumps(
+            {
+                "eval_id": 1,
+                "eval_name": "swot-direct-result",
+                "prompt": "Give me a direct SWOT result.",
+                "expected_output": "A complete SWOT result.",
+                "assertions": [],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    write_eval_run(eval_dir, "with_skill", 1, "active with-skill answer")
+    write_eval_run(eval_dir, "with_skill", 2, "inactive with-skill answer")
+    write_eval_run(eval_dir, "without_skill", 1, "active baseline answer")
+    write_eval_run(eval_dir, "without_skill", 2, "inactive baseline answer")
+
+    result = grade_iteration_runs(iteration_dir)
+
+    assert len(result["graded_runs"]) == 2
+    assert (eval_dir / "with_skill" / "run-1" / "grading.json").exists()
+    assert not (eval_dir / "with_skill" / "run-2" / "grading.json").exists()
+    assert result["benchmark"]["metadata"]["runs_per_configuration"] == 1

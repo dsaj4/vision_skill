@@ -88,6 +88,9 @@ def test_prepare_iteration_creates_eval_directories_and_metadata(tmp_path: Path)
     assert result["created"] is True
     assert iteration_dir.exists()
     assert eval_dir.exists()
+    iteration_config = json.loads((iteration_dir / "iteration_config.json").read_text(encoding="utf-8"))
+    assert iteration_config["runs_per_configuration"] == 1
+    assert iteration_config["selected_eval_ids"] == [1, 2]
     assert (eval_dir / "eval_metadata.json").exists()
     assert (eval_dir / "with_skill" / "run-1" / "outputs").exists()
     assert (eval_dir / "without_skill" / "run-1" / "outputs").exists()
